@@ -21,11 +21,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('/category')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
-    // Route::get('/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
-    // Route::post('/store', [MahasiswaController::class, 'store'])->name('mahasiswa.store');
+    Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
     // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
     // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
-    // Route::delete('/delete/{id}', [MahasiswaController::class, 'delete'])->name('mahasiswa.delete');
+    Route::delete('/delete/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
 });
 
 Auth::routes();
