@@ -1,5 +1,9 @@
 @extends('layouts.template')
 
+@push('styles')
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="row mt-4">

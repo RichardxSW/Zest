@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,15 @@ Route::prefix('/category')->group(function () {
     // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
     // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/delete/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
+});
+
+Route::prefix('/product')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+    // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
+    // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
 });
 
 Auth::routes();

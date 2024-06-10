@@ -90,8 +90,8 @@
                             <i class="fas fa-th-list"></i> Category
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
+                    <li class="nav-item {{ Route::is('products.index') ? 'active' : '' }}">
+                        <a class="nav-link text-white" href="{{ route('products.index') }}">
                             <i class="fas fa-box"></i> Product
                         </a>
                     </li>
