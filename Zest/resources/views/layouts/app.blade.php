@@ -14,6 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
+    @stack('styles')
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
@@ -21,7 +22,8 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Zest') }}
+                    <!-- {{ config('app.name', 'Zest') }} -->
+                      Zest
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -34,8 +36,8 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
+                    <!-- <ul class="navbar-nav ms-auto">
+                       
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -66,7 +68,7 @@
                                     </form>
                                 </div>
                             </li>
-                        @endguest
+                        @endguest -->
                     </ul>
                 </div>
             </div>
