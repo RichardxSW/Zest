@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,12 +40,12 @@ Route::prefix('/product')->group(function () {
 });
 
 Route::prefix('/supplier')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('supplier.index');
-    Route::get('/create', [ProductController::class, 'create'])->name('supplier.create');
-    Route::post('/store', [ProductController::class, 'store'])->name('supplier.store');
+    Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
+    Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
     // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
     // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
-    Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('supplier.delete');
+    Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
 });
 
 Auth::routes();
