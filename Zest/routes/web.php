@@ -38,6 +38,15 @@ Route::prefix('/product')->group(function () {
     Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
 });
 
+Route::prefix('/supplier')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('supplier.index');
+    Route::get('/create', [ProductController::class, 'create'])->name('supplier.create');
+    Route::post('/store', [ProductController::class, 'store'])->name('supplier.store');
+    // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
+    // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('supplier.delete');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\AuthController::class, 'index'])->name('home');
