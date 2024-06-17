@@ -26,24 +26,23 @@
     </tr>
   </thead>
   <tbody>
-  @foreach ($supplier as $sup)
-                <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $sup-> name }}</td>
-                <td>{{ $sup-> address }} </td>
-                <td>{{ $sup-> email }} </td>
-                <td>{{ $sup-> contact }} </td>
-                <td>
-                    <a href="{{ route('supplier.edit', $sup->id) }}" class="btn btn-warning">Edit</a>
-                    <!-- <a href="#" class="btn btn-danger">Delete</a> -->
-                    <form action="{{ route('products.delete', $sup->id) }}" method="POST" class="d-inline">
-                        @method('delete')
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                </tr>
-                @endforeach
+    @foreach ($supplier as $sup)
+      <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $sup-> name }}</td>
+        <td>{{ $sup-> address }} </td>
+        <td>{{ $sup-> email }} </td>
+        <td>{{ $sup-> contact }} </td>
+        <td>
+          <a href="{{ route('supplier.edit', $sup->id) }}" class="btn btn-warning">Edit</a>
+          <form action="{{ route('supplier.delete', $sup->id) }}" method="POST" class="d-inline">
+            @method('delete')
+            @csrf
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    @endforeach
   </tbody>
 </table>
 </div>
