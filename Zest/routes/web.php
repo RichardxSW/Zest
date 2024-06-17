@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,15 @@ Route::prefix('/product')->group(function () {
     // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
     // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
+});
+
+Route::prefix('/customer')->group(function () {
+    Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
 });
 
 Auth::routes();
