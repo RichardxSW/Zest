@@ -50,7 +50,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Supplier</h5>
                     <p class="card-text">2</p>
-                    <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('supplier.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
