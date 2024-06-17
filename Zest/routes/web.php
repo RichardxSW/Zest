@@ -43,8 +43,8 @@ Route::prefix('/supplier')->group(function () {
     Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
     Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
     Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
-    // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('mahasiswa.edit');
-    // Route::put('/update/{id}', [SupplierController::class, 'update'])->name('mahasiswa.update');
+    Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
     Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
 });
 

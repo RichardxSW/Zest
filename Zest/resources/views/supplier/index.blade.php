@@ -34,7 +34,7 @@
                 <td>{{ $sup-> email }} </td>
                 <td>{{ $sup-> contact }} </td>
                 <td>
-                    <a href="#" class="btn btn-warning">Edit</a>
+                    <a href="{{ route('supplier.edit', $sup->id) }}" class="btn btn-warning">Edit</a>
                     <!-- <a href="#" class="btn btn-danger">Delete</a> -->
                     <form action="{{ route('products.delete', $sup->id) }}" method="POST" class="d-inline">
                         @method('delete')
