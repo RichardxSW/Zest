@@ -7,6 +7,13 @@
 @section('content')
 <div class="container-fluid">
     <a href="{{ route('supplier.create') }}" class="btn btn-primary mb-3">Add Suppliers</a>
+
+    @if(session('success'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{ session('success') }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 <table class="table">
   <thead>
     <tr>

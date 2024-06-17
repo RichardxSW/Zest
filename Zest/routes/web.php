@@ -34,8 +34,8 @@ Route::prefix('/product')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('products.index');
     Route::get('/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/store', [ProductController::class, 'store'])->name('products.store');
-    // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('mahasiswa.edit');
-    // Route::put('/update/{id}', [SupplierController::class, 'update'])->name('mahasiswa.update');
+    // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
+    // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
 });
 
@@ -43,8 +43,8 @@ Route::prefix('/supplier')->group(function () {
     Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
     Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
     Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
-    // Route::get('/edit/{id}', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
-    // Route::put('/update/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('mahasiswa.edit');
+    // Route::put('/update/{id}', [SupplierController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
 });
 
