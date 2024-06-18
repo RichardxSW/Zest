@@ -6,7 +6,22 @@
 
 @section('content')
 <div class="container-fluid">
-    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#addSupplierModal"><i class="fas fa-plus"></i> Add New Supplier</button>
+    <div class="row mb-3 justify-content-between"> <!-- Menggunakan kelas justify-content-between di sini -->
+        <div class="col-auto">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSupplierModal"><i class="fas fa-plus"></i> Add New Supplier</button>
+        </div>
+        <div class="col-auto ml-auto"> <!-- Menambahkan kelas ml-auto pada div ini -->
+            <form action="{{ route('supplier.search') }}" method="GET" class="form-inline">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" name="query" placeholder="Search Supplier">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-secondary"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -42,5 +57,34 @@
 
 @include('supplier.create')
 @include('supplier.edit')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('.table tbody tr');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const addressCell = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const emailCell = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const contactCell = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+
+                if (
+                    nameCell.includes(searchText) ||
+                    addressCell.includes(searchText) ||
+                    emailCell.includes(searchText) ||
+                    contactCell.includes(searchText)
+                ) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

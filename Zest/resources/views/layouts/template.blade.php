@@ -102,7 +102,7 @@
                             <i class="fas fa-users"></i> Customer
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ Route::is('supplier.index') ? 'active' : ''}}">
                         <a class="nav-link text-white" href="{{ route('supplier.index') }}">
                             <i class="fas fa-truck"></i> Supplier
                         </a>
