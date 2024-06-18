@@ -6,44 +6,41 @@
 
 @section('content')
 <div class="container-fluid">
-    <a href="{{ route('supplier.create') }}" class="btn btn-primary mb-3">Add Suppliers</a>
-
-    @if(session('success'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>{{ session('success') }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Address</th>
-      <th scope="col">Email</th>
-      <th scope="col">Contact</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach ($supplier as $sup)
-      <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $sup-> name }}</td>
-        <td>{{ $sup-> address }} </td>
-        <td>{{ $sup-> email }} </td>
-        <td>{{ $sup-> contact }} </td>
-        <td>
-          <a href="{{ route('supplier.edit', $sup->id) }}" class="btn btn-warning">Edit</a>
-          <form action="{{ route('supplier.delete', $sup->id) }}" method="POST" class="d-inline">
-            @method('delete')
-            @csrf
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
-        </td>
-      </tr>
-    @endforeach
-  </tbody>
-</table>
+    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#addSupplierModal"><i class="fas fa-plus"></i> Add New Supplier</button>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+              <th width="5%" scope="col">ID</th>
+              <th width="18%" scope="col">Name</th>
+              <th width="18%" scope="col">Address</th>
+              <th width="18%" scope="col">Email</th>
+              <th width="18%" scope="col">Contact</th>
+              <th width="26%" scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach ($supplier as $sup)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $sup->name }}</td>
+                <td>{{ $sup->address }}</td>
+                <td>{{ $sup->email }}</td>
+                <td>{{ $sup->contact }}</td>
+                <td>
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editSupplierModal{{ $sup->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                  <form action="{{ route('supplier.delete', $sup->id) }}" method="POST" class="d-inline">
+                      @method('delete')
+                      @csrf
+                      <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                  </form>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>
+
+@include('supplier.create')
+@include('supplier.edit')
+
 @endsection
