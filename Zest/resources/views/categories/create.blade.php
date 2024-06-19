@@ -1,17 +1,21 @@
 @extends('layouts.template')
 
+@push('styles')
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
 <section class="page-section bg-light" id="portfolio">
             <div class="container">
-            <h1 class="mt-5">Tambah Kategori</h1>
+            <h2 class="mt-5">ADD NEW CATEGORY</h2>
                 <form action="{{ route('categories.store') }}" method="POST">
                     @csrf
                 <div class="mb-3">
-                    <label class="form-label">Nama Kategori</label>
+                    <label class="form-label">Category</label>
                     <input type="text" class="form-control" name="kategori">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Jumlah</label>
+                    <label class="form-label">Quantity</label>
                     <input type="text" class="form-control" name="jumlah">
                 </div>
                <!--  <div class="mb-3">
