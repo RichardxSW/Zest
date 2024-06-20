@@ -57,3 +57,22 @@ html, body, #app {
 .container-fluid {
     padding: 0;
 }
+
+.custom-modal-size {
+    max-width: 80vw; 
+    max-height: 80vh; 
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button{
+    margin-right: 10px !important;
+}
+
+.sort-icon {
+    margin-left: 10px !important; /* Adjust the margin as needed */
+}

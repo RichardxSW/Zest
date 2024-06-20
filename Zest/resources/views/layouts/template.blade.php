@@ -12,6 +12,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <!-- Scripts -->
     @stack('styles')
@@ -95,12 +97,12 @@
                             <i class="fas fa-box"></i> Product
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ Route::is('customers.index') ? 'active' : ''}}">
                         <a class="nav-link text-white" href="#">
                             <i class="fas fa-users"></i> Customer
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ Route::is('supplier.index') ? 'active' : ''}}">
                         <a class="nav-link text-white" href="{{ route('supplier.index') }}">
                             <i class="fas fa-truck"></i> Supplier
                         </a>
@@ -131,5 +133,8 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
 </html>

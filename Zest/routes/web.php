@@ -46,6 +46,7 @@ Route::prefix('/supplier')->group(function () {
     Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
     Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
     Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
+    Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
 });
 
 Auth::routes();

@@ -74,4 +74,18 @@ class SupplierController extends Controller
         return redirect()->route("supplier.index")
             ->with("success","Supplier deleted successfully.");
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $supplier = Supplier::query()
+            ->where('name', 'ILIKE', '%' . $query . '%')
+            ->orWhere('address', 'ILIKE', '%' . $query . '%')
+            ->orWhere('email', 'ILIKE', '%' . $query . '%')
+            ->orWhere('contact', 'ILIKE', '%' . $query . '%')
+            ->get();
+
+        return view("supplier.index", compact("supplier"));
+    }
 }
