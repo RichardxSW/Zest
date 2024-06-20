@@ -40,6 +40,7 @@
         </button>
       </th>
       <th scope="col">Quantity</th>
+      <th scope="col">Total Products</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -49,6 +50,8 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $cat-> kategori }}</td>
                 <td>{{ $cat-> jumlah }} </td>
+                <td>{{ $cat-> total_products }}</td>
+                
                 <td>
                     <!-- <a href="{{ route('categories.edit', $cat->id) }}" class="btn btn-warning">Edit</a> -->
                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCategoryModal{{ $cat->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
@@ -56,7 +59,7 @@
                     <form action="{{ route('categories.delete', $cat->id) }}" method="POST" class="d-inline">
                         @method('delete')
                         @csrf
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Delete</button>
                     </form>
                 </td>
                 </tr>

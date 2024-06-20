@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     //
     public function index() {
-        $category = Category::all();
+        $category = Category::orderBy('created_at', 'asc')->get(); 
 
         return view('categories.index', compact('category'));
     }
@@ -30,7 +30,12 @@ class CategoryController extends Controller
 
         ]);
 
-        Category::create($request->all());
+        // Menyimpan data produk ke database
+        $category = new Category;
+        $category-> kategori = $request->kategori;
+        $category-> jumlah = 0;
+        $category-> total_products = 0;
+        $category->save();
 
         return redirect()->route('categories.index')
             ->with('success', 'Category added successfully');
@@ -44,14 +49,12 @@ class CategoryController extends Controller
     public function update($id, Request $request) {
 
         $request->validate([
-            'kategori' => 'required',
-            'jumlah' => 'numeric',
+            'kategori' => 'required'
 
         ]);
 
         $update = [
-            'kategori' => $request->kategori,
-            'jumlah' => $request->jumlah,
+            'kategori' => $request->kategori
         ];
 
         Category::whereId($id)->update($update);
@@ -74,6 +77,7 @@ class CategoryController extends Controller
         $category = Category::query()
             ->where('kategori', 'ILIKE', '%' . $query . '%')
             ->orWhere('jumlah', 'ILIKE', '%' . $query . '%')
+            ->orWhere('total_products', 'ILIKE', '%' . $query . '%')
             // ->orWhere('email', 'ILIKE', '%' . $query . '%')
             // ->orWhere('contact', 'ILIKE', '%' . $query . '%')
             ->get();

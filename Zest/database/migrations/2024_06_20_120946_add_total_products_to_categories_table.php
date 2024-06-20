@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->id();
-            $table->string('kategori');
-            $table->integer('jumlah')->default(0);
-            $table->timestamps();
+        Schema::table('category', function (Blueprint $table) {
+            //
+            $table->integer('total_products')->default(0); // Tambahkan kolom ini
         });
     }
 
@@ -24,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::table('category', function (Blueprint $table) {
+            //
+            $table->dropColumn('total_products');
+        });
     }
 };

@@ -10,9 +10,13 @@ class category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kategori',
-        'jumlah'
+        'kategori'
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'kategori_produk', 'kategori');
+    }
 
     protected $table = 'category';
 }

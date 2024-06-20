@@ -16,5 +16,10 @@ class product extends Model
         'kategori_produk',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'kategori_produk', 'kategori');
+    }
+
     protected $table = 'product';
 }

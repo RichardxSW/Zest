@@ -20,10 +20,10 @@
                         <label class="form-label">Category</label>
                         <input type="text" class="form-control" name="kategori">
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label">Quantity</label>
                         <input type="text" class="form-control" name="jumlah">
-                    </div>
+                    </div> -->
                     <!-- <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="text" class="form-control" name="email">
