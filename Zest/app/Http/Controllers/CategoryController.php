@@ -66,4 +66,18 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')
         ->with('success', 'Category deleted successfully');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $category = Category::query()
+            ->where('kategori', 'ILIKE', '%' . $query . '%')
+            ->orWhere('jumlah', 'ILIKE', '%' . $query . '%')
+            // ->orWhere('email', 'ILIKE', '%' . $query . '%')
+            // ->orWhere('contact', 'ILIKE', '%' . $query . '%')
+            ->get();
+
+        return view("categories.index", compact("category"));
+    }
 }
