@@ -72,3 +72,7 @@ html, body, #app {
 button{
     margin-right: 10px !important;
 }
+
+.sort-icon {
+    margin-left: 10px !important; /* Adjust the margin as needed */
+}
