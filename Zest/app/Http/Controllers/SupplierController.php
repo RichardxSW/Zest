@@ -11,7 +11,7 @@ class SupplierController extends Controller
     public function index()
     {
         $supplier = Supplier::all();
-
+        $supplier = Supplier::orderBy('created_at', 'asc')->get();
         return view("supplier.index", compact("supplier"));
     }
 
