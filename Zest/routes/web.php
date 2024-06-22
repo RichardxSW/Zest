@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TotalPurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,16 @@ Route::prefix('/supplier')->group(function () {
     Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
     Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
     Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
+});
+
+Route::prefix('/totalpurchase')->group(function () {
+    Route::get('/', [TotalPurchaseController::class, 'index'])->name('totalpurchase.index');
+    Route::get('/create', [TotalPurchaseController::class, 'create'])->name('totalpurchase.create');
+    Route::post('/store', [TotalPurchaseController::class, 'store'])->name('totalpurchase.store');
+    Route::get('/edit/{id}', [TotalPurchaseController::class, 'edit'])->name('totalpurchase.edit');
+    Route::put('/update/{id}', [TotalPurchaseController::class, 'update'])->name('totalpurchase.update');
+    Route::delete('/delete/{id}', [TotalPurchaseController::class, 'delete'])->name('totalpurchase.delete');
+    Route::get('/search', [TotalPurchaseController::class, 'search'])->name('totalpurchase.search');
 });
 
 Auth::routes();

@@ -107,8 +107,8 @@
                             <i class="fas fa-shopping-cart"></i> Outgoing Products
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
+                    <li class="nav-item {{ Route::is('totalpurchase.index') ? 'active' : ''}}">
+                        <a class="nav-link text-white" href="{{ route('totalpurchase.index') }}">
                             <i class="fas fa-receipt"></i> Purchase Products
                         </a>
                     </li>

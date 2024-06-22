@@ -59,7 +59,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Total Purchase</h5>
                     <p class="card-text">3</p>
-                    <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('totalpurchase.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
