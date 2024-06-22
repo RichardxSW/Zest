@@ -35,18 +35,18 @@
                 <th width="5%" scope="col">#</th>
                 <th width="18%" scope="col">
                     Product Name 
-                    <button id="sortName" class="btn btn-link p-0">
+                    <button id="sortProductName" class="btn btn-link p-0">
                         <i class="fas fa-sort sort-icon"></i>
                     </button>
                 </th>
                 <th width="18%" scope="col">
                     Supplier Name 
-                    <button id="sortName" class="btn btn-link p-0">
+                    <button id="sortSupplierName" class="btn btn-link p-0">
                         <i class="fas fa-sort sort-icon"></i>
                     </button>
                 </th>
                 <th width="18%" scope="col">Quantity</th>
-                <th width="18%" scope="col">In date</th>
+                <th width="18%" scope="col">In Date</th>
                 <th width="26%" scope="col">Action</th>
             </tr>
         </thead>
@@ -79,21 +79,22 @@
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
         const tableRows = document.querySelectorAll('.table tbody tr');
-        const sortButton = document.getElementById('sortName');
+        const sortProductNameButton = document.getElementById('sortProductName');
+        const sortSupplierNameButton = document.getElementById('sortSupplierName');
         let sortOrder = 'asc';
 
         searchInput.addEventListener('input', function () {
             const searchText = searchInput.value.toLowerCase();
             tableRows.forEach(row => {
-                const nameCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const addressCell = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const emailCell = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                const contactCell = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                const productNameCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const supplierNameCell = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const quantityCell = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const inDateCell = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
                 if (
-                    nameCell.includes(searchText) ||
-                    addressCell.includes(searchText) ||
-                    emailCell.includes(searchText) ||
-                    contactCell.includes(searchText)
+                    productNameCell.includes(searchText) ||
+                    supplierNameCell.includes(searchText) ||
+                    quantityCell.includes(searchText) ||
+                    inDateCell.includes(searchText)
                 ) {
                     row.style.display = '';
                 } else {
@@ -102,21 +103,29 @@
             });
         });
 
-        sortButton.addEventListener('click', function () {
+        function sortTable(columnIndex) {
             const rowsArray = Array.from(tableRows);
             rowsArray.sort((a, b) => {
-                const nameA = a.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const nameB = b.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                if (nameA < nameB) {
+                const cellA = a.querySelector(`td:nth-child(${columnIndex})`).textContent.toLowerCase();
+                const cellB = b.querySelector(`td:nth-child(${columnIndex})`).textContent.toLowerCase();
+                if (cellA < cellB) {
                     return sortOrder === 'asc' ? -1 : 1;
                 }
-                if (nameA > nameB) {
+                if (cellA > cellB) {
                     return sortOrder === 'asc' ? 1 : -1;
                 }
                 return 0;
             });
             sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
             rowsArray.forEach(row => document.querySelector('.table tbody').appendChild(row));
+        }
+
+        sortProductNameButton.addEventListener('click', function () {
+            sortTable(2);
+        });
+
+        sortSupplierNameButton.addEventListener('click', function () {
+            sortTable(3);
         });
     });
 </script>

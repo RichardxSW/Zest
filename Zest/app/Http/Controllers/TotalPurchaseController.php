@@ -41,9 +41,6 @@ class TotalPurchaseController extends Controller
         $purchase->in_date = $request->in_date;
         $purchase->save();
 
-        // $this->updateCategoryCount($product->kategori_produk);
-        // $this->updateTotalProductCount($product->kategori_produk);
-
         return redirect()->route('totalpurchase.index')
             ->with('success', 'Purchase added successfully');
     }
@@ -83,5 +80,20 @@ class TotalPurchaseController extends Controller
 
         return redirect()->route('totalpurchase.index')
             ->with('success', 'Purchase deleted successfully');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $purchase = totalpurchase::query()
+            ->where('product_name', 'ILIKE', '%' . $query . '%')
+            ->orWhere('supplier_name', 'ILIKE', '%' . $query . '%')
+            ->orWhere('quantity', 'ILIKE', '%' . $query . '%')
+            ->orWhere('in_date', 'ILIKE', '%' . $query . '%')
+            ->get();
+        $supplier = Supplier::all();
+        $product = Product::all();
+
+        return view("totalpurchase.index", compact("product","supplier","purchase"));
     }
 }
