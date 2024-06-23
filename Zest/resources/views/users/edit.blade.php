@@ -26,19 +26,20 @@
                         <label class="form-label">Email</label>
                         <input type="text" class="form-control" name="email" value="{{ $user->email }}" required>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label">Password</label>
                         <input type="password" class="form-control" name="password" required>
-                    </div>
-                    <div class="mb-3">
+                    </div> -->
+                    <!-- <div class="mb-3">
                         <label class="form-label">Confirm Password</label>
                         <input type="password" class="form-control" name="password_confirmation" required>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                     <label class="form-label">Role</label>
                         <select class="form-control" name="role" required>
                             <option value="" disabled selected>Select a role</option>
                                 <option value="Stock_Manager" {{ $user->role == 'Stock_Manager' ? 'selected' : '' }}>Stock Manager</option>
+                                <option value="Super_Admin" {{ $user->role == 'Super_Admin' ? 'selected' : '' }}>Super Admin</option>
                                 <option value="Purchasing_Staff" {{ $user->role == 'Purchasing_Staff' ? 'selected' : '' }}>Purchasing Staff</option>
                                 <option value="Marketing_Staff" {{ $user->role == 'Marketing_Staff' ? 'selected' : '' }}>Marketing Staff</option>
                         </select>

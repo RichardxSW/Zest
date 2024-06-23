@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function index()
-    {
-        $users = User::all();
+    {   
+        $users = User::orderBy('created_at', 'asc')->get(); 
         return view('users.index', compact('users'));
     }
 
@@ -60,7 +60,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            // 'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|string',
         ]);
 
@@ -73,16 +73,18 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
+            // 'password' => $request->password ? Hash::make($request->password) : $user->password,
             'role' => $request->role,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user)
+    public function delete($id)
     {
+        $user = User::find($id);
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')
+        ->with('success', 'User deleted successfully');
     }
 }
