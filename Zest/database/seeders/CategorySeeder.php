@@ -14,9 +14,9 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('category')->insert([
-            'kategori' => 'Kategori 2',
-            'jumlah' => 20,
-        ]);
+        // DB::table('category')->insert([
+        //     'kategori' => 'Kategori 2',
+        //     'jumlah' => 20,
+        // ]);
     }
 }
