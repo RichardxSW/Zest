@@ -58,21 +58,32 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
         Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
     });
 
-    Route::prefix('purchase')->group(function () {
-        Route::get('/', [PurchaseController::class, 'index'])->name('purchase.index');
-        Route::get('/create', [PurchaseController::class, 'create'])->name('purchase.create');
-        Route::post('/store', [PurchaseController::class, 'store'])->name('purchase.store');
-        Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
-        Route::put('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
-        Route::delete('/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
-        Route::get('/search', [PurchaseController::class, 'search'])->name('purchase.search');
-    });
+    // Route::prefix('purchase')->group(function () {
+    //     Route::get('/', [PurchaseController::class, 'index'])->name('purchase.index');
+    //     Route::get('/create', [PurchaseController::class, 'create'])->name('purchase.create');
+    //     Route::post('/store', [PurchaseController::class, 'store'])->name('purchase.store');
+    //     Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
+    //     Route::put('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
+    //     Route::delete('/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
+    //     Route::get('/search', [PurchaseController::class, 'search'])->name('purchase.search');
+    // });
 });
 
 // Assuming you have CustomerController and OutgoingProductController
-Route::group(['middleware' => ['role:Marketing_Staff']], function () {
-    Route::resource('customer', CustomerController::class);
-    Route::resource('outgoing', OutgoingProductController::class);
+// Customer routes for Marketing Staff
+Route::middleware(['role:Marketing_Staff'])->group(function () {
+    Route::prefix('customer')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
+        Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
+        Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
+        Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
+        Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
+        Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
+        Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
+        Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
+        Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
+        Route::get('/{id}', [CustomerController::class, 'show'])->name('customers.show');
+    });
 });
 
 Route::prefix('users')->group( function () {
@@ -90,17 +101,17 @@ Route::middleware(['role:Super_Admin'])->group(function () {
     Route::resource('users', UserController::class);
 });
 
-Route::prefix('/customer')->group(function () {
-    Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
-    Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
-    Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
-    Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
-    Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
-    Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
-    Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
-});
+// Route::prefix('/customer')->group(function () {
+//     Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
+//     Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
+//     Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
+//     Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
+//     Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
+//     Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
+//     Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
+//     Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
+//     Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
+// });
 
 Auth::routes();
 
