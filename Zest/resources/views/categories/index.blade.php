@@ -9,7 +9,7 @@
   <div class="row mb-3 justify-content-between">
     <!-- <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Add Category</a> -->
     <div class="col-auto">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategoryModal"><i class="fas fa-plus"></i> Add New Category</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal"><i class="fas fa-plus"></i> Add New Category</button>
         </div>
         <div class="col-auto ml-auto">
             <form action="{{ route('categories.search') }}" method="GET" class="form-inline">
@@ -54,7 +54,7 @@
                 
                 <td>
                     <!-- <a href="{{ route('categories.edit', $cat->id) }}" class="btn btn-warning">Edit</a> -->
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCategoryModal{{ $cat->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{ $cat->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
                     <!-- <a href="#" class="btn btn-danger">Delete</a> -->
                     <form action="{{ route('categories.delete', $cat->id) }}" method="POST" class="d-inline">
                         @method('delete')
