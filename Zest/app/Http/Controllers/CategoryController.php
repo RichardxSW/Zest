@@ -80,6 +80,7 @@ class CategoryController extends Controller
             ->orWhere('total_products', 'ILIKE', '%' . $query . '%')
             // ->orWhere('email', 'ILIKE', '%' . $query . '%')
             // ->orWhere('contact', 'ILIKE', '%' . $query . '%')
+            ->orderBy('created_at', 'asc') 
             ->get();
 
         return view("categories.index", compact("category"));
