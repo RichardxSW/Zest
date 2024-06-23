@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +76,7 @@ Route::group(['middleware' => ['role:Marketing_Staff']], function () {
 });
 
 Route::prefix('users')->group( function () {
-    Route::get('/', [UsereController::class, 'index'])->name('users.index');
+    Route::get('/', [UserController::class, 'index'])->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
@@ -86,6 +88,18 @@ Route::prefix('users')->group( function () {
 // User management routes
 Route::middleware(['role:Super_Admin'])->group(function () {
     Route::resource('users', UserController::class);
+});
+
+Route::prefix('/customer')->group(function () {
+    Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
+    Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
+    Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
+    Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
 });
 
 Auth::routes();
