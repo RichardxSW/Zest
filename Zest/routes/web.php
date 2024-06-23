@@ -47,6 +47,9 @@ Route::prefix('/customer')->group(function () {
     Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
+    Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
+    Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
+    Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
 });
 
 Auth::routes();
