@@ -1,0 +1,25 @@
+.pagination {
+    display: flex;
+    justify-content: flex-start; /* Align pagination to the left */
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.page-link {
+    color: #007bff;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
