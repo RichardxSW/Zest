@@ -26,25 +26,11 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <select class="form-control" name="product_name" required>
-                            <option value="" disabled selected>Select a product name</option>
-                            @foreach($product as $pro)
-                                <option value="{{ $pro->nama_produk }}" {{ $pur->product_name == $pro->nama_produk ? 'selected' : '' }}>
-                                    {{ $pro->nama_produk }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" name="product_name" value="{{ $pur->product_name }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
-                        <select class="form-control" name="supplier_name" required>
-                            <option value="" disabled selected>Select a supplier name</option>
-                            @foreach($supplier as $sup)
-                                <option value="{{ $sup->name }}" {{ $pur->supplier_name == $sup->name ? 'selected' : '' }}>
-                                    {{ $sup->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" name="supplier_name" value="{{ $pur->supplier_name }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>

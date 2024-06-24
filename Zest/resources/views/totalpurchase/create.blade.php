@@ -1,7 +1,5 @@
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .mb-3 {
         margin-bottom: 30px !important;
@@ -24,21 +22,11 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <select class="form-control" name="product_name" required>
-                            <option value="" disabled selected>Select a product name</option>
-                            @foreach($product as $pro)
-                                <option value="{{ $pro->nama_produk }}">{{ $pro->nama_produk }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" name="product_name">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
-                        <select class="form-control" name="supplier_name" required>
-                            <option value="" disabled selected>Select a supplier name</option>
-                            @foreach($supplier as $sup)
-                                <option value="{{ $sup->name }}">{{ $sup->name }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" name="supplier_name">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
@@ -56,7 +44,3 @@
         </div>
     </div>
 </div>
-
-<!-- Add jQuery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
