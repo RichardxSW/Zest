@@ -55,7 +55,10 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
         Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
         Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
         Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
-        Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
+        Route::get('/exportPdf', [SupplierController::class, 'exportPdf'])->name('supplier.exportPdf');
+        Route::get('/exportXls', [SupplierController::class, 'exportXls'])->name('supplier.exportXls');
+        Route::post('/importXls', [SupplierController::class, 'import'])->name('supplier.import');
+        Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier.show');
     });
 
     // Route::prefix('purchase')->group(function () {

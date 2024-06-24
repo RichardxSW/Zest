@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\supplier;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\CustomersExport;
+use App\Imports\CustomersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SupplierController extends Controller
 {
