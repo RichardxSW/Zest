@@ -25,22 +25,33 @@ class SellingController extends Controller
             'product_name' => 'required|string|max:255',
             'category_name' => 'required|string|max:255',
             'customer_name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|min:0',
             'date' => 'required|date',
         ]);
 
         try {
-            // Create a new Selling instance and assign the validated data
-            $selling = new Selling();
-            $selling->product_name = $request->product_name;
-            $selling->category_name = $request->category_name;
-            $selling->customer_name = $request->customer_name;
-            $selling->quantity = $request->quantity;
-            $selling->date = $request->date;
-            $selling->status = 'pending'; // Default status
+            // Check if the selling entry already exists with the same product, category, and customer names
+            $selling = Selling::where('product_name', ucwords(strtolower($request->input('product_name'))))
+                                ->where('category_name', ucwords(strtolower($request->input('category_name'))))
+                                ->where('customer_name', ucwords(strtolower($request->input('customer_name'))))
+                                ->where('date', $request->input('date'))
+                                ->first();
 
-            // Save the instance to the database
-            $selling->save();
+            if ($selling) {
+                // If entry exists, update the quantity
+                $selling->quantity += $request->input('quantity');
+                $selling->save();
+            } else {
+                // If entry doesn't exist, create a new one
+                $selling = new Selling();
+                $selling->product_name = ucwords(strtolower($request->input('product_name')));
+                $selling->category_name = ucwords(strtolower($request->input('category_name')));
+                $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
+                $selling->quantity = $request->input('quantity');
+                $selling->date = $request->input('date');
+                $selling->status = 'pending'; // Default status
+                $selling->save();
+            }
 
             return redirect()->route('sellings.index')->with('success', 'Selling added successfully.');
         } catch (\Exception $e) {
@@ -48,25 +59,49 @@ class SellingController extends Controller
         }
     }
 
-
     public function edit($id) {
         $selling = Selling::find($id);
         return view('sellings.edit', compact('selling'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $selling = Selling::find($id);
         $request->validate([
             'product_name' => 'required|string|max:255',
             'category_name' => 'required|string|max:255',
             'customer_name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|min:0',
             'date' => 'required|date',
-            'status' => 'in:pending,approved',
+            // 'status' => 'in:pending,approved',
         ]);
 
         try {
-            $selling->update($request->all());
+            // Check if there is any other selling entry with the same product, category, and customer names
+            $existingSelling = Selling::where('id', '!=', $id)
+                                        ->where('product_name', ucwords(strtolower($request->input('product_name'))))
+                                        ->where('category_name', ucwords(strtolower($request->input('category_name'))))
+                                        ->where('customer_name', ucwords(strtolower($request->input('customer_name'))))
+                                        ->where('date', $request->input('date'))
+                                        ->first();
+
+            if ($existingSelling) {
+                // If entry exists, update the quantity
+                $existingSelling->quantity += $request->input('quantity');
+                $existingSelling->save();
+                // Delete the current selling instance as it's merged with an existing one
+                $selling->delete();
+            } else {
+                // If entry doesn't exist, update the current selling instance
+                $selling->product_name = ucwords(strtolower($request->input('product_name')));
+                $selling->category_name = ucwords(strtolower($request->input('category_name')));
+                $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
+                $selling->quantity = $request->input('quantity');
+                $selling->date = $request->input('date');
+                $selling->status = $request->input('status');
+                $selling->save();
+            }
+
             return redirect()->route('sellings.index')->with('success', 'Selling updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update selling. Please try again.');

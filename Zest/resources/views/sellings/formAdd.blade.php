@@ -29,7 +29,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" required>
+                        <input type="number" class="form-control" name="quantity" required min="0" oninput="this.value = Math.abs(this.value)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date</label>
