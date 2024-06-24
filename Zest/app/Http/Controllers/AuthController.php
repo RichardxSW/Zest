@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Customer;
 
 class AuthController extends Controller
 {
@@ -34,9 +35,11 @@ class AuthController extends Controller
         $categoryCount = Category::count();
         $productCount = Product::count();
         $supplierCount = Supplier::count();
-        // $customerCount = Customer::count();
+        $customerCount = Customer::count();
         // $purchaseCount = Purchase::count();
         // $outgoingCount = OutgoingProduct::count();
+
+        $recentlyAddedProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
 
         return view('homepage', compact(
             'users',
@@ -44,9 +47,10 @@ class AuthController extends Controller
             'categoryCount', 
             'productCount', 
             'supplierCount', 
-            // 'customerCount', 
+            'customerCount', 
             // 'purchaseCount', 
-            // 'outgoingCount'
+            // 'outgoingCount',
+            'recentlyAddedProducts'
         ));
     }
 }
