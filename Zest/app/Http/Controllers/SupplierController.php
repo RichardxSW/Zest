@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\CustomersExport;
+use App\Exports\SupplierExport;
 use App\Imports\CustomersImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -33,15 +33,13 @@ class SupplierController extends Controller
             "email"=> "required",
             "phone"=> "required",
         ]);
-        $supplier = new Supplier();
-        $supplier->name = $request->name;
-        $supplier->address = $request->address;
-        $supplier->email = $request->email;
-        $supplier->contact = $request->phone;
-        $supplier->save();
 
-        return redirect()->route("supplier.index")
-            ->with("success","Supplier added successfully.");
+        try {
+            Supplier::create($request->all());
+            return redirect()->route('supplier.index')->with('success', 'Suppier added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add supplier. Please try again.');
+        }
     }
 
     public function edit($id)
@@ -52,6 +50,8 @@ class SupplierController extends Controller
 
     public function update(Request $request, $id)
     {
+        $supplier = supplier::find($id);
+
         $request->validate([
             "name"=> "required",
             "address"=> "required",
@@ -65,31 +65,42 @@ class SupplierController extends Controller
             "email"=> $request->email,
             "contact"=> $request->phone
         ];
-        Supplier::whereId($id)->update($update);
 
-        return redirect()->route("supplier.index")
-            ->with("success","Supplier updated successfully.");
+        try {
+            $supplier->update($request->all());
+            return redirect()->route('supplier.index')->with('success', 'Supplier updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update supplier. Please try again.');
+        }
     }
 
     public function delete($id)
     {
-        $supplier = Supplier::find($id);
-        $supplier->delete();
-        return redirect()->route("supplier.index")
-            ->with("success","Supplier deleted successfully.");
+        try {
+            $sup = Supplier::find($id);
+            $sup->delete();
+            return redirect()->route('supplier.index')->with('success', 'Supplier deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete supplier. Please try again.');
+        }
     }
 
-    public function search(Request $request)
+    public function exportPdf() {
+        try {
+            $supplier = supplier::all();
+            $pdf = PDF::loadView('supplier.exportPdf', compact('supplier'));
+            return $pdf->download('supplier.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to PDF. Please try again.');
+        }
+    }
+
+    public function exportXls()
     {
-        $query = $request->input('query');
-
-        $supplier = Supplier::query()
-            ->where('name', 'ILIKE', '%' . $query . '%')
-            ->orWhere('address', 'ILIKE', '%' . $query . '%')
-            ->orWhere('email', 'ILIKE', '%' . $query . '%')
-            ->orWhere('contact', 'ILIKE', '%' . $query . '%')
-            ->get();
-
-        return view("supplier.index", compact("supplier"));
+        try {
+            return Excel::download(new SupplierExport, 'supplier.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to Excel. Please try again.');
+        }
     }
 }
