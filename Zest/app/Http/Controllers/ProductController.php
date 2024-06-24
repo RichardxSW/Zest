@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Category;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -123,6 +127,40 @@ class ProductController extends Controller
             $totalProducts = Product::where('kategori_produk', $categoryName)->sum('jumlah_produk');
             $category->total_products = $totalProducts;
             $category->save();
+        }
+    }
+
+    public function exportPdf() {
+        try {
+            $product = Product::all();
+            $pdf = PDF::loadView('products.exportPdf', compact('product'));
+            return $pdf->download('product.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to PDF. Please try again.');
+        }
+    }
+
+    public function exportXls()
+    {
+        try {
+            return Excel::download(new ProductExport, 'product.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to Excel. Please try again.');
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new ProductImport, $request->file('file'));
+            return redirect()->route('products.index')->with('success', 'Product data imported successfully from Excel file.');
+        } catch (\Exception $e) {
+            // Mengembalikan pesan error kepada pengguna
+            return redirect()->back()->with('error', 'Failed to import data from Excel file. Please make sure the file format is correct and try again.');
         }
     }
 }

@@ -41,7 +41,10 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
-        Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+        Route::get('/exportPdf', [ProductController::class, 'exportPdf'])->name('products.exportPdf');
+        Route::get('/exportXls', [ProductController::class, 'exportXls'])->name('products.exportXls');
+        Route::post('/importXls', [ProductController::class, 'import'])->name('products.import');
+        Route::get('/{id}', [ProductController::class, 'show'])->name('supplier.show');
     });
 });
 
