@@ -59,6 +59,11 @@ html, body, #app {
     border-radius: 0.5rem;
 }
 
+.card-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
 .container-fluid {
     padding: 0;
 }
