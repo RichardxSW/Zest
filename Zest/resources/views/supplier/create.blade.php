@@ -1,16 +1,10 @@
-<style>
-    .mb-3 {
-        margin-bottom: 30px !important;
-    }
-</style>
-
 <!-- Add Supplier Modal -->
 <div class="modal fade" id="addSupplierModal" tabindex="-1" role="dialog" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-modal-size modal-dialog-centered" role="document">
         <div class="modal-content custom-modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addSupplierModalLabel">Add New Supplier</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -34,7 +28,7 @@
                         <input type="text" class="form-control" name="phone">
                     </div>
 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success">Submit</button>
                 </form>
             </div>
