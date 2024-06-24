@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\SupplierExport;
-use App\Imports\CustomersImport;
+use App\Imports\SupplierImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SupplierController extends Controller
@@ -101,6 +101,21 @@ class SupplierController extends Controller
             return Excel::download(new SupplierExport, 'supplier.xlsx');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to export data to Excel. Please try again.');
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new SupplierImport, $request->file('file'));
+            return redirect()->route('supplier.index')->with('success', 'Supplier data imported successfully from Excel file.');
+        } catch (\Exception $e) {
+            // Mengembalikan pesan error kepada pengguna
+            return redirect()->back()->with('error', 'Failed to import data from Excel file. Please make sure the file format is correct and try again.');
         }
     }
 }
