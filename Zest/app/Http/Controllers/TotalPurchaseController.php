@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseExport;
-use App\Imports\SupplierImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TotalPurchaseController extends Controller
@@ -107,5 +106,17 @@ class TotalPurchaseController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to export data to Excel. Please try again.');
         }
+    }
+
+    public function exportInv($id)
+    {
+        $purchase = totalpurchase::findOrFail($id);
+        $pdf = Pdf::loadView('totalpurchase.exportInv', compact('purchase'));
+        return $pdf->download('invoice.pdf');
+    }
+
+    public function show($id) {
+        $purchase = totalpurchase::find($id);
+        return view('totalpurchase.show', compact('purchase'));
     }
 }
