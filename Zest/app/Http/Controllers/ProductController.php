@@ -103,9 +103,10 @@ class ProductController extends Controller
             ->orWhere('harga_produk', 'ILIKE', '%' . $query . '%')
             ->orWhere('jumlah_produk', 'ILIKE', '%' . $query . '%')
             ->orWhere('kategori_produk', 'ILIKE', '%' . $query . '%')
+            ->orderBy('created_at', 'asc') 
             ->get();
 
-        return view("products.index", compact("product, category"));
+        return view("products.index", compact("product", "category"));
     }
 
     private function updateCategoryCount($categoryName) {
