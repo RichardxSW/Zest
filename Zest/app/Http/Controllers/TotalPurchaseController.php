@@ -7,7 +7,7 @@ use App\Models\totalpurchase;
 use App\Models\Product;
 use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\SupplierExport;
+use App\Exports\PurchaseExport;
 use App\Imports\SupplierImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -90,18 +90,22 @@ class TotalPurchaseController extends Controller
         }
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
-        $purchase = totalpurchase::query()
-            ->where('product_name', 'ILIKE', '%' . $query . '%')
-            ->orWhere('supplier_name', 'ILIKE', '%' . $query . '%')
-            ->orWhere('quantity', 'ILIKE', '%' . $query . '%')
-            ->orWhere('in_date', 'ILIKE', '%' . $query . '%')
-            ->get();
-        $supplier = Supplier::all();
-        $product = Product::all();
+    public function exportPdf() {
+        try {
+            $purchase = totalpurchase::orderBy('created_at', 'asc')->get();
+            $pdf = PDF::loadView('totalpurchase.exportPdf', compact('purchase'));
+            return $pdf->download('purchase.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to PDF. Please try again.');
+        }
+    }
 
-        return view("totalpurchase.index", compact("product","supplier","purchase"));
+    public function exportXls()
+    {
+        try {
+            return Excel::download(new PurchaseExport, 'purchase.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export data to Excel. Please try again.');
+        }
     }
 }

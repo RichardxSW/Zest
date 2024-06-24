@@ -2,11 +2,11 @@
 
 namespace App\Exports;
 
-use App\Models\supplier;
+use App\Models\totalpurchase;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class SupplierExport implements FromCollection, WithHeadings
+class PurchaseExport implements FromCollection, WithHeadings
 {
     /**
      * Return a collection of customers.
@@ -15,7 +15,7 @@ class SupplierExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return supplier::orderBy('created_at', 'asc')->get(['id', 'name', 'address', 'email', 'contact']);
+        return TotalPurchase::orderBy('created_at', 'asc')->get(['id', 'product_name', 'supplier_name', 'quantity', 'in_date']);
     }
 
     /**
@@ -27,10 +27,10 @@ class SupplierExport implements FromCollection, WithHeadings
     {
         return [
             'ID',
-            'Name',
-            'Address',
-            'Email',
-            'Contact',
+            'Product Name',
+            'Supplier Name',
+            'Quantity',
+            'In Date',
         ];
     }
 }

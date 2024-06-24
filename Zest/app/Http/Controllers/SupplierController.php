@@ -14,7 +14,6 @@ class SupplierController extends Controller
     //index
     public function index()
     {
-        $supplier = Supplier::all();
         $supplier = Supplier::orderBy('created_at', 'asc')->get();
         return view("supplier.index", compact("supplier"));
     }
@@ -87,7 +86,7 @@ class SupplierController extends Controller
 
     public function exportPdf() {
         try {
-            $supplier = supplier::all();
+            $supplier = Supplier::orderBy('created_at', 'asc')->get();
             $pdf = PDF::loadView('supplier.exportPdf', compact('supplier'));
             return $pdf->download('supplier.pdf');
         } catch (\Exception $e) {
