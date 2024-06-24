@@ -103,9 +103,9 @@
                             <i class="fas fa-truck"></i> Supplier
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-shopping-cart"></i> Outgoing Products
+                    <li class="nav-item {{ Route::is('sellings.index') ? 'active' : ''}}">
+                        <a class="nav-link text-white" href="{{ route('sellings.index') }}">
+                            <i class="fas fa-shopping-cart"></i> Selling Products
                         </a>
                     </li>
                     <li class="nav-item">

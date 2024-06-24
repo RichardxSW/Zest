@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SellingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,8 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::post('/importXls', [ProductController::class, 'import'])->name('products.import');
         Route::get('/{id}', [ProductController::class, 'show'])->name('supplier.show');
     });
+
+    Route::get('/selling/{id}/approve', [SellingController::class, 'approve'])->name('sellings.approve');
 });
 
 // Supplier routes for Purchasing Staff
@@ -75,7 +78,7 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
     // });
 });
 
-// Assuming you have CustomerController and OutgoingProductController
+// Assuming you have CustomerController and SellingController
 // Customer routes for Marketing Staff
 Route::middleware(['role:Marketing_Staff'])->group(function () {
     Route::prefix('customer')->group(function () {
@@ -89,6 +92,19 @@ Route::middleware(['role:Marketing_Staff'])->group(function () {
         Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
         Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
         Route::get('/{id}', [CustomerController::class, 'show'])->name('customers.show');
+    });
+    Route::prefix('selling')->group(function () {
+        Route::get('/', [SellingController::class, 'index'])->name('sellings.index');
+        Route::get('/create', [SellingController::class, 'create'])->name('sellings.create');
+        Route::post('/store', [SellingController::class, 'store'])->name('sellings.store');
+        Route::get('/edit/{id}', [SellingController::class, 'edit'])->name('sellings.edit');
+        Route::put('/update/{id}', [SellingController::class, 'update'])->name('sellings.update');
+        Route::delete('/delete/{id}', [SellingController::class, 'delete'])->name('sellings.delete');
+        Route::get('/exportPdf', [SellingController::class, 'exportPdf'])->name('sellings.exportPdf');
+        Route::get('/exportXls', [SellingController::class, 'exportXls'])->name('sellings.exportXls');
+        Route::get('/exportInv/{id}', [SellingController::class, 'exportInv'])->name('sellings.exportInv');
+        Route::post('/importXls', [SellingController::class, 'import'])->name('sellings.import');
+        Route::get('/{id}', [SellingController::class, 'show'])->name('sellings.show');
     });
 });
 
@@ -107,17 +123,6 @@ Route::middleware(['role:Super_Admin'])->group(function () {
     Route::resource('users', UserController::class);
 });
 
-// Route::prefix('/customer')->group(function () {
-//     Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
-//     Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
-//     Route::post('/store', [CustomerController::class, 'store'])->name('customers.store');
-//     Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customers.edit');
-//     Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customers.update');
-//     Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
-//     Route::get('/exportPdf', [CustomerController::class, 'exportPdf'])->name('customers.exportPdf');
-//     Route::get('/exportXls', [CustomerController::class, 'exportXls'])->name('customers.exportXls');
-//     Route::post('/importXls', [CustomerController::class, 'import'])->name('customers.import');
-// });
 
 Auth::routes();
 
