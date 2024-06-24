@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Supplier;
 
 class AuthController extends Controller
 {
@@ -22,7 +26,27 @@ class AuthController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('homepage');
+    {   
+        
+        $users = User::orderBy('created_at', 'asc')->get(); 
+        $userCount = $users->count();
+        // $userCount = DB::table('users')->count();
+        $categoryCount = Category::count();
+        $productCount = Product::count();
+        $supplierCount = Supplier::count();
+        // $customerCount = Customer::count();
+        // $purchaseCount = Purchase::count();
+        // $outgoingCount = OutgoingProduct::count();
+
+        return view('homepage', compact(
+            'users',
+            'userCount',  
+            'categoryCount', 
+            'productCount', 
+            'supplierCount', 
+            // 'customerCount', 
+            // 'purchaseCount', 
+            // 'outgoingCount'
+        ));
     }
 }

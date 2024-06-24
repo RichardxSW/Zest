@@ -11,7 +11,7 @@
             <div class="card bg-info text-white">
                 <div class="card-body">
                     <h5 class="card-title">System Users</h5>
-                    <p class="card-text">2</p>
+                    <p class="card-text">{{ $userCount }}</p>
                     <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h5 class="card-title">Category</h5>
-                    <p class="card-text">4</p>
+                    <p class="card-text">{{ $categoryCount }}</p>
                     <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -29,7 +29,7 @@
             <div class="card bg-warning text-white">
                 <div class="card-body">
                     <h5 class="card-title">Product</h5>
-                    <p class="card-text">6</p>
+                    <p class="card-text">{{ $productCount }}</p>
                     <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>

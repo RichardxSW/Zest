@@ -20,7 +20,7 @@ use App\Http\Controllers\CustomerController;
 */
 
 Route::get('/', [App\Http\Controllers\LoginController::class, 'index'])->name('login');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
 
 // Category routes for Stock Manager
 Route::middleware(['role:Stock_Manager'])->group(function () {
