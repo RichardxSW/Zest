@@ -146,7 +146,6 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Product Name</th>
                                 <th>Date</th>
                                 <th>Total Sale</th>
@@ -155,7 +154,6 @@
                         <tbody>
                      
                                 <tr>
-                                    <td> iteration </td>
                                     <td> product_name </td>
                                     <td> date </td>
                                     <td> total_sale </td>
