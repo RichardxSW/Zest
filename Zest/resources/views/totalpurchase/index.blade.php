@@ -2,132 +2,121 @@
 
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/customer.css') }}" rel="stylesheet">
+<style>
+    .dt-length .dt-input {
+        margin-right: 10px !important;
+    }
+</style>
 @endpush
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-3 justify-content-between">
-        <div class="col-auto">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addPurchaseModal"><i class="fas fa-plus"></i> Add New Purchase</button>
-        </div>
-        <div class="col-auto ml-auto">
-            <form action="{{ route('totalpurchase.search') }}" method="GET" class="form-inline">
-                <div class="input-group">
-                    <input type="text" id="searchInput" class="form-control" name="query" placeholder="Search Purchase">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-secondary"><i class="fas fa-search"></i></button>
-                    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <h3>List of Purchases</h3>
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
-            </form>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
         </div>
     </div>
-    
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session('success') }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="row mb-1 justify-content-between">
+        <div class="col-auto">
+            <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addPurchaseModal"><i class="fas fa-plus"></i> Add New Purchase</button>
+            <button type="button" class="btn btn-danger mb-2" onclick="window.location.href='{{ route('totalpurchase.exportPdf') }}'">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </button>
+            <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='{{ route('totalpurchase.exportXls') }}'">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </button>
         </div>
-    @endif
-
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th width="5%" scope="col">#</th>
-                <th width="18%" scope="col">
-                    Product Name 
-                    <button id="sortProductName" class="btn btn-link p-0">
-                        <i class="fas fa-sort sort-icon"></i>
-                    </button>
-                </th>
-                <th width="18%" scope="col">
-                    Supplier Name 
-                    <button id="sortSupplierName" class="btn btn-link p-0">
-                        <i class="fas fa-sort sort-icon"></i>
-                    </button>
-                </th>
-                <th width="18%" scope="col">Quantity</th>
-                <th width="18%" scope="col">In Date</th>
-                <th width="26%" scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach ($purchase as $pur)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $pur->product_name }}</td>
-                <td>{{ $pur->supplier_name }}</td>
-                <td>{{ $pur->quantity }}</td>
-                <td>{{ $pur->in_date }}</td>
-                <td>
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-                  <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
-                      @method('delete')
-                      @csrf
-                      <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-                  </form>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+    </div>
+    <div class="box-body">
+        <table id="purTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th width="5%" scope="col">ID</th>
+                    <th width="18%" scope="col">Product Name</th>
+                    <th width="18%" scope="col">Supplier Name</th>
+                    <th width="18%" scope="col">Quantity</th>
+                    <th width="18%" scope="col">In Date</th>
+                    <th width="26%" scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($purchase as $pur)
+                <tr>
+                    <td>{{ $pur->id }}</td>
+                    <td>{{ $pur->product_name }}</td>
+                    <td>{{ $pur->supplier_name }}</td>
+                    <td>{{ $pur->quantity }}</td>
+                    <td>{{ $pur->in_date }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                        <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
+                            @method('delete')
+                            @csrf
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<div class="container-fluid mt-5" id="importPurchaseContainer">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title" id="importPurchaseModalLabel">Import Purchases</h3>
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <form action="{{ route('totalpurchase.import') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <input type="file" name="file" class="form-control-file" id="file" required accept=".csv, .xlsx, .xls">
+                            <div class="invalid-feedback">Please select a file with CSV, XLSX, or XLS format.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import Excel</button>
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Supplier Modal -->
 @include('totalpurchase.create')
+<!-- Edit Supplier Modal -->
 @include('totalpurchase.edit')
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.table tbody tr');
-        const sortProductNameButton = document.getElementById('sortProductName');
-        const sortSupplierNameButton = document.getElementById('sortSupplierName');
-        let sortOrder = 'asc';
-
-        searchInput.addEventListener('input', function () {
-            const searchText = searchInput.value.toLowerCase();
-            tableRows.forEach(row => {
-                const productNameCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const supplierNameCell = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const quantityCell = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                const inDateCell = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-                if (
-                    productNameCell.includes(searchText) ||
-                    supplierNameCell.includes(searchText) ||
-                    quantityCell.includes(searchText) ||
-                    inDateCell.includes(searchText)
-                ) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-
-        function sortTable(columnIndex) {
-            const rowsArray = Array.from(tableRows);
-            rowsArray.sort((a, b) => {
-                const cellA = a.querySelector(`td:nth-child(${columnIndex})`).textContent.toLowerCase();
-                const cellB = b.querySelector(`td:nth-child(${columnIndex})`).textContent.toLowerCase();
-                if (cellA < cellB) {
-                    return sortOrder === 'asc' ? -1 : 1;
-                }
-                if (cellA > cellB) {
-                    return sortOrder === 'asc' ? 1 : -1;
-                }
-                return 0;
-            });
-            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            rowsArray.forEach(row => document.querySelector('.table tbody').appendChild(row));
-        }
-
-        sortProductNameButton.addEventListener('click', function () {
-            sortTable(2);
-        });
-
-        sortSupplierNameButton.addEventListener('click', function () {
-            sortTable(3);
-        });
+    $(document).ready(function() {
+        $('#purTable').DataTable();
     });
+</script>
+<script>
+    setTimeout(function(){
+        $('.alert').fadeOut('slow');
+    }, 5000);
 </script>
 
 @endsection

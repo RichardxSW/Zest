@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\totalpurchase;
 use App\Models\Product;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\SupplierExport;
+use App\Imports\SupplierImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TotalPurchaseController extends Controller
 {
@@ -22,7 +26,7 @@ class TotalPurchaseController extends Controller
     {
         $supplier = Supplier::all();
         $product = Product::all();
-        return view("totalpurchse.create", compact("supplier","product"));
+        return view("totalpurchase.create", compact("supplier","product"));
     }
 
     public function store(Request $request)
@@ -34,15 +38,12 @@ class TotalPurchaseController extends Controller
             "in_date"=> "required",
         ]);
 
-        $purchase = new totalpurchase();
-        $purchase->product_name = $request->product_name;
-        $purchase->supplier_name = $request->supplier_name;
-        $purchase->quantity = $request->quantity;
-        $purchase->in_date = $request->in_date;
-        $purchase->save();
-
-        return redirect()->route('totalpurchase.index')
-            ->with('success', 'Purchase added successfully');
+        try {
+            totalpurchase::create($request->all());
+            return redirect()->route('totalpurchase.index')->with('success', 'Purchase added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add purchase. Please try again.');
+        }
     }
 
     public function edit($id)
@@ -55,6 +56,8 @@ class TotalPurchaseController extends Controller
 
     public function update(Request $request, $id)
     {
+        $purchase = totalpurchase::find($id);
+
         $request->validate([
             "product_name"=> "required",
             "supplier_name"=> "required",
@@ -69,17 +72,22 @@ class TotalPurchaseController extends Controller
             'in_date' => $request->in_date,
         ];
 
-        totalpurchase::whereId($id)->update($update);
-        return redirect()->route('totalpurchase.index')
-            ->with('success', 'Purchase updated successfully');
+        try {
+            $purchase->update($request->all());
+            return redirect()->route('totalpurchase.index')->with('success', 'Purchase updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update purchase. Please try again.');
+        }
     }
 
     public function delete($id) {
-        $purchase = totalpurchase::find($id);
-        $purchase->delete();
-
-        return redirect()->route('totalpurchase.index')
-            ->with('success', 'Purchase deleted successfully');
+        try {
+            $pur = totalpurchase::find($id);
+            $pur->delete();
+            return redirect()->route('totalpurchase.index')->with('success', 'Purchase deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete purchase. Please try again.');
+        }
     }
 
     public function search(Request $request)
