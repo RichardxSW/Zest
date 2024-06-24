@@ -103,6 +103,39 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Low Quantity Products
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($lowQuantityProducts as $product)
+                                <tr>
+                                    <td>{{ $product->nama_produk }}</td>
+                                    <td>{{ $product->harga_produk }}</td>
+                                    <td>{{ $product->jumlah_produk }}</td>
+                                    <td>{{ $product->kategori_produk }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="card">

@@ -40,6 +40,7 @@ class AuthController extends Controller
         // $outgoingCount = OutgoingProduct::count();
 
         $recentlyAddedProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
+        $lowQuantityProducts = Product::where('jumlah_produk', '<', 15)->get();
 
         return view('homepage', compact(
             'users',
@@ -50,7 +51,8 @@ class AuthController extends Controller
             'customerCount', 
             // 'purchaseCount', 
             // 'outgoingCount',
-            'recentlyAddedProducts'
+            'recentlyAddedProducts',
+            'lowQuantityProducts',
         ));
     }
 }
