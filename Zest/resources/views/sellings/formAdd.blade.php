@@ -38,8 +38,8 @@
                     {{-- <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-control" readonly required>
-                            <option value="pending" selected>Pending</option>
-                            <option value="approved" disabled>Approved</option>
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Approved" disabled>Approved</option>
                         </select>
                     </div> --}}
                     <button type="submit" class="btn btn-success">Submit</button>

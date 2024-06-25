@@ -21,5 +21,10 @@ class product extends Model
         return $this->belongsTo(Category::class, 'kategori_produk', 'kategori');
     }
 
+    public function selling()
+    {
+        return $this->hasMany(Selling::class, 'product_name', 'nama_produk');
+    }
+
     protected $table = 'product';
 }

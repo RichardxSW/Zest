@@ -18,5 +18,10 @@ class Selling extends Model
         // 'status',  // Remove 'status' from fillable to prevent direct mass assignment
     ];
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_name', 'nama_produk');
+    }
+
     protected $table = 'selling';
 }

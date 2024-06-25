@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Selling;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\ProductExport;
 use App\Imports\ProductImport;
@@ -15,9 +16,10 @@ class ProductController extends Controller
 {
     //
     public function index() {
+        $selling = Selling::all();
         $product = Product::orderBy('created_at', 'asc')->get(); 
         $category = Category::all(); // Mengambil semua kategori
-        return view('products.index', compact('product', 'category')); // Mengirim data kategori ke view
+        return view('products.index', compact('product', 'category', 'selling')); // Mengirim data kategori ke view
     }
 
     public function create() {
@@ -162,5 +164,41 @@ class ProductController extends Controller
             // Mengembalikan pesan error kepada pengguna
             return redirect()->back()->with('error', 'Failed to import data from Excel file. Please make sure the file format is correct and try again.');
         }
+    }
+
+    public function requestPurchase() {
+        return view('products.requestPurchase');
+    }
+    
+    public function requestSell() {
+        // $selling = Selling::where('status', 'pending')->get();
+        $selling = Selling::all();
+        return view('products.requestSell', compact('selling'));
+    }
+
+    private function reduceCategoryProductCount($categoryName, $quantity)
+        {
+            $category = Category::where('kategori', $categoryName)->first();
+            if ($category) {
+                $category->total_products -= $quantity;
+                $category->save();
+            }
+        }
+
+    public function approveSell(Request $request, $id)
+    {
+        $selling = Selling::findOrFail($id);
+        $selling->status = 'approved';
+        $selling->save();
+
+        // Tambahkan logika untuk menambah jumlah produk
+        // $selling = Product::findOrFail($selling->id);
+        $product = Product::where('nama_produk', $selling->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product->jumlah_produk -= $selling->quantity;
+        // Mengurangi jumlah total produk pada tabel kategori
+        $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Sell approved and product quantity updated.');
     }
 }
