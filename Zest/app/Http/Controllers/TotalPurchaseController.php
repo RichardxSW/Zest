@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\totalpurchase;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseExport;
@@ -15,26 +16,25 @@ class TotalPurchaseController extends Controller
     // Display a listing of all purchases
     public function index(){
         // Get all purchases, suppliers, and products
-        $purchase = totalPurchase::all();
-        $supplier = Supplier::all();
         $product = Product::all();
+        $categories = Category::all();
 
         // Order purchases by creation date in ascending order
         $purchase = totalPurchase::orderBy('created_at', 'asc')->get();
 
         // Return the index view with the retrieved data
-        return view("totalpurchase.index", compact("purchase", "supplier", "product"));
+        return view("totalpurchase.index", compact("purchase", "categories", "product"));
     }
 
     // Show the form for creating a new purchase
     public function create()
     {
         // Get all suppliers and products
-        $supplier = Supplier::all();
         $product = Product::all();
+        $categories = Category::all();
 
         // Return the create view with the retrieved data
-        return view("totalpurchase.create", compact("supplier","product"));
+        return view("totalpurchase.create", compact("categories","product"));
     }
 
     // Store a newly created purchase in storage
@@ -49,21 +49,21 @@ class TotalPurchaseController extends Controller
             "in_date"=> "required",
         ]);
 
-        // Normalize supplier name to handle case sensitivity
-        $supplierName = strtolower($request->supplier_name);
+        // // Normalize supplier name to handle case sensitivity
+        // $supplierName = strtolower($request->supplier_name);
 
-        // Check if supplier exists with a case-insensitive comparison
-        $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
+        // // Check if supplier exists with a case-insensitive comparison
+        // $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
 
-        // If supplier does not exist, create a new one
-        if (!$supplier) {
-            $supplier = Supplier::create([
-                'name' => $request->supplier_name,
-                'address' => '',
-                'email' => '',
-                'contact' => '',
-            ]);
-        }
+        // // If supplier does not exist, create a new one
+        // if (!$supplier) {
+        //     $supplier = Supplier::create([
+        //         'name' => $request->supplier_name,
+        //         'address' => '',
+        //         'email' => '',
+        //         'contact' => '',
+        //     ]);
+        // }
 
         try {
             // Create a new purchase with the request data

@@ -16,15 +16,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('totalpurchase.store') }}" method="POST">
+                <form id="addPurchaseForm" action="{{ route('totalpurchase.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Category</label>
-                        <input type="text" class="form-control" name="category">
+                        <select class="form-control" name="category" id="category" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->kategori }}">{{ $category->kategori }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" name="product_name">
+                        <select class="form-control" name="product_name" id="product_name" required disabled>
+                            <option value="">Select Product</option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}">{{ $product->nama_produk }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
@@ -46,3 +56,40 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('category');
+        const productSelect = document.getElementById('product_name');
+        const allOptions = Array.from(productSelect.querySelectorAll('option'));
+        const form = document.getElementById('addPurchaseForm');
+
+        // Disable product dropdown initially
+        productSelect.disabled = true;
+
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+
+            // Clear the current product options
+            productSelect.innerHTML = '<option value="">Select Product</option>';
+
+            // Filter and add options that match the selected category
+            allOptions.forEach(option => {
+                if (option.getAttribute('data-category') === selectedCategory) {
+                    productSelect.appendChild(option);
+                }
+            });
+
+            // Reset the product select to show the first option and enable it
+            productSelect.selectedIndex = 0;
+            productSelect.disabled = selectedCategory === '' ? true : false;
+        });
+
+        // Clear form on modal close
+        $('#addPurchaseModal').on('hidden.bs.modal', function () {
+            form.reset();
+            productSelect.disabled = true;
+            productSelect.innerHTML = '<option value="">Select Product</option>';
+        });
+    });
+</script>
