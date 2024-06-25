@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Customer;
+use App\Models\Selling;
 
 class AuthController extends Controller
 {
@@ -37,7 +38,7 @@ class AuthController extends Controller
         $supplierCount = Supplier::count();
         $customerCount = Customer::count();
         // $purchaseCount = Purchase::count();
-        // $outgoingCount = OutgoingProduct::count();
+        $saleCount = Selling::where('status', 'approved')->count();
 
         $recentlyAddedProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
         $lowQuantityProducts = Product::where('jumlah_produk', '<', 15)->get();
@@ -50,7 +51,7 @@ class AuthController extends Controller
             'supplierCount', 
             'customerCount', 
             // 'purchaseCount', 
-            // 'outgoingCount',
+            'saleCount',
             'recentlyAddedProducts',
             'lowQuantityProducts',
         ));

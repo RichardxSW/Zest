@@ -57,7 +57,7 @@
         <div class="col-md-3 mb-4">
             <div class="card bg-primary text-white">
                 <div class="card-body">
-                    <h5 class="card-title">3</h5>
+                    <h5 class="card-title">10</h5>
                     <p class="card-text">Total Purchase</p>
                     <a href="{{ route('totalpurchase.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
@@ -66,8 +66,8 @@
         <div class="col-md-3 mb-4">
             <div class="card bg-primary text-white">
                 <div class="card-body">
-                    <h5 class="card-title">2</h5>
-                    <p class="card-text">Total Outgoing</p>
+                    <h5 class="card-title">{{ $saleCount }}</h5>
+                    <p class="card-text">Total Sale</p>
                     <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -179,6 +179,7 @@
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Category</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -188,6 +189,7 @@
                                     <td>{{ $product->harga_produk }}</td>
                                     <td>{{ $product->jumlah_produk }}</td>
                                     <td>{{ $product->kategori_produk }}</td>
+                                    <td>{{ $product->created_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
