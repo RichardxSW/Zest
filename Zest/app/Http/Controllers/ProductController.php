@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Selling;
 use App\Models\totalpurchase;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,6 +19,7 @@ class ProductController extends Controller
     //
     public function index() {
         $selling = Selling::all();
+        $customer = Customer::all();
         $purchase = totalPurchase::all();
         $product = Product::orderBy('created_at', 'asc')->get(); 
         $category = Category::all(); // Mengambil semua kategori
@@ -213,6 +215,14 @@ class ProductController extends Controller
         // Mengurangi jumlah total produk pada tabel kategori
         $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
         $product->save();
+
+        // Check if the customer exists, if not, add them
+        $customer = Customer::where('nama_customer', $selling->customer_name)->first();
+        if (!$customer) {
+            $customer = new Customer;
+            $customer->nama_customer = $selling->customer_name;
+            $customer->save();
+        }
 
         return redirect()->route('products.index')->with('success', 'Sale approved and product quantity updated.');
     }

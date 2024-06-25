@@ -57,14 +57,7 @@ class SellingController extends Controller
             $selling->status = 'pending'; // Default status
             $selling->save();
 
-            // Check if the customer is new and add if necessary
-            if ($request->input('customer_name_input')) {
-                $customer = new Customer;
-                $customer->nama_customer = ucwords(strtolower($customer_name));
-                $customer->save();
-            }
-
-            return redirect()->route('sellings.index')->with('success', 'Selling and Customer added successfully.');
+            return redirect()->route('sellings.index')->with('success', 'Selling added successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to add selling. Please try again.');
         }
@@ -95,33 +88,17 @@ class SellingController extends Controller
         ]);
 
         try {
-            // Store the old customer name before updating the selling record
-            $oldCustomerName = $selling->customer_name;
-
             // Update the selling record
             $selling->product_name = ucwords(strtolower($request->input('product_name')));
             $selling->category_name = ucwords(strtolower($request->input('category_name')));
+            // Optionally, you can skip updating customer_name here to maintain the existing customer association
             $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
             $selling->quantity = $request->input('quantity');
             $selling->date = $request->input('date');
-            $selling->status = $selling->status;
+            $selling->status = $selling->status; // Ensure status remains unchanged
             $selling->save();
 
-            // Update the customer record
-            $customer = Customer::where('nama_customer', ucwords(strtolower($oldCustomerName)))->first();
-            if ($customer) {
-                $customer->nama_customer = ucwords(strtolower($request->input('customer_name')));
-                $customer->save();
-
-                // Update all related sellings with the new customer name
-                Selling::where('customer_name', $oldCustomerName)
-                    ->update(['customer_name' => $request->input('customer_name')]);
-            } else {
-                // Handle the case where the customer does not exist, if necessary
-                return redirect()->route('sellings.index')->with('error', 'Customer record not found.');
-            }
-
-            return redirect()->route('sellings.index')->with('success', 'Selling and customer updated successfully.');
+            return redirect()->route('sellings.index')->with('success', 'Selling updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update selling. Please try again.');
         }

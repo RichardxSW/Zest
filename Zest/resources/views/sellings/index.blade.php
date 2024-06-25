@@ -59,7 +59,7 @@
     #invTable td:nth-child(4),
     #invTable th:nth-child(6),
     #invTable td:nth-child(6) {
-        width: 12%;
+        width: 14%;
     }
 
     #invTable th:nth-child(5),
@@ -131,21 +131,31 @@
                     <td>{{ $selling->customer_name }}</td>
                     <td>{{ $selling->quantity }}</td>
                     <td>{{ $selling->date }}</td>
-                    <td>{{ $selling->status === 'approved' ? 'Approved' : 'Pending' }}</td>
                     <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button type="button" class="btn btn-warning btn-sm equal-width-btn me-2" data-bs-toggle="modal" data-bs-target="#editSellingModal{{ $selling->id }}">
-                                <i class="fas fa-pencil-alt"></i> Edit
-                            </button>
-                            <form action="{{ route('sellings.delete', $selling->id) }}" method="POST" class="d-inline">
-                                @method('delete')
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm equal-width-btn">
-                                    <i class="fas fa-trash"></i> Delete
+                        @if($selling->status === 'approved')
+                            <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
+                        @else
+                            <span class="badge rounded-pill bg-warning text-dark" style="width: 80px"; >Pending</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($selling->status === 'approved')
+                            No Action
+                        @else
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-warning btn-sm equal-width-btn me-2" data-bs-toggle="modal" data-bs-target="#editSellingModal{{ $selling->id }}">
+                                    <i class="fas fa-pencil-alt"></i> Edit
                                 </button>
-                            </form>
-                        </div>
-                    </td>                                   
+                                <form action="{{ route('sellings.delete', $selling->id) }}" method="POST" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm equal-width-btn">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </td>                                    
                 </tr>
             @endforeach
             </tbody>
@@ -183,7 +193,9 @@
                             <td>{{ $selling->customer_name }}</td>
                             <td>{{ $selling->quantity }}</td>
                             <td>{{ $selling->date }}</td>
-                            <td>{{ $selling->status === 'approved' ? 'Approved' : 'Pending' }}</td>
+                            <td>
+                                <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
+                            </td>    
                             <td>
                                 <a href="{{ route('sellings.exportInv', $selling->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
                             </td>
