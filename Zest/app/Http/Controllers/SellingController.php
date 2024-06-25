@@ -53,19 +53,25 @@ class SellingController extends Controller
 
     public function edit($id) {
         $selling = Selling::find($id);
-        return view('sellings.edit', compact('selling'));
+        $categories = Category::all();
+        $products = Product::all();
+        return view('sellings.edit', compact('selling', 'categories', 'products'));
     }
 
     public function update(Request $request, $id)
     {
         $selling = Selling::find($id);
+
+        if (!$selling) {
+            return redirect()->route('sellings.index')->with('error', 'Selling record not found.');
+        }
+
         $request->validate([
             'product_name' => 'required|string|max:255',
             'category_name' => 'required|string|max:255',
             'customer_name' => 'required|string|max:255',
             'quantity' => 'required|integer|min:0',
             'date' => 'required|date',
-            // 'status' => 'in:pending,approved',
         ]);
 
         try {
@@ -74,7 +80,7 @@ class SellingController extends Controller
             $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
             $selling->quantity = $request->input('quantity');
             $selling->date = $request->input('date');
-            $selling->status = $request->input('status');
+
             $selling->save();
 
             return redirect()->route('sellings.index')->with('success', 'Selling updated successfully.');
