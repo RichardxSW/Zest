@@ -6,6 +6,17 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
+
+    .btn .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            transform: translate(50%, -50%);
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+    }
 </style>
 @endpush
 
@@ -41,6 +52,8 @@
         <div class="col-auto">
             <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#requestPurchaseModal">
                 <i class="fas fa-arrow-circle-down"></i> Request Purchase
+                <span class="badge">{{ $pendingRequestPurchase }}
+                </span>
             </button>
             <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#requestSellModal">
                 <i class="fas fa-arrow-circle-up"></i> Request Sell
