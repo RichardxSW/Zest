@@ -14,7 +14,11 @@ html, body, #app {
     z-index: 1000;
     background-color: #343a40;
     color: #fff;
-    padding-top: 56px; /* Add padding to prevent overlapping with navbar */
+     /* Add padding to prevent overlapping with navbar */
+}
+
+.sidebar .text-center {
+    color:crimson;
 }
 
 /* Tambahkan aturan CSS untuk menandai sidebar yang aktif */
@@ -33,9 +37,10 @@ html, body, #app {
 }
 
 .navbar {
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
+    position: fixed;
     width: 100%;
-    z-index: 1050; /* Ensure navbar is above the sidebar */
+    /* z-index: 1050;  */
 }
 
 .navbar-text {
@@ -52,6 +57,11 @@ html, body, #app {
 .card {
     border: none;
     border-radius: 0.5rem;
+}
+
+.card-title {
+    font-size: 32px;
+    font-weight: bold;
 }
 
 .container-fluid {

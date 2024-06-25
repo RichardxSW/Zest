@@ -11,9 +11,7 @@
         <div class="modal-content custom-modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editSupplierModalLabel{{ $sup->id }}">Edit Supplier Info</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('supplier.update', $sup->id) }}" method="POST">
@@ -33,10 +31,10 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" value="{{ $sup->contact }}">
+                        <input type="text" class="form-control" name="contact" value="{{ $sup->contact }}">
                     </div>
 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success">Save</button>
                 </form>
             </div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SellingController;
+use App\Http\Controllers\TotalPurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ use App\Http\Controllers\SellingController;
 */
 
 Route::get('/', [App\Http\Controllers\LoginController::class, 'index'])->name('login');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
 
 // Category routes for Stock Manager
 Route::middleware(['role:Stock_Manager'])->group(function () {
@@ -42,7 +43,10 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
-        Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+        Route::get('/exportPdf', [ProductController::class, 'exportPdf'])->name('products.exportPdf');
+        Route::get('/exportXls', [ProductController::class, 'exportXls'])->name('products.exportXls');
+        Route::post('/importXls', [ProductController::class, 'import'])->name('products.import');
+        Route::get('/{id}', [ProductController::class, 'show'])->name('supplier.show');
     });
 
     Route::get('/selling/{id}/approve', [SellingController::class, 'approve'])->name('sellings.approve');
@@ -58,18 +62,24 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
         Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
         Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
         Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
-        Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
+        Route::get('/exportPdf', [SupplierController::class, 'exportPdf'])->name('supplier.exportPdf');
+        Route::get('/exportXls', [SupplierController::class, 'exportXls'])->name('supplier.exportXls');
+        Route::post('/importXls', [SupplierController::class, 'import'])->name('supplier.import');
+        Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier.show');
     });
 
-    // Route::prefix('purchase')->group(function () {
-    //     Route::get('/', [PurchaseController::class, 'index'])->name('purchase.index');
-    //     Route::get('/create', [PurchaseController::class, 'create'])->name('purchase.create');
-    //     Route::post('/store', [PurchaseController::class, 'store'])->name('purchase.store');
-    //     Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
-    //     Route::put('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
-    //     Route::delete('/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
-    //     Route::get('/search', [PurchaseController::class, 'search'])->name('purchase.search');
-    // });
+    Route::prefix('/totalpurchase')->group(function () {
+        Route::get('/', [TotalPurchaseController::class, 'index'])->name('totalpurchase.index');
+        Route::get('/create', [TotalPurchaseController::class, 'create'])->name('totalpurchase.create');
+        Route::post('/store', [TotalPurchaseController::class, 'store'])->name('totalpurchase.store');
+        Route::get('/edit/{id}', [TotalPurchaseController::class, 'edit'])->name('totalpurchase.edit');
+        Route::put('/update/{id}', [TotalPurchaseController::class, 'update'])->name('totalpurchase.update');
+        Route::delete('/delete/{id}', [TotalPurchaseController::class, 'delete'])->name('totalpurchase.delete');
+        Route::get('/exportPdf', [TotalPurchaseController::class, 'exportPdf'])->name('totalpurchase.exportPdf');
+        Route::get('/exportXls', [TotalPurchaseController::class, 'exportXls'])->name('totalpurchase.exportXls');
+        Route::get('/exportInv/{id}', [TotalPurchaseController::class, 'exportInv'])->name('totalpurchase.exportInv');
+        Route::get('show/{id}', [TotalPurchaseController::class, 'show'])->name('totalpurchase.show');
+    });
 });
 
 // Assuming you have CustomerController and SellingController

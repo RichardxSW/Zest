@@ -76,7 +76,7 @@
         <div class="d-flex flex-grow-1">
             <!-- Sidebar -->
             <nav class="bg-dark text-white sidebar">
-                <h3 class="text-center my-4">Inventory System</h3>
+                <h3 class="text-center my-4">ZEST</h3>
                 <ul class="nav flex-column">
                     <li class="nav-item {{ Route::is('home') ? 'active' : '' }}">
                         <a class="nav-link text-white" href="{{ route('home') }}">
@@ -108,8 +108,8 @@
                             <i class="fas fa-shopping-cart"></i> Selling Products
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
+                    <li class="nav-item {{ Route::is('totalpurchase.index') ? 'active' : ''}}">
+                        <a class="nav-link text-white" href="{{ route('totalpurchase.index') }}">
                             <i class="fas fa-receipt"></i> Purchase Products
                         </a>
                     </li>
