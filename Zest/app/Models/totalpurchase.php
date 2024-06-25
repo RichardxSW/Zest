@@ -10,6 +10,7 @@ class totalpurchase extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category',
         'product_name',
         'supplier_name',
         'quantity',

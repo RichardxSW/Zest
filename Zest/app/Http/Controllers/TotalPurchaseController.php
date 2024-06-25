@@ -42,6 +42,7 @@ class TotalPurchaseController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
+            "category"=> "required",
             "product_name"=> "required",
             "supplier_name"=> "required",
             "quantity"=> "numeric",
@@ -98,6 +99,7 @@ class TotalPurchaseController extends Controller
 
         // Validate the incoming request data
         $request->validate([
+            'category'=> 'required',
             "product_name"=> "required",
             "supplier_name"=> "required",
             "quantity"=> "numeric",

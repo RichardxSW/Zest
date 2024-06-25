@@ -21,6 +21,10 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" class="form-control" name="category" value="{{ $pur->category }}">
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Product Name</label>
                         <input type="text" class="form-control" name="product_name" value="{{ $pur->product_name }}">
                     </div>
