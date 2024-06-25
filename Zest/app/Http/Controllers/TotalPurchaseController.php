@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class TotalPurchaseController extends Controller
 {
@@ -50,25 +51,34 @@ class TotalPurchaseController extends Controller
         ]);
 
         // Normalize supplier name to handle case sensitivity
-        $supplierName = strtolower($request->supplier_name);
+        // $supplierName = strtolower($request->supplier_name);
 
         // Check if supplier exists with a case-insensitive comparison
-        $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
+        // $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
 
-        // If supplier does not exist, create a new one
-        if (!$supplier) {
-            $supplier = Supplier::create([
-                'name' => $request->supplier_name,
-                'address' => '',
-                'email' => '',
-                'contact' => '',
-            ]);
-        }
+        // // If supplier does not exist, create a new one
+        // if (!$supplier) {
+        //     $supplier = Supplier::create([
+        //         'name' => $request->supplier_name,
+        //         'address' => '',
+        //         'email' => '',
+        //         'contact' => '',
+        //     ]);
+        // }
+        // Log::info('Request Data:', $request->all());
 
-        try {
+        try {       
             // Create a new purchase with the request data
-            totalpurchase::create($request->all());
-
+            // totalpurchase::create($request->all());
+            $purchase = new totalPurchase;
+            $purchase->product_name = ucwords(strtolower($request->input('product_name')));
+            $purchase->category = ucwords(strtolower($request->input('category')));
+            $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));
+            $purchase->quantity = $request->input('quantity');
+            $purchase->in_date = $request->input('in_date');
+            $purchase->status = 'pending'; // Default status
+            $purchase->save();
+            
             // Redirect to the index route with a success message
             return redirect()->route('totalpurchase.index')->with('success', 'Purchase added successfully.');
         } catch (\Exception $e) {
