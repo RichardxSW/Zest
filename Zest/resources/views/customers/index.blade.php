@@ -44,19 +44,21 @@
             <thead>
                 <tr>
                     <th width="5%" scope="col">ID</th>
-                    <th width="18%" scope="col">Name</th>
-                    <th width="18%" scope="col">Item</th>
-                    <th width="18%" scope="col">Item Quantity</th>
-                    <th width="26%" scope="col">Action</th>
+                    <th width="15%" scope="col">Name</th>
+                    <th width="15%" scope="col">Address</th>
+                    <th width="15%" scope="col">Email</th>
+                    <th width="15%" scope="col">Contact</th>
+                    <th width="15%" scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach ($customer as $cus)
+            @foreach ($customers as $cus)
                 <tr>
                     <td>{{ $cus->id }}</td>
                     <td>{{ $cus->nama_customer }}</td>
-                    <td>{{ $cus->item_customer }}</td>
-                    <td>{{ $cus->quantity_customer }}</td>
+                    <td>{{ $cus->address_customer }}</td>
+                    <td>{{ $cus->email_customer }}</td>
+                    <td>{{ $cus->contact_customer }}</td>
                     <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editCustomerModal{{ $cus->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
                         <form action="{{ route('customers.delete', $cus->id) }}" method="POST" class="d-inline">

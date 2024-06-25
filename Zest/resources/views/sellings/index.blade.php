@@ -7,8 +7,12 @@
         margin-right: 10px !important;
     }
 
+    .equal-width-btn {
+        width: 80px; /* Adjust this value as needed */
+    }
+
     table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
-    text-align: left;
+        text-align: left;
     }
 
     #sellTable th:nth-child(1),
@@ -22,11 +26,14 @@
     #sellTable td:nth-child(3),
     #sellTable th:nth-child(4),
     #sellTable td:nth-child(4),
-    #sellTable th:nth-child(5),
-    #sellTable td:nth-child(5),
     #sellTable th:nth-child(6),
     #sellTable td:nth-child(6) {
         width: 14%;
+    }
+
+    #sellTable th:nth-child(5),
+    #sellTable td:nth-child(5){
+        width: 8%;
     }
 
     #sellTable th:nth-child(7),
@@ -50,11 +57,14 @@
     #invTable td:nth-child(3),
     #invTable th:nth-child(4),
     #invTable td:nth-child(4),
-    #invTable th:nth-child(5),
-    #invTable td:nth-child(5),
     #invTable th:nth-child(6),
     #invTable td:nth-child(6) {
-        width: 14%;
+        width: 12%;
+    }
+
+    #invTable th:nth-child(5),
+    #invTable td:nth-child(5){
+        width: 8%;
     }
 
     #invTable th:nth-child(7),
@@ -108,8 +118,8 @@
                     <th scope="col">Customer</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Date</th>
-                    <th width="10%" scope="col">Status</th>
-                    <th width="16%" scope="col">Action</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,13 +133,19 @@
                     <td>{{ $selling->date }}</td>
                     <td>{{ $selling->status === 'approved' ? 'Approved' : 'Pending' }}</td>
                     <td>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editSellingModal{{ $selling->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <form action="{{ route('sellings.delete', $selling->id) }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-                        </form>
-                    </td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-warning btn-sm equal-width-btn me-2" data-bs-toggle="modal" data-bs-target="#editSellingModal{{ $selling->id }}">
+                                <i class="fas fa-pencil-alt"></i> Edit
+                            </button>
+                            <form action="{{ route('sellings.delete', $selling->id) }}" method="POST" class="d-inline">
+                                @method('delete')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm equal-width-btn">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>                                   
                 </tr>
             @endforeach
             </tbody>
@@ -158,21 +174,23 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach ($sellings as $selling)
-                <tr>
-                    <td>{{ $selling->id }}</td>
-                    <td>{{ $selling->product_name }}</td>
-                    <td>{{ $selling->category_name }}</td>
-                    <td>{{ $selling->customer_name }}</td>
-                    <td>{{ $selling->quantity }}</td>
-                    <td>{{ $selling->date }}</td>
-                    <td>{{ $selling->status === 'approved' ? 'Approved' : 'Pending' }}</td>
-                    <td>
-                        <a href="{{ route('sellings.exportInv', $selling->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
+                @foreach ($sellings as $selling)
+                    @if($selling->status === 'approved')
+                        <tr>
+                            <td>{{ $selling->id }}</td>
+                            <td>{{ $selling->product_name }}</td>
+                            <td>{{ $selling->category_name }}</td>
+                            <td>{{ $selling->customer_name }}</td>
+                            <td>{{ $selling->quantity }}</td>
+                            <td>{{ $selling->date }}</td>
+                            <td>{{ $selling->status === 'approved' ? 'Approved' : 'Pending' }}</td>
+                            <td>
+                                <a href="{{ route('sellings.exportInv', $selling->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>            
         </table>
     </div>
 </div>

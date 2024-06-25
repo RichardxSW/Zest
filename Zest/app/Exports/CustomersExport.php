@@ -15,7 +15,7 @@ class CustomersExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Customer::all(['id', 'nama_customer', 'item_customer', 'quantity_customer']);
+        return Customer::all(['id', 'nama_customer', 'address_customer', 'email_customer', 'contact_customer']);
     }
 
     /**
@@ -28,8 +28,9 @@ class CustomersExport implements FromCollection, WithHeadings
         return [
             'ID',
             'Name',
-            'Item',
-            'Item Quantity',
+            'Address',
+            'Email',
+            'Contact',
         ];
     }
 }

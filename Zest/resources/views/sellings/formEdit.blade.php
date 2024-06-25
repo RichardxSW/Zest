@@ -30,7 +30,12 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label>
-                        <input type="text" class="form-control" name="customer_name" value="{{ $sell->customer_name }}" required>
+                        <select class="form-control" name="customer_name" id="customer_name_edit_{{ $sell->id }}" required>
+                            <option value="">Select Customer</option>
+                            @foreach($customers as $customer)
+                                <option value="{{ $customer->nama_customer }}" {{ $sell->customer_name == $customer->nama_customer ? 'selected' : '' }}>{{ $customer->nama_customer }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
@@ -39,13 +44,6 @@
                     <div class="mb-3">
                         <label class="form-label">Date</label>
                         <input type="date" class="form-control" name="date" value="{{ $sell->date }}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-control" name="status" disabled>
-                            <option value="pending" {{ $sell->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="approved" {{ $sell->status == 'approved' ? 'selected' : '' }}>Approved</option>
-                        </select>
                     </div>
                     <button type="submit" class="btn btn-success mt-3">Submit</button>
                     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
@@ -66,7 +64,7 @@
             const originalData = {
                 category: categorySelectEdit.value,
                 product: productSelectEdit.value,
-                customerName: document.querySelector('#editForm{{ $sell->id }} input[name="customer_name"]').value,
+                customerName: document.querySelector('#customer_name_edit_{{ $sell->id }}').value,
                 quantity: document.querySelector('#editForm{{ $sell->id }} input[name="quantity"]').value,
                 date: document.querySelector('#editForm{{ $sell->id }} input[name="date"]').value
             };
@@ -100,7 +98,7 @@
             const modalElement = document.getElementById('editSellingModal{{ $sell->id }}');
             modalElement.addEventListener('hidden.bs.modal', function() {
                 categorySelectEdit.value = originalData.category;
-                document.querySelector('#editForm{{ $sell->id }} input[name="customer_name"]').value = originalData.customerName;
+                document.querySelector('#customer_name_edit_{{ $sell->id }}').value = originalData.customerName;
                 document.querySelector('#editForm{{ $sell->id }} input[name="quantity"]').value = originalData.quantity;
                 document.querySelector('#editForm{{ $sell->id }} input[name="date"]').value = originalData.date;
                 populateEditProductOptions();

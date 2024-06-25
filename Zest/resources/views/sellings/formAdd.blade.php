@@ -29,7 +29,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label>
-                        <input type="text" class="form-control" name="customer_name" required>
+                        <select class="form-control" id="customer_name_select" name="customer_name_select">
+                            <option value="">Select Customer</option>
+                            @foreach($customers as $customer)
+                                <option value="{{ $customer->nama_customer }}">{{ $customer->nama_customer }}</option>
+                            @endforeach
+                        </select>
+                        <input type="text" class="form-control mt-2" id="customer_name_input" name="customer_name_input" placeholder="Or add new customer">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>

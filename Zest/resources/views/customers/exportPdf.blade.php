@@ -23,8 +23,9 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Item</th>
-                <th>Item Quantity</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody>
@@ -32,8 +33,9 @@
                 <tr>
                     <td>{{ $cus->id }}</td>
                     <td>{{ $cus->nama_customer }}</td>
-                    <td>{{ $cus->item_customer }}</td>
-                    <td>{{ $cus->quantity_customer }}</td>
+                    <td>{{ $cus->address_customer }}</td>
+                    <td>{{ $cus->email_customer }}</td>
+                    <td>{{ $cus->contact_customer }}</td>
                 </tr>
             @endforeach
         </tbody>

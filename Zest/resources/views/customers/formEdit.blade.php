@@ -1,11 +1,5 @@
-<style>
-    .mb-3 {
-        margin-bottom: 30px !important;
-    }
-</style>
-
 <!-- Edit Customer Modal -->
-@foreach ($customer as $cus)
+@foreach ($customers as $cus)
 <div class="modal fade" id="editCustomerModal{{ $cus->id }}" tabindex="-1" aria-labelledby="editCustomerModalLabel{{ $cus->id }}" aria-hidden="true">
     <div class="modal-dialog custom-modal-size modal-dialog-centered" role="document">
         <div class="modal-content custom-modal-content">
@@ -19,15 +13,19 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="nama_customer" value="{{ $cus->nama_customer }}">
+                        <input type="text" class="form-control" name="nama_customer" value="{{ $cus->nama_customer }}" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Item</label>
-                        <input type="text" class="form-control" name="item_customer" value="{{ $cus->item_customer }}">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="address_customer" value="{{ $cus->address_customer }}">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Item Quantity</label>
-                        <input type="number" class="form-control" name="quantity_customer" value="{{ $cus->quantity_customer }}">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email_customer" value="{{ $cus->email_customer }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact</label>
+                        <input type="text" class="form-control" name="contact_customer" value="{{ $cus->contact_customer }}">
                     </div>
                     <button type="submit" class="btn btn-success">Submit</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
