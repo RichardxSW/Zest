@@ -48,11 +48,9 @@
             background: #eee;
             border-bottom: 1px solid #ddd;
             font-weight: bold;
-            text-align: left;
         }
         .invoice-box table tr.item td {
             border-bottom: 1px solid #eee;
-            text-align: left;
         }
         .invoice-box table tr.item.last td {
             border-bottom: none;
@@ -69,9 +67,6 @@
         }
         .invoice-box table tr.details td {
             background: #f9f9f9;
-        }
-        .invoice-box table tr.heading {
-            background: #f7f7f7;
         }
         .invoice-box table tr.total td {
             background: #f1f1f1;
@@ -90,7 +85,7 @@
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
-                <td colspan="4">
+                <td colspan="5">
                     <table>
                         <tr>
                             <td class="title">
@@ -104,12 +99,14 @@
                 </td>
             </tr>
             <tr class="heading">
+                <td>Category</td>
                 <td>Product Name</td>
                 <td>Supplier Name</td>
                 <td>Quantity</td>
                 <td>In Date</td>
             </tr>
             <tr class="item">
+                <td>{{ $purchase->category }}</td>
                 <td>{{ $purchase->product_name }}</td>
                 <td>{{ $purchase->supplier_name }}</td>
                 <td>{{ $purchase->quantity }}</td>

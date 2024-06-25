@@ -22,6 +22,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Category</th>
                 <th>Product Name</th>
                 <th>Supplier Name</th>
                 <th>Quantity</th>
@@ -32,6 +33,7 @@
             @foreach($purchase as $pur)
                 <tr>
                     <td>{{ $pur->id }}</td>
+                    <td>{{ $pur->category }}</td>
                     <td>{{ $pur->product_name }}</td>
                     <td>{{ $pur->supplier_name }}</td>
                     <td>{{ $pur->quantity }}</td>

@@ -14,14 +14,16 @@
         <div class="modal-content custom-modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editPurchaseModalLabel{{ $pur->id }}">Edit Purchase Info</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('totalpurchase.update', $pur->id) }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" class="form-control" name="category" value="{{ $pur->category }}">
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
                         <input type="text" class="form-control" name="product_name" value="{{ $pur->product_name }}">

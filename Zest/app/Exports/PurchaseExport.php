@@ -15,7 +15,7 @@ class PurchaseExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return TotalPurchase::orderBy('created_at', 'asc')->get(['id', 'product_name', 'supplier_name', 'quantity', 'in_date']);
+        return TotalPurchase::orderBy('created_at', 'asc')->get(['id', 'category', 'product_name', 'supplier_name', 'quantity', 'in_date']);
     }
 
     /**
@@ -27,6 +27,7 @@ class PurchaseExport implements FromCollection, WithHeadings
     {
         return [
             'ID',
+            'Category',
             'Product Name',
             'Supplier Name',
             'Quantity',

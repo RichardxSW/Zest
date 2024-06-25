@@ -13,13 +13,15 @@
         <div class="modal-content custom-modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addPurchaseModalLabel">Add New Purchase</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('totalpurchase.store') }}" method="POST">
                     @csrf
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" class="form-control" name="category">
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
                         <input type="text" class="form-control" name="product_name">
