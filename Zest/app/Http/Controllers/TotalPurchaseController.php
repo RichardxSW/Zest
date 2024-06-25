@@ -118,6 +118,15 @@ class TotalPurchaseController extends Controller
         ]);
 
         try {
+            // Check if the old supplier name exists in the Supplier model
+            $oldSupplier = Supplier::whereRaw('LOWER(name) = ?', [strtolower($purchase->supplier_name)])->first();
+
+            // If old supplier exists, update its name to the new name
+            if ($oldSupplier) {
+                $oldSupplier->name = ucwords(strtolower($request->input('supplier_name')));
+                $oldSupplier->save();
+            }
+            
             $purchase->product_name = ucwords(strtolower($request->input('product_name')));
             $purchase->category = ucwords(strtolower($request->input('category')));
             $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));

@@ -46,7 +46,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">In Date</label>
-                        <input type="date" class="form-control" name="in_date">
+                        <input type="date" class="form-control" name="in_date" value="{{ date('Y-m-d') }}" required readonly>
                     </div>
 
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
