@@ -19,22 +19,24 @@
     #purTable th:nth-child(2),
     #purTable td:nth-child(2),
     #purTable th:nth-child(3),
-    #purTable td:nth-child(3) {
-        width: 18%;
-    }
+    #purTable td:nth-child(3),
     #purTable th:nth-child(4),
-    #purTable td:nth-child(4),
+    #purTable td:nth-child(4) {
+        width: 15%;
+    }
     #purTable th:nth-child(5),
     #purTable td:nth-child(5),
     #purTable th:nth-child(6),
-    #purTable td:nth-child(6) {
-        width: 13%;
-    }
+    #purTable td:nth-child(6),
     #purTable th:nth-child(7),
     #purTable td:nth-child(7) {
-        width: 27%;
+        width: 10%;
     }
-    
+    #purTable th:nth-child(8),
+    #purTable td:nth-child(8) {
+        width: 18%;
+    }
+
     /* Styling untuk invTable */
     #invTable th,
     #invTable td {
@@ -48,20 +50,22 @@
     #invTable th:nth-child(2),
     #invTable td:nth-child(2),
     #invTable th:nth-child(3),
-    #invTable td:nth-child(3) {
-        width: 18%;
-    }
+    #invTable td:nth-child(3),
     #invTable th:nth-child(4),
-    #invTable td:nth-child(4),
+    #invTable td:nth-child(4) {
+        width: 15%;
+    }
     #invTable th:nth-child(5),
     #invTable td:nth-child(5),
     #invTable th:nth-child(6),
-    #invTable td:nth-child(6) {
-        width: 15%;
-    }
+    #invTable td:nth-child(6),
     #invTable th:nth-child(7),
     #invTable td:nth-child(7) {
-        width: 27%;
+        width: 10%;
+    }
+    #invTable th:nth-child(8),
+    #invTable td:nth-child(8) {
+        width: 15%;
     }
 </style>
 @endpush
@@ -96,39 +100,46 @@
         </div>
     </div>
     <div class="box-body">
-        <table id="purTable" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Supplier Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($purchase as $pur)
-                <tr>
-                    <td>{{ $pur->id }}</td>
-                    <td>{{ $pur->product_name }}</td>
-                    <td>{{ $pur->supplier_name }}</td>
-                    <td>{{ $pur->quantity }}</td>
-                    <td>{{ $pur->in_date }}</td>
-                    <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
-                    <td>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+    <table id="purTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Category</th> <!-- Tambahkan ini -->
+            <th scope="col">Product Name</th>
+            <th scope="col">Supplier Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach ($purchase as $pur)
+        <tr>
+            <td>{{ $pur->id }}</td>
+            <td>{{ $pur->category }}</td> <!-- Tambahkan ini -->
+            <td>{{ $pur->product_name }}</td>
+            <td>{{ $pur->supplier_name }}</td>
+            <td>{{ $pur->quantity }}</td>
+            <td>{{ $pur->in_date }}</td>
+            <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
+            <td>
+            @if ($pur->status === 'approved')
+                <button type="button" class="btn btn-warning" disabled><i class="fas fa-pencil-alt"></i> Edit</button>
+            @else
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+            @endif
+                <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
+                    @method('delete')
+                    @csrf
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
+
     </div>
 </div>
 
@@ -143,6 +154,7 @@
             <thead>
                 <tr>
                     <th scope="col">ID</th>
+                    <th scope="col">Category</th>
                     <th scope="col">Product Name</th>
                     <th scope="col">Supplier Name</th>
                     <th scope="col">Quantity</th>
@@ -153,8 +165,10 @@
             </thead>
             <tbody>
             @foreach ($purchase as $pur)
+                @if ($pur->status === 'approved')
                 <tr>
                     <td>{{ $pur->id }}</td>
+                    <td>{{ $pur->category }}</td>
                     <td>{{ $pur->product_name }}</td>
                     <td>{{ $pur->supplier_name }}</td>
                     <td>{{ $pur->quantity }}</td>
@@ -164,6 +178,7 @@
                         <a href="{{ route('totalpurchase.exportInv', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
                     </td>
                 </tr>
+                @endif
             @endforeach
             </tbody>
         </table>

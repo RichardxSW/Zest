@@ -17,12 +17,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('totalpurchase.update', $pur->id) }}" method="POST">
+                <form id="editForm{{ $pur->id }}" action="{{ route('totalpurchase.update', $pur->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" name="category" id="category_name_edit_{{ $pur->id }}" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->kategori }}" {{ $pur->category_name == $category->kategori ? 'selected' : '' }}>{{ $category->kategori }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" name="product_name" value="{{ $pur->product_name }}">
+                        <select class="form-control" name="product_name" id="product_name_edit_{{ $pur->id }}" required>
+                            <option value="">Select Product</option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}" {{ $pur->product_name == $product->nama_produk ? 'selected' : '' }}>{{ $product->nama_produk }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
@@ -30,7 +44,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="text" class="form-control" name="quantity" value="{{ $pur->quantity }}">
+                        <input type="text" class="form-control" name="quantity" value="{{ $pur->quantity }}" min="0" oninput="this.value = Math.abs(this.value)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">In Date</label>
@@ -45,3 +59,58 @@
     </div>
 </div>
 @endforeach
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @foreach ($purchase as $pur)
+        (function() {
+            const categorySelectEdit = document.getElementById('category_name_edit_{{ $pur->id }}');
+            const productSelectEdit = document.getElementById('product_name_edit_{{ $pur->id }}');
+            const allOptionsEdit = Array.from(document.querySelectorAll('#product_name_edit_{{ $pur->id }} option'));
+            const originalData = {
+                category: categorySelectEdit.value,
+                product: productSelectEdit.value,
+                suuplierName: document.querySelector('#editForm{{ $pur->id }} input[name="supplier_name"]').value,
+                quantity: document.querySelector('#editForm{{ $pur->id }} input[name="quantity"]').value,
+                date: document.querySelector('#editForm{{ $pur->id }} input[name="in_date"]').value
+            };
+
+            function populateEditProductOptions() {
+                const selectedCategoryEdit = categorySelectEdit.value;
+                productSelectEdit.innerHTML = '<option value="">Select Product</option>';
+
+                allOptionsEdit.forEach(option => {
+                    if (option.getAttribute('data-category') === selectedCategoryEdit) {
+                        productSelectEdit.appendChild(option.cloneNode(true));
+                    }
+                });
+
+                productSelectEdit.disabled = selectedCategoryEdit === '' ? true : false;
+
+                // Retain the previously selected product
+                if (productSelectEdit.querySelector(`option[value="{{ $pur->product_name }}"]`)) {
+                    productSelectEdit.value = "{{ $pur->product_name }}";
+                }
+            }
+
+            populateEditProductOptions();
+
+            categorySelectEdit.addEventListener('change', function() {
+                productSelectEdit.selectedIndex = 0;
+                populateEditProductOptions();
+            });
+
+            // Reset form data when modal is closed
+            const modalElement = document.getElementById('editPurchaseModal{{ $pur->id }}');
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                categorySelectEdit.value = originalData.category;
+                document.querySelector('#editForm{{ $pur->id }} input[name="supplier_name"]').value = originalData.supplierName;
+                document.querySelector('#editForm{{ $pur->id }} input[name="quantity"]').value = originalData.quantity;
+                document.querySelector('#editForm{{ $pur->id }} input[name="in_date"]').value = originalData.date;
+                populateEditProductOptions();
+                productSelectEdit.value = originalData.product;
+            });
+        })();
+        @endforeach
+    });
+</script>
