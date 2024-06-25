@@ -124,7 +124,11 @@
             <td>{{ $pur->in_date }}</td>
             <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
             <td>
+            @if ($pur->status === 'approved')
+                <button type="button" class="btn btn-warning" disabled><i class="fas fa-pencil-alt"></i> Edit</button>
+            @else
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+            @endif
                 <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
                     @method('delete')
                     @csrf
