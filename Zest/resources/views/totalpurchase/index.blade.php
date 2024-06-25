@@ -161,6 +161,7 @@
             </thead>
             <tbody>
             @foreach ($purchase as $pur)
+                @if ($pur->status === 'approved')
                 <tr>
                     <td>{{ $pur->id }}</td>
                     <td>{{ $pur->category }}</td>
@@ -173,6 +174,7 @@
                         <a href="{{ route('totalpurchase.exportInv', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
                     </td>
                 </tr>
+                @endif
             @endforeach
             </tbody>
         </table>
