@@ -17,11 +17,21 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" name="product_name" required>
+                        <select class="form-control" name="product_name" required>
+                            <option value="">Select Product</option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->nama_produk }}">{{ $product->nama_produk }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="category_name" required>
+                        <select class="form-control" name="category_name" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->kategori }}">{{ $category->kategori }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label>
@@ -35,13 +45,6 @@
                         <label class="form-label">Date</label>
                         <input type="date" class="form-control" name="date" required>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-control" readonly required>
-                            <option value="pending" selected>Pending</option>
-                            <option value="approved" disabled>Approved</option>
-                        </select>
-                    </div> --}}
                     <button type="submit" class="btn btn-success">Submit</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                 </form>

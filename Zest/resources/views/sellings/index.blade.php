@@ -194,8 +194,23 @@
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#sellTable').DataTable();
-        $('#invTable').DataTable();
+        $('#sellTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5,6,7]
+                }, 
+            ]
+        });
+
+        $('#invTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5,6,7]
+                }, 
+            ]
+        });
     });
 </script>
 <script>
