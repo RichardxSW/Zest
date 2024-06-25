@@ -6,6 +6,17 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
+
+    .btn .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            transform: translate(50%, -50%);
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+    }
 </style>
 @endpush
 
@@ -29,7 +40,6 @@
         </div>
 
     <div class="row mb-3 justify-content-between">
-    <div class="col-auto">
         <div class="col-auto">
             <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addProductModal"><i class="fas fa-plus"></i> Add New Product</button>
             <button type="button" class="btn btn-danger mb-2" onclick="window.location.href='{{ route('products.exportPdf') }}'">
@@ -37,6 +47,16 @@
             </button>
             <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='{{ route('products.exportXls') }}'">
                 <i class="fas fa-file-excel"></i> Export Excel
+            </button>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#requestPurchaseModal">
+                <i class="fas fa-arrow-circle-down"></i> Request Purchase
+                <span class="badge">{{ $pendingRequestPurchase }}
+                </span>
+            </button>
+            <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#requestSellModal">
+                <i class="fas fa-arrow-circle-up"></i> Request Sell
             </button>
         </div>
   </div>
@@ -108,6 +128,8 @@
 
 @include('products.create')
 @include('products.edit')
+@include('products.requestPurchase')
+@include('products.requestSell')
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
