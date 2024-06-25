@@ -1,4 +1,4 @@
-<!-- 
+<!-- Request Purchase Modal -->
 <div class="modal fade" id="requestPurchaseModal" tabindex="-1" aria-labelledby="requestPurchaseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -11,9 +11,9 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Product Name</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Customer</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Supplier Name</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Date</th>
                             <th scope="col">Status</th>
@@ -22,26 +22,25 @@
                     </thead>
                     <tbody>
     
-                            @foreach ($selling as $sell)
-                                @if ($sell->status == 'pending')
+                            @foreach ($purchase as $pur)
+                                @if ($pur->status == 'pending')
                                     <tr>
-                                        <td>{{ $sell->id }}</td>
-                                        <td>{{ $sell->product_name }}</td>
-                                        <td>{{ $sell->category_name }}</td>
-                                        <td>{{ $sell->customer_name }}</td>
-                                        <td>{{ $sell->quantity }}</td>
-                                        <td>{{ $sell->date }}</td>
-                                        <td>{{ $sell->status }}</td>
+                                    <td>{{ $pur->id }}</td>
+                                        <td>{{ $pur->category }}</td> <!-- Tambahkan ini -->
+                                        <td>{{ $pur->product_name }}</td>
+                                        <td>{{ $pur->supplier_name }}</td>
+                                        <td>{{ $pur->quantity }}</td>
+                                        <td>{{ $pur->in_date }}</td>
+                                        <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
                                         <td>
-                                            @if ($sell->status != 'approved')
-                                                <form action="{{ route('products.approvePurchase', $sell->id) }}" method="POST">
+                                            @if ($pur->status != 'approved')
+                                                <form action="{{ route('products.approvePurchase', $pur->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
                                             @else
                                                 <span class="badge bg-success">Approved</span>
                                             @endif
-                                            <button type="button" class="btn btn-danger" onclick="handlePurchase({{ $sell->id }})"><i class="fas fa-wrong"></i> Approve</button>
                                         </td>
                                     </tr>
                                 @endif
@@ -52,4 +51,4 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>

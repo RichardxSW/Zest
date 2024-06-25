@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Selling;
+use App\Models\totalpurchase;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\ProductExport;
 use App\Imports\ProductImport;
@@ -17,9 +18,13 @@ class ProductController extends Controller
     //
     public function index() {
         $selling = Selling::all();
+        $purchase = totalPurchase::all();
         $product = Product::orderBy('created_at', 'asc')->get(); 
         $category = Category::all(); // Mengambil semua kategori
-        return view('products.index', compact('product', 'category', 'selling')); // Mengirim data kategori ke view
+        // Hitung jumlah request purchase yang pending
+        $pendingRequestPurchase = totalPurchase::where('status', 'pending')->count();
+        $pendingRequestSell = Selling::where('status', 'pending')->count();
+        return view('products.index', compact('product', 'category', 'selling', 'purchase', 'pendingRequestPurchase', 'pendingRequestSell')); // Mengirim data kategori ke view
     }
 
     public function create() {
@@ -167,7 +172,8 @@ class ProductController extends Controller
     }
 
     public function requestPurchase() {
-        return view('products.requestPurchase');
+        $purchase = totalPurchase::all();
+        return view('products.requestPurchase', compact('purchase'));
     }
     
     public function requestSell() {
@@ -181,6 +187,15 @@ class ProductController extends Controller
             $category = Category::where('kategori', $categoryName)->first();
             if ($category) {
                 $category->total_products -= $quantity;
+                $category->save();
+            }
+        }
+
+    private function increaseCategoryProductCount($categoryName, $quantity)
+        {
+            $category = Category::where('kategori', $categoryName)->first();
+            if ($category) {
+                $category->total_products += $quantity;
                 $category->save();
             }
         }
@@ -199,6 +214,23 @@ class ProductController extends Controller
         $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
         $product->save();
 
-        return redirect()->route('products.index')->with('success', 'Sell approved and product quantity updated.');
+        return redirect()->route('products.index')->with('success', 'Sale approved and product quantity updated.');
+    }
+
+    public function approvePurchase(Request $request, $id)
+    {
+        $purchase = totalPurchase::findOrFail($id);
+        $purchase->status = 'approved';
+        $purchase->save();
+
+        // Tambahkan logika untuk menambah jumlah produk
+        // $selling = Product::findOrFail($selling->id);
+        $product = Product::where('nama_produk', $purchase->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product->jumlah_produk += $purchase->quantity;
+        // Mengurangi jumlah total produk pada tabel kategori
+        $this->increaseCategoryProductCount($product->kategori_produk, $purchase->quantity);
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Purchase approved and product quantity updated.');
     }
 }
