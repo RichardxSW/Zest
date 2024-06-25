@@ -1,9 +1,3 @@
-<style>
-    .mb-3 {
-        margin-bottom: 30px !important;
-    }
-</style>
-
 <!-- Add Selling Modal -->
 <div class="modal fade" id="addSellingModal" tabindex="-1" aria-labelledby="addSellingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -13,15 +7,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('sellings.store') }}" method="POST">
+                <form id="addSellingForm" action="{{ route('sellings.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" name="product_name" required>
+                        <label class="form-label">Category Name</label>
+                        <select class="form-control" name="category_name" id="category_name" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->kategori }}">{{ $category->kategori }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="category_name" required>
+                        <label class="form-label">Product Name</label>
+                        <select class="form-control" name="product_name" id="product_name" required disabled>
+                            <option value="">Select Product</option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}">{{ $product->nama_produk }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label>
@@ -35,17 +39,47 @@
                         <label class="form-label">Date</label>
                         <input type="date" class="form-control" name="date" required>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-control" readonly required>
-                            <option value="pending" selected>Pending</option>
-                            <option value="approved" disabled>Approved</option>
-                        </select>
-                    </div> --}}
-                    <button type="submit" class="btn btn-success">Submit</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success mt-3">Submit</button>
+                    <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('category_name');
+        const productSelect = document.getElementById('product_name');
+        const allOptions = Array.from(productSelect.querySelectorAll('option'));
+        const form = document.getElementById('addSellingForm');
+
+        // Disable product dropdown initially
+        productSelect.disabled = true;
+
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+
+            // Clear the current product options
+            productSelect.innerHTML = '<option value="">Select Product</option>';
+
+            // Filter and add options that match the selected category
+            allOptions.forEach(option => {
+                if (option.getAttribute('data-category') === selectedCategory) {
+                    productSelect.appendChild(option);
+                }
+            });
+
+            // Reset the product select to show the first option and enable it
+            productSelect.selectedIndex = 0;
+            productSelect.disabled = selectedCategory === '' ? true : false;
+        });
+
+        // Clear form on modal close
+        $('#addSellingModal').on('hidden.bs.modal', function () {
+            form.reset();
+            productSelect.disabled = true;
+            productSelect.innerHTML = '<option value="">Select Product</option>';
+        });
+    });
+</script>

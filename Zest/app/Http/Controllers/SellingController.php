@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Selling;
+use App\Models\Product;
+use App\Models\Category;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\SellingExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -12,11 +14,15 @@ class SellingController extends Controller
 {
     public function index() {
         $sellings = Selling::all();
-        return view('sellings.index', compact('sellings'));
+        $products = Product::all();
+        $categories = Category::all();
+        return view('sellings.index', compact('sellings', 'products', 'categories'));
     }
 
     public function create() {
-        return view('sellings.create');
+        $categories = Category::all();
+        $products = Product::all();
+        return view('sellings.create', compact('categories', 'products'));
     }
 
     public function store(Request $request)
@@ -30,28 +36,14 @@ class SellingController extends Controller
         ]);
 
         try {
-            // Check if the selling entry already exists with the same product, category, and customer names
-            $selling = Selling::where('product_name', ucwords(strtolower($request->input('product_name'))))
-                                ->where('category_name', ucwords(strtolower($request->input('category_name'))))
-                                ->where('customer_name', ucwords(strtolower($request->input('customer_name'))))
-                                ->where('date', $request->input('date'))
-                                ->first();
-
-            if ($selling) {
-                // If entry exists, update the quantity
-                $selling->quantity += $request->input('quantity');
-                $selling->save();
-            } else {
-                // If entry doesn't exist, create a new one
-                $selling = new Selling();
-                $selling->product_name = ucwords(strtolower($request->input('product_name')));
-                $selling->category_name = ucwords(strtolower($request->input('category_name')));
-                $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
-                $selling->quantity = $request->input('quantity');
-                $selling->date = $request->input('date');
-                $selling->status = 'pending'; // Default status
-                $selling->save();
-            }
+            $selling = new Selling;
+            $selling->product_name = ucwords(strtolower($request->input('product_name')));
+            $selling->category_name = ucwords(strtolower($request->input('category_name')));
+            $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
+            $selling->quantity = $request->input('quantity');
+            $selling->date = $request->input('date');
+            $selling->status = 'pending'; // Default status
+            $selling->save();
 
             return redirect()->route('sellings.index')->with('success', 'Selling added successfully.');
         } catch (\Exception $e) {
@@ -61,46 +53,35 @@ class SellingController extends Controller
 
     public function edit($id) {
         $selling = Selling::find($id);
-        return view('sellings.edit', compact('selling'));
+        $categories = Category::all();
+        $products = Product::all();
+        return view('sellings.edit', compact('selling', 'categories', 'products'));
     }
 
     public function update(Request $request, $id)
     {
         $selling = Selling::find($id);
+
+        if (!$selling) {
+            return redirect()->route('sellings.index')->with('error', 'Selling record not found.');
+        }
+
         $request->validate([
             'product_name' => 'required|string|max:255',
             'category_name' => 'required|string|max:255',
             'customer_name' => 'required|string|max:255',
             'quantity' => 'required|integer|min:0',
             'date' => 'required|date',
-            // 'status' => 'in:pending,approved',
         ]);
 
         try {
-            // Check if there is any other selling entry with the same product, category, and customer names
-            $existingSelling = Selling::where('id', '!=', $id)
-                                        ->where('product_name', ucwords(strtolower($request->input('product_name'))))
-                                        ->where('category_name', ucwords(strtolower($request->input('category_name'))))
-                                        ->where('customer_name', ucwords(strtolower($request->input('customer_name'))))
-                                        ->where('date', $request->input('date'))
-                                        ->first();
+            $selling->product_name = ucwords(strtolower($request->input('product_name')));
+            $selling->category_name = ucwords(strtolower($request->input('category_name')));
+            $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
+            $selling->quantity = $request->input('quantity');
+            $selling->date = $request->input('date');
 
-            if ($existingSelling) {
-                // If entry exists, update the quantity
-                $existingSelling->quantity += $request->input('quantity');
-                $existingSelling->save();
-                // Delete the current selling instance as it's merged with an existing one
-                $selling->delete();
-            } else {
-                // If entry doesn't exist, update the current selling instance
-                $selling->product_name = ucwords(strtolower($request->input('product_name')));
-                $selling->category_name = ucwords(strtolower($request->input('category_name')));
-                $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
-                $selling->quantity = $request->input('quantity');
-                $selling->date = $request->input('date');
-                $selling->status = $request->input('status');
-                $selling->save();
-            }
+            $selling->save();
 
             return redirect()->route('sellings.index')->with('success', 'Selling updated successfully.');
         } catch (\Exception $e) {

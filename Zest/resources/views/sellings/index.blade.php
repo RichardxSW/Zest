@@ -6,10 +6,9 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
-    #sellTable th,
-    #sellTable td {
-        padding: 8px; /* Sesuaikan padding sesuai kebutuhan */
-        text-align: left; /* Atur alignment teks sesuai kebutuhan */
+
+    table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
+    text-align: left;
     }
 
     #sellTable th:nth-child(1),
@@ -38,12 +37,6 @@
     #sellTable th:nth-child(8),
     #sellTable td:nth-child(8) {
         width: 16%;
-    }
-    
-    #invTable th,
-    #invTable td {
-        padding: 8px; 
-        text-align: left; 
     }
 
     #invTable th:nth-child(1),
@@ -115,8 +108,8 @@
                     <th scope="col">Customer</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
+                    <th width="10%" scope="col">Status</th>
+                    <th width="16%" scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -194,8 +187,23 @@
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#sellTable').DataTable();
-        $('#invTable').DataTable();
+        $('#sellTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5,6,7]
+                }, 
+            ]
+        });
+
+        $('#invTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5,6,7]
+                }, 
+            ]
+        });
     });
 </script>
 <script>
