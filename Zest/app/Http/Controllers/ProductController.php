@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Customer;
+use App\Models\Selling;
+use App\Models\totalpurchase;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\ProductExport;
 use App\Imports\ProductImport;
@@ -15,9 +18,15 @@ class ProductController extends Controller
 {
     //
     public function index() {
+        $selling = Selling::all();
+        $customer = Customer::all();
+        $purchase = totalPurchase::all();
         $product = Product::orderBy('created_at', 'asc')->get(); 
         $category = Category::all(); // Mengambil semua kategori
-        return view('products.index', compact('product', 'category')); // Mengirim data kategori ke view
+        // Hitung jumlah request purchase yang pending
+        $pendingRequestPurchase = totalPurchase::where('status', 'pending')->count();
+        $pendingRequestSell = Selling::where('status', 'pending')->count();
+        return view('products.index', compact('product', 'category', 'selling', 'purchase', 'pendingRequestPurchase', 'pendingRequestSell')); // Mengirim data kategori ke view
     }
 
     public function create() {
@@ -163,4 +172,94 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Failed to import data from Excel file. Please make sure the file format is correct and try again.');
         }
     }
+
+    public function requestPurchase() {
+        $purchase = totalPurchase::all();
+        return view('products.requestPurchase', compact('purchase'));
+    }
+    
+    public function requestSell() {
+        // $selling = Selling::where('status', 'pending')->get();
+        $selling = Selling::all();
+        return view('products.requestSell', compact('selling'));
+    }
+
+    private function reduceCategoryProductCount($categoryName, $quantity)
+        {
+            $category = Category::where('kategori', $categoryName)->first();
+            if ($category) {
+                $category->total_products -= $quantity;
+                $category->save();
+            }
+        }
+
+    private function increaseCategoryProductCount($categoryName, $quantity)
+        {
+            $category = Category::where('kategori', $categoryName)->first();
+            if ($category) {
+                $category->total_products += $quantity;
+                $category->save();
+            }
+        }
+
+    public function approveSell(Request $request, $id)
+    {
+        $selling = Selling::findOrFail($id);
+        $selling->status = 'approved';
+        $selling->save();
+
+        // Tambahkan logika untuk menambah jumlah produk
+        // $selling = Product::findOrFail($selling->id);
+        $product = Product::where('nama_produk', $selling->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product->jumlah_produk -= $selling->quantity;
+        // Mengurangi jumlah total produk pada tabel kategori
+        $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
+        $product->save();
+
+        // Check if the customer exists, if not, add them
+        $customer = Customer::where('nama_customer', $selling->customer_name)->first();
+        if (!$customer) {
+            $customer = new Customer;
+            $customer->nama_customer = $selling->customer_name;
+            $customer->save();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Sale approved and product quantity updated.');
+    }
+
+    public function approvePurchase(Request $request, $id)
+    {
+        $purchase = totalPurchase::findOrFail($id);
+        $purchase->status = 'approved';
+        $purchase->save();
+
+        // Tambahkan logika untuk menambah jumlah produk
+        // $selling = Product::findOrFail($selling->id);
+        $product = Product::where('nama_produk', $purchase->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product->jumlah_produk += $purchase->quantity;
+        // Mengurangi jumlah total produk pada tabel kategori
+        $this->increaseCategoryProductCount($product->kategori_produk, $purchase->quantity);
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Purchase approved and product quantity updated.');
+    }
+
+    public function declineSell(Request $request, $id)
+    {
+        $selling = Selling::findOrFail($id);
+        $selling->status = 'declined';
+        $selling->save();
+
+        return redirect()->route('products.index')->with('success', 'Sell Request declined successfully.');
+    }
+
+    public function declinePurchase(Request $request, $id)
+    {
+        $purchase = totalPurchase::findOrFail($id);
+        $purchase->status = 'declined';
+        $purchase->save();
+
+        return redirect()->route('products.index')->with('success', 'Purchase Request declined successfully.');
+    }
+
 }

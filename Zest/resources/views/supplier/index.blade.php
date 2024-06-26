@@ -55,8 +55,8 @@
             @foreach ($supplier as $sup)
                 <tr>
                     <td>{{ $sup->id }}</td>
-                    <td>{{ $sup->name }}</td>
-                    <td>{{ $sup->address }}</td>
+                    <td>{{ ucwords($sup->name) }}</td>
+                    <td>{{ ucwords($sup->address) }}</td>
                     <td>{{ $sup->email }}</td>
                     <td>{{ $sup->contact }}</td>
                     <td>

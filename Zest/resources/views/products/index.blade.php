@@ -28,8 +28,7 @@
             </div>
         </div>
 
-    <div class="row mb-3 justify-content-between">
-    <div class="col-auto">
+    <div class="row mb-2 justify-content-between">
         <div class="col-auto">
             <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addProductModal"><i class="fas fa-plus"></i> Add New Product</button>
             <button type="button" class="btn btn-danger mb-2" onclick="window.location.href='{{ route('products.exportPdf') }}'">
@@ -37,6 +36,29 @@
             </button>
             <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='{{ route('products.exportXls') }}'">
                 <i class="fas fa-file-excel"></i> Export Excel
+            </button>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-info mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestPurchaseModal">
+                <i class="fas fa-arrow-circle-down"></i> Request Purchase
+                @if ($pendingRequestPurchase > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="badge">{{ $pendingRequestPurchase }}
+                        </span>
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                @endif
+            </button>
+
+            <button type="button" class="btn btn-warning mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestSellModal">
+                <i class="fas fa-arrow-circle-down"></i> Request Sell
+                @if ($pendingRequestSell > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="badge">{{ $pendingRequestSell }}
+                        </span>
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                @endif
             </button>
         </div>
   </div>
@@ -108,6 +130,8 @@
 
 @include('products.create')
 @include('products.edit')
+@include('products.requestPurchase')
+@include('products.requestSell')
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>

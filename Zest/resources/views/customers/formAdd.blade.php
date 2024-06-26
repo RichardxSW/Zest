@@ -1,9 +1,3 @@
-<style>
-    .mb-3 {
-        margin-bottom: 30px !important;
-    }
-</style>
-
 <!-- Add Customer Modal -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -17,15 +11,19 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="nama_customer">
+                        <input type="text" class="form-control" name="nama_customer" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Item</label>
-                        <input type="text" class="form-control" name="item_customer">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="address_customer">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity_customer">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email_customer">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact</label>
+                        <input type="text" class="form-control" name="contact_customer">
                     </div>
                     <button type="submit" class="btn btn-success">Submit</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>

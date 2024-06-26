@@ -5,36 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\totalpurchase;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class TotalPurchaseController extends Controller
 {
     // Display a listing of all purchases
     public function index(){
         // Get all purchases, suppliers, and products
-        $purchase = totalPurchase::all();
-        $supplier = Supplier::all();
-        $product = Product::all();
+        $products = Product::all();
+        $categories = Category::all();
 
         // Order purchases by creation date in ascending order
         $purchase = totalPurchase::orderBy('created_at', 'asc')->get();
 
         // Return the index view with the retrieved data
-        return view("totalpurchase.index", compact("purchase", "supplier", "product"));
+        return view("totalpurchase.index", compact("purchase", "categories", "products"));
     }
 
     // Show the form for creating a new purchase
     public function create()
     {
         // Get all suppliers and products
-        $supplier = Supplier::all();
-        $product = Product::all();
+        $products = Product::all();
+        $categories = Category::all();
 
         // Return the create view with the retrieved data
-        return view("totalpurchase.create", compact("supplier","product"));
+        return view("totalpurchase.create", compact("categories","products"));
     }
 
     // Store a newly created purchase in storage
@@ -42,32 +43,39 @@ class TotalPurchaseController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
+            "category"=> "required",
             "product_name"=> "required",
             "supplier_name"=> "required",
             "quantity"=> "numeric",
             "in_date"=> "required",
         ]);
 
-        // Normalize supplier name to handle case sensitivity
-        $supplierName = strtolower($request->supplier_name);
-
-        // Check if supplier exists with a case-insensitive comparison
-        $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
-
-        // If supplier does not exist, create a new one
-        if (!$supplier) {
-            $supplier = Supplier::create([
-                'name' => $request->supplier_name,
-                'address' => '',
-                'email' => '',
-                'contact' => '',
-            ]);
-        }
-
         try {
-            // Create a new purchase with the request data
-            totalpurchase::create($request->all());
+            // Normalize supplier name to handle case sensitivity
+            $supplierName = strtolower($request->supplier_name);
 
+            // Check if supplier exists with a case-insensitive comparison
+            $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
+
+            // If supplier does not exist, create a new one
+            if (!$supplier) {
+                $supplier = Supplier::create([
+                    'name' => $request->supplier_name,
+                    'address' => '',
+                    'email' => '',
+                    'contact' => '',
+                ]);
+            }
+            
+            $purchase = new totalPurchase;
+            $purchase->product_name = ucwords(strtolower($request->input('product_name')));
+            $purchase->category = ucwords(strtolower($request->input('category')));
+            $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));
+            $purchase->quantity = $request->input('quantity');
+            $purchase->in_date = $request->input('in_date');
+            $purchase->status = 'pending'; // Default status
+            $purchase->save();
+            
             // Redirect to the index route with a success message
             return redirect()->route('totalpurchase.index')->with('success', 'Purchase added successfully.');
         } catch (\Exception $e) {
@@ -83,11 +91,11 @@ class TotalPurchaseController extends Controller
         $purchase = totalpurchase::find($id);
 
         // Get all suppliers and products
-        $supplier = Supplier::all();
-        $product = Product::all();
+        $products = Product::all();
+        $categories = Category::all();
 
         // Return the edit view with the retrieved data
-        return view('totalpurchase.edit', compact('purchase','supplier', 'product'));
+        return view('totalpurchase.edit', compact('purchase','categories', 'products'));
     }
 
     // Update the specified purchase in storage
@@ -96,8 +104,13 @@ class TotalPurchaseController extends Controller
         // Find the purchase by ID
         $purchase = totalpurchase::find($id);
 
+        if (!$purchase) {
+            return redirect()->route('totalpurchase.index')->with('error', 'Selling record not found.');
+        }
+
         // Validate the incoming request data
         $request->validate([
+            'category'=> 'required',
             "product_name"=> "required",
             "supplier_name"=> "required",
             "quantity"=> "numeric",
@@ -105,8 +118,22 @@ class TotalPurchaseController extends Controller
         ]);
 
         try {
-            // Update the purchase with the request data
-            $purchase->update($request->all());
+            // Check if the old supplier name exists in the Supplier model
+            $oldSupplier = Supplier::whereRaw('LOWER(name) = ?', [strtolower($purchase->supplier_name)])->first();
+
+            // If old supplier exists, update its name to the new name
+            if ($oldSupplier) {
+                $oldSupplier->name = ucwords(strtolower($request->input('supplier_name')));
+                $oldSupplier->save();
+            }
+            
+            $purchase->product_name = ucwords(strtolower($request->input('product_name')));
+            $purchase->category = ucwords(strtolower($request->input('category')));
+            $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));
+            $purchase->quantity = $request->input('quantity');
+            $purchase->in_date = $request->input('in_date');
+
+            $purchase->save();
 
             // Redirect to the index route with a success message
             return redirect()->route('totalpurchase.index')->with('success', 'Purchase updated successfully.');

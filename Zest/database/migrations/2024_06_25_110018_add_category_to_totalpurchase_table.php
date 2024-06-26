@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_customer');
-            $table->string('item_customer');
-            $table->integer('quantity_customer');
-            $table->timestamps();
+        Schema::table('totalpurchase', function (Blueprint $table) {
+            $table->string('category')->nullable()->before('product_name'); // menambahkan kolom 'category' sebelum kolom 'product_name'
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer');
+        Schema::table('totalpurchase', function (Blueprint $table) {
+            $table->dropColumn('category');
+        });
     }
 };
