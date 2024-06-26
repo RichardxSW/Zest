@@ -243,4 +243,23 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Purchase approved and product quantity updated.');
     }
+
+    public function declineSell(Request $request, $id)
+    {
+        $selling = Selling::findOrFail($id);
+        $selling->status = 'declined';
+        $selling->save();
+
+        return redirect()->route('products.index')->with('success', 'Sell Request declined successfully.');
+    }
+
+    public function declinePurchase(Request $request, $id)
+    {
+        $purchase = totalPurchase::findOrFail($id);
+        $purchase->status = 'declined';
+        $purchase->save();
+
+        return redirect()->route('products.index')->with('success', 'Purchase Request declined successfully.');
+    }
+
 }

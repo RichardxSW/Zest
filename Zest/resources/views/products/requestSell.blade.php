@@ -38,10 +38,14 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
+
+                                                <form action="{{ route('products.declineSell', $sell->id) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                                </form>
                                             @else
                                                 <span class="badge bg-success">Approved</span>
                                             @endif
-                                            <!-- <button type="button" class="btn btn-danger" onclick="handleSell({{ $sell->id }})"><i class="fas fa-wrong"></i> Approve</button> -->
                                         </td>
                                     </tr>
                                 @endif

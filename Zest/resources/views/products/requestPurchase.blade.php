@@ -38,6 +38,11 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
+
+                                                <form action="{{ route('products.declinePurchase', $pur->id) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                                </form>
                                             @else
                                                 <span class="badge bg-success">Approved</span>
                                             @endif
