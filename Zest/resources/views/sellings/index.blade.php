@@ -134,12 +134,14 @@
                     <td>
                         @if($selling->status === 'approved')
                             <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
-                        @else
+                        @elseif ($selling->status === 'pending')
                             <span class="badge rounded-pill bg-warning text-dark" style="width: 80px"; >Pending</span>
+                        @else ($selling->status === 'declined')
+                            <span class="badge rounded-pill bg-danger text-dark" style="width: 80px";>Declined</span>
                         @endif
                     </td>
                     <td>
-                        @if($selling->status === 'approved')
+                        @if($selling->status === 'approved' || $selling->status === 'declined')
                             No Action
                         @else
                             <div class="d-flex justify-content-between align-items-center">

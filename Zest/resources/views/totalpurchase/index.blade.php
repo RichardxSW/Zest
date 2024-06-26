@@ -122,7 +122,16 @@
             <td>{{ $pur->supplier_name }}</td>
             <td>{{ $pur->quantity }}</td>
             <td>{{ $pur->in_date }}</td>
-            <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
+            <td>
+                <!-- {{ $pur->status === 'approved' ? 'Approved' : 'Pending' }} -->
+                @if($pur->status === 'approved')
+                    <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
+                @elseif ($pur->status === 'pending')
+                    <span class="badge rounded-pill bg-warning text-dark" style="width: 80px"; >Pending</span>
+                @else ($pur->status === 'declined')
+                    <span class="badge rounded-pill bg-danger text-dark" style="width: 80px";>Declined</span>
+                @endif  
+            </td>
             <td>
             @if ($pur->status === 'approved')
                 <button type="button" class="btn btn-warning" disabled><i class="fas fa-pencil-alt"></i> Edit</button>
