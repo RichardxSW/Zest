@@ -49,7 +49,7 @@ class TotalPurchaseController extends Controller
             "product_name"=> "required",
             'supplier_name_select' => 'nullable|string|max:255',
             'supplier_name_input' => 'nullable|string|max:255',
-            "quantity"=> "numeric",
+            "quantity"=> "numeric|min:1",
             "in_date"=> "required",
         ]);
 
@@ -125,7 +125,7 @@ class TotalPurchaseController extends Controller
             'category'=> 'required',
             "product_name"=> "required",
             "supplier_name"=> "required",
-            "quantity"=> "numeric",
+            "quantity"=> "numeric|min:1",
             "in_date"=> "required",
         ]);
 

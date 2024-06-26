@@ -51,7 +51,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="text" class="form-control" name="quantity" required min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="text" class="form-control" name="quantity" id="quantity" required min="1" oninput="handleQuantityInput(this)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">In Date</label>
@@ -113,4 +113,14 @@
             productSelect.innerHTML = '<option value="">Select Product</option>';
         });
     });
+
+    function handleQuantityInput(input) {
+        if (input.value === '0') {
+            input.value = '1';
+        } else if (input.value === '') {
+            input.value = '';
+        } else if (input.value < 1) {
+            input.value = '1';
+        }
+    }
 </script>
