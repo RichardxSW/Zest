@@ -6,17 +6,6 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
-
-    .btn .badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            transform: translate(50%, -50%);
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 5px 10px;
-    }
 </style>
 @endpush
 
@@ -39,7 +28,7 @@
             </div>
         </div>
 
-    <div class="row mb-3 justify-content-between">
+    <div class="row mb-2 justify-content-between">
         <div class="col-auto">
             <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addProductModal"><i class="fas fa-plus"></i> Add New Product</button>
             <button type="button" class="btn btn-danger mb-2" onclick="window.location.href='{{ route('products.exportPdf') }}'">
@@ -50,13 +39,26 @@
             </button>
         </div>
         <div class="col-auto">
-            <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#requestPurchaseModal">
+            <button type="button" class="btn btn-info mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestPurchaseModal">
                 <i class="fas fa-arrow-circle-down"></i> Request Purchase
-                <span class="badge">{{ $pendingRequestPurchase }}
-                </span>
+                @if ($pendingRequestPurchase > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="badge">{{ $pendingRequestPurchase }}
+                        </span>
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                @endif
             </button>
-            <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#requestSellModal">
-                <i class="fas fa-arrow-circle-up"></i> Request Sell
+
+            <button type="button" class="btn btn-info mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestSellModal">
+                <i class="fas fa-arrow-circle-down"></i> Request Sell
+                @if ($pendingRequestSell > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="badge">{{ $pendingRequestSell }}
+                        </span>
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                @endif
             </button>
         </div>
   </div>
