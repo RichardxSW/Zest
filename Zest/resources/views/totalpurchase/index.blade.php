@@ -153,7 +153,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col">
-            <h3>Export invoice</h3>
+            <h3>Export Receipt</h3>
         </div>
     </div>
     <div class="box-body">
@@ -182,7 +182,7 @@
                     <td>{{ $pur->in_date }}</td>
                     <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
                     <td>
-                        <a href="{{ route('totalpurchase.exportInv', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
+                        <a href="{{ route('totalpurchase.exportReceipt', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Receipt</a>
                     </td>
                 </tr>
                 @endif
