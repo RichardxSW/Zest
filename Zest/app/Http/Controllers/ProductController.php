@@ -234,7 +234,6 @@ class ProductController extends Controller
         $purchase->save();
 
         // Tambahkan logika untuk menambah jumlah produk
-        // $selling = Product::findOrFail($selling->id);
         $product = Product::where('nama_produk', $purchase->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
         $product->jumlah_produk += $purchase->quantity;
         // Mengurangi jumlah total produk pada tabel kategori
