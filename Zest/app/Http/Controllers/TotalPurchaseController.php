@@ -19,12 +19,13 @@ class TotalPurchaseController extends Controller
         // Get all purchases, suppliers, and products
         $products = Product::all();
         $categories = Category::all();
+        $supplier = Supplier::all();
 
         // Order purchases by creation date in ascending order
         $purchase = totalPurchase::orderBy('created_at', 'asc')->get();
 
         // Return the index view with the retrieved data
-        return view("totalpurchase.index", compact("purchase", "categories", "products"));
+        return view("totalpurchase.index", compact("purchase", "categories", "products", "supplier"));
     }
 
     // Show the form for creating a new purchase
@@ -33,9 +34,10 @@ class TotalPurchaseController extends Controller
         // Get all suppliers and products
         $products = Product::all();
         $categories = Category::all();
+        $suppliers = Supplier::all();
 
         // Return the create view with the retrieved data
-        return view("totalpurchase.create", compact("categories","products"));
+        return view("totalpurchase.create", compact("categories","products", "suppliers"));
     }
 
     // Store a newly created purchase in storage
@@ -45,32 +47,41 @@ class TotalPurchaseController extends Controller
         $request->validate([
             "category"=> "required",
             "product_name"=> "required",
-            "supplier_name"=> "required",
-            "quantity"=> "numeric",
+            'supplier_name_select' => 'nullable|string|max:255',
+            'supplier_name_input' => 'nullable|string|max:255',
+            "quantity"=> "numeric|min:1",
             "in_date"=> "required",
         ]);
 
         try {
+            // Determine which supplier name to use
+            $supplier_name = $request->input('supplier_name_select') ?: $request->input('supplier_name_input');
+
+            if (!$supplier_name) {
+                return redirect()->back()->with('error', 'Supplier name is required.');
+            }
+
             // Normalize supplier name to handle case sensitivity
-            $supplierName = strtolower($request->supplier_name);
+            $supplierNameNormalized = strtolower($supplier_name);
 
             // Check if supplier exists with a case-insensitive comparison
-            $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierName])->first();
+            $supplier = Supplier::whereRaw('LOWER(name) = ?', [$supplierNameNormalized])->first();
 
             // If supplier does not exist, create a new one
             if (!$supplier) {
                 $supplier = Supplier::create([
-                    'name' => $request->supplier_name,
+                    'name' => ucwords(strtolower($supplier_name)),
                     'address' => '',
                     'email' => '',
                     'contact' => '',
                 ]);
             }
             
+            // Create a new purchase
             $purchase = new totalPurchase;
             $purchase->product_name = ucwords(strtolower($request->input('product_name')));
             $purchase->category = ucwords(strtolower($request->input('category')));
-            $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));
+            $purchase->supplier_name = ucwords(strtolower($supplier_name));
             $purchase->quantity = $request->input('quantity');
             $purchase->in_date = $request->input('in_date');
             $purchase->status = 'pending'; // Default status
@@ -93,9 +104,10 @@ class TotalPurchaseController extends Controller
         // Get all suppliers and products
         $products = Product::all();
         $categories = Category::all();
+        $suppliers = Supplier::all();
 
         // Return the edit view with the retrieved data
-        return view('totalpurchase.edit', compact('purchase','categories', 'products'));
+        return view('totalpurchase.edit', compact('purchase','categories', 'products', 'suppliers'));
     }
 
     // Update the specified purchase in storage
@@ -105,7 +117,7 @@ class TotalPurchaseController extends Controller
         $purchase = totalpurchase::find($id);
 
         if (!$purchase) {
-            return redirect()->route('totalpurchase.index')->with('error', 'Selling record not found.');
+            return redirect()->route('totalpurchase.index')->with('error', 'Purchase record not found.');
         }
 
         // Validate the incoming request data
@@ -113,7 +125,7 @@ class TotalPurchaseController extends Controller
             'category'=> 'required',
             "product_name"=> "required",
             "supplier_name"=> "required",
-            "quantity"=> "numeric",
+            "quantity"=> "numeric|min:1",
             "in_date"=> "required",
         ]);
 
