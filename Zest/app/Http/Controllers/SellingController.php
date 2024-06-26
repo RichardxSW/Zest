@@ -47,13 +47,6 @@ class SellingController extends Controller
                 return redirect()->back()->with('error', 'Customer name is required.');
             }
 
-            // Check if the product exists and has sufficient quantity
-            $product = Product::where('nama_produk', ucwords(strtolower($request->input('product_name'))))->first();
-
-            if ($request->input('quantity') > $product->jumlah_produk) {
-                return redirect()->back()->with('error', 'Quantity exceeds available stock.');
-            }
-
             // Adding selling record
             $selling = new Selling;
             $selling->product_name = ucwords(strtolower($request->input('product_name')));
@@ -95,13 +88,6 @@ class SellingController extends Controller
         ]);
 
         try {
-            // Check if the product exists and has sufficient quantity
-            $product = Product::where('nama_produk', ucwords(strtolower($request->input('product_name'))))->first();
-
-            if ($request->input('quantity') > $product->jumlah_produk) {
-                return redirect()->back()->with('error', 'Quantity exceeds available stock.');
-            }
-
             // Update the selling record
             $selling->product_name = ucwords(strtolower($request->input('product_name')));
             $selling->category_name = ucwords(strtolower($request->input('category_name')));
