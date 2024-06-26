@@ -200,16 +200,25 @@ class TotalPurchaseController extends Controller
     }
 
     // Export a single purchase invoice to a PDF file
-    public function exportInv($id)
+    // Update exportReceipt function in TotalPurchaseController
+    public function exportReceipt($id)
     {
-        // Find the purchase by ID
-        $purchase = totalpurchase::findOrFail($id);
+        try {
+            // Find the purchase by ID
+            $purchase = totalpurchase::findOrFail($id);
 
-        // Load the view and generate the PDF for the invoice
-        $pdf = Pdf::loadView('totalpurchase.exportInv', compact('purchase'));
+            // Get product data from database
+            $product = Product::where('nama_produk', $purchase->product_name)->first();
 
-        // Download the generated PDF
-        return $pdf->download('invoice.pdf');
+            // Load the view and pass purchase and product data
+            $pdf = PDF::loadView('totalpurchase.exportReceipt', compact('purchase', 'product'));
+
+            // Download the generated PDF
+            return $pdf->download('receipt.pdf');
+        } catch (\Exception $e) {
+            // Handle errors if purchase is not found or other exceptions
+            return redirect()->back()->with('error', 'Failed to generate receipt. Please try again.');
+        }
     }
 
     // Display the specified purchase

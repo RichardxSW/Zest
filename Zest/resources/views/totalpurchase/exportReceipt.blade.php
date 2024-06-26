@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Purchase Invoice</title>
+    <title>Purchase Receipt</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,6 +20,16 @@
             line-height: 24px;
             color: #555;
             position: relative;
+        }
+        .invoice-box .title {
+            font-size: 30px;
+            line-height: 30px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .invoice-box .date {
+            text-align: right;
+            margin-bottom: 20px;
         }
         .invoice-box table {
             width: 100%;
@@ -40,9 +50,6 @@
             font-size: 30px;
             line-height: 30px;
             color: #333;
-        }
-        .invoice-box table tr.information table td {
-            padding-bottom: 40px;
         }
         .invoice-box table tr.heading td {
             background: #eee;
@@ -79,37 +86,34 @@
             bottom: 20px;
             right: 30px;
         }
+        .date-column {
+            white-space: nowrap; /* Prevents text wrapping */
+        }
     </style>
 </head>
 <body>
     <div class="invoice-box">
+        <div class="title">
+            Purchase Receipt
+        </div>
+        <div class="date">
+            Date: {{ \Carbon\Carbon::now()->toFormattedDateString() }}
+        </div>
         <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="5">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                Purchase Invoice
-                            </td>
-                            <td style="text-align: right;">
-                                Date: {{ \Carbon\Carbon::now()->toFormattedDateString() }}<br>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
             <tr class="heading">
                 <td>Category</td>
                 <td>Product Name</td>
-                <td>Supplier Name</td>
+                <td>Price @</td>
                 <td>Quantity</td>
+                <td>Total Price</td>
                 <td>In Date</td>
             </tr>
             <tr class="item">
                 <td>{{ $purchase->category }}</td>
                 <td>{{ $purchase->product_name }}</td>
-                <td>{{ $purchase->supplier_name }}</td>
+                <td>IDR {{ $product->harga_produk }}</td>
                 <td>{{ $purchase->quantity }}</td>
+                <td>IDR {{ $product->harga_produk * $purchase->quantity }}</td>
                 <td>{{ $purchase->in_date }}</td>
             </tr>
         </table>
