@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('customers.update', $cus->id) }}" method="POST">
+                <form id="editCustomerForm{{ $cus->id }}" action="{{ route('customers.update', $cus->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
@@ -35,3 +35,29 @@
     </div>
 </div>
 @endforeach
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Iterate through each edit modal and add event listener
+        @foreach ($customers as $cus)
+        (function() {
+            const originalData = {
+                customerName: document.querySelector('#editCustomerForm{{ $cus->id }} input[name="nama_customer"]').value,
+                address: document.querySelector('#editCustomerForm{{ $cus->id }} input[name="address_customer"]').value,
+                email: document.querySelector('#editCustomerForm{{ $cus->id }} input[name="email_customer"]').value,
+                contact: document.querySelector('#editCustomerForm{{ $cus->id }} input[name="contact_customer"]').value,
+            };
+
+
+            // Reset form data when modal is closed
+            const modalElement = document.getElementById('editCustomerModal{{ $cus->id }}');
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                document.querySelector('#editCustomerForm{{ $cus->id }} input[name="nama_customer"]').value = originalData.customerName;
+                document.querySelector('#editCustomerForm{{ $cus->id }} input[name="address_customer"]').value = originalData.address;
+                document.querySelector('#editCustomerForm{{ $cus->id }} input[name="email_customer"]').value = originalData.email;
+                document.querySelector('#editCustomerForm{{ $cus->id }} input[name="contact_customer"]').value = originalData.contact;
+            });
+        })();
+        @endforeach
+    });
+</script>

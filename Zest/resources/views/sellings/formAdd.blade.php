@@ -29,21 +29,24 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label>
-                        <select class="form-control" id="customer_name_select" name="customer_name_select">
-                            <option value="">Select Customer</option>
-                            @foreach($customers as $customer)
-                                <option value="{{ $customer->nama_customer }}">{{ $customer->nama_customer }}</option>
-                            @endforeach
-                        </select>
-                        <input type="text" class="form-control mt-2" id="customer_name_input" name="customer_name_input" placeholder="Or add new customer">
+                        <div class="input-group">
+                            <select class="form-control" id="customer_name_select" name="customer_name_select">
+                                <option value="">Select Customer</option>
+                                @foreach($customers as $customer)
+                                    <option value="{{ $customer->nama_customer }}">{{ $customer->nama_customer }}</option>
+                                @endforeach
+                            </select>
+                            <input type="text" class="form-control d-none" id="customer_name_input" name="customer_name_input" placeholder="Enter new customer name">
+                            <button type="button" id="toggleCustomerInput" class="btn btn-secondary ms-2 small-button">New Customer</button>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" required min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="number" class="form-control" name="quantity" required min="1" oninput="this.value = Math.abs(this.value)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" required>
+                        <input type="date" class="form-control" name="date" id="date" required>
                     </div>
                     <button type="submit" class="btn btn-success mt-3">Submit</button>
                     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
@@ -59,6 +62,14 @@
         const productSelect = document.getElementById('product_name');
         const allOptions = Array.from(productSelect.querySelectorAll('option'));
         const form = document.getElementById('addSellingForm');
+        const toggleCustomerButton = document.getElementById('toggleCustomerInput');
+        const customerSelect = document.getElementById('customer_name_select');
+        const customerInput = document.getElementById('customer_name_input');
+        const dateInput = document.getElementById('date');
+
+        // Set date input to today's date
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
 
         // Disable product dropdown initially
         productSelect.disabled = true;
@@ -81,11 +92,39 @@
             productSelect.disabled = selectedCategory === '' ? true : false;
         });
 
+        // Toggle between select and input for customer name
+        toggleCustomerButton.addEventListener('click', function() {
+            const isSelectVisible = !customerSelect.classList.contains('d-none');
+            customerSelect.classList.toggle('d-none', isSelectVisible);
+            customerInput.classList.toggle('d-none', !isSelectVisible);
+            toggleCustomerButton.textContent = isSelectVisible ? 'Cancel' : 'New Customer';
+            toggleCustomerButton.classList.toggle('btn-danger', isSelectVisible);
+            toggleCustomerButton.classList.toggle('btn-secondary', !isSelectVisible);
+        });
+
         // Clear form on modal close
         $('#addSellingModal').on('hidden.bs.modal', function () {
             form.reset();
             productSelect.disabled = true;
             productSelect.innerHTML = '<option value="">Select Product</option>';
+            customerSelect.classList.remove('d-none');
+            customerInput.classList.add('d-none');
+            toggleCustomerButton.textContent = 'New Customer';
+            toggleCustomerButton.classList.remove('btn-danger');
+            toggleCustomerButton.classList.add('btn-secondary');
+            
+            // Reset date input to today's date
+            dateInput.value = today;
         });
     });
 </script>
+
+<style>
+    .input-group .btn {
+        white-space: nowrap;
+    }
+
+    .input-group .small-button {
+        width: 120px;
+    }
+</style>
