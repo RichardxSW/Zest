@@ -17,8 +17,10 @@ html, body, #app {
      /* Add padding to prevent overlapping with navbar */
 }
 
-.sidebar .text-center {
+.sidebar .text-center::first-letter {
     color:crimson;
+    font-size: 32px;
+    margin-right: 3px;
 }
 
 /* Tambahkan aturan CSS untuk menandai sidebar yang aktif */
