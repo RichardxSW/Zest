@@ -15,6 +15,13 @@
     <div class="row mb-2">
         <div class="col">
             <h3>List of Customers</h3>
+
+            @if($errors->has('duplicate'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('duplicate') }}
+                </div>
+            @endif
+
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -81,6 +88,15 @@
             @if(session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
+                </div>
+            @endif
+            @if($errors->has('duplicate'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->get('duplicate') as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
         </div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use App\Exports\CustomersExport;
 use App\Imports\CustomersImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,21 +32,30 @@ class CustomerController extends Controller
             'email_customer' => 'nullable|email|max:255',
             'contact_customer' => 'nullable|string|max:20',
         ]);
-    
+
+        // Check for duplicate customer
+        $duplicateCustomer = Customer::where('nama_customer', $request->input('nama_customer'))
+            ->where('address_customer', $request->input('address_customer'))
+            ->where('email_customer', $request->input('email_customer'))
+            ->where('contact_customer', $request->input('contact_customer'))
+            ->first();
+
+        if ($duplicateCustomer) {
+            return redirect()->route('customers.index')->withErrors(['duplicate' => 'Same customer already exists.']);
+        }
+
         try {
-            // Save new customer data
             $customer = new Customer();
             $customer->nama_customer = ucwords(strtolower($request->input('nama_customer')));
             $customer->address_customer = ucwords(strtolower($request->input('address_customer')));
             $customer->email_customer = strtolower($request->input('email_customer'));
             $customer->contact_customer = $request->input('contact_customer');
             $customer->save();
-    
+
             return redirect()->route('customers.index')->with('success', 'Customer added successfully.');
         } catch (\Exception $e) {
-            // Log the exception message
             Log::error('Failed to add customer: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to add customer. Please try again.');
+            return redirect()->route('customers.index')->with('error', 'Failed to add customer. Please try again.');
         }
     }
 
@@ -65,15 +75,29 @@ class CustomerController extends Controller
             'contact_customer' => 'nullable|string|max:20',
         ]);
 
+        // Check for duplicate customer
+        $duplicateCustomer = Customer::where('nama_customer', $request->input('nama_customer'))
+            ->where('address_customer', $request->input('address_customer'))
+            ->where('email_customer', $request->input('email_customer'))
+            ->where('contact_customer', $request->input('contact_customer'))
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($duplicateCustomer) {
+            return redirect()->route('customers.index')->withErrors(['duplicate' => 'Same customer already exists.']);
+        }
+
         try {
             $customer->nama_customer = ucwords(strtolower($request->input('nama_customer')));
             $customer->address_customer = ucwords(strtolower($request->input('address_customer')));
             $customer->email_customer = strtolower($request->input('email_customer'));
             $customer->contact_customer = $request->input('contact_customer');
             $customer->save();
+
             return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update customer. Please try again.');
+            Log::error('Failed to update customer: ' . $e->getMessage());
+            return redirect()->route('customers.index')->with('error', 'Failed to update customer. Please try again.');
         }
     }
 
@@ -116,6 +140,10 @@ class CustomerController extends Controller
 
         try {
             Excel::import(new CustomersImport, $request->file('file'));
+            // Check for import errors
+            if (Session::has('import_errors')) {
+                return redirect()->route('customers.index')->withErrors(['duplicate' => Session::get('import_errors')]);
+            }   
             return redirect()->route('customers.index')->with('success', 'Customer data imported successfully from Excel file.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to import data from Excel file. Please make sure the file format is correct and try again.');
