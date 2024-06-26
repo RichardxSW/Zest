@@ -42,11 +42,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" required min="1" oninput="this.value = Math.abs(this.value)">
+                        <input type="number" class="form-control" name="quantity" required min="1" oninput="this.value = Math.max(1, this.value)" value="1">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" id="date" required>
+                        <input type="date" class="form-control" name="date" id="date" required readonly>
                     </div>
                     <button type="submit" class="btn btn-success mt-3">Submit</button>
                     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
