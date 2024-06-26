@@ -26,7 +26,14 @@ class ProductController extends Controller
         // Hitung jumlah request purchase yang pending
         $pendingRequestPurchase = totalPurchase::where('status', 'pending')->count();
         $pendingRequestSell = Selling::where('status', 'pending')->count();
-        return view('products.index', compact('product', 'category', 'selling', 'purchase', 'pendingRequestPurchase', 'pendingRequestSell')); // Mengirim data kategori ke view
+        return view('products.index', compact(
+            'product', 
+            'category', 
+            'selling', 
+            'purchase', 
+            'pendingRequestPurchase', 
+            'pendingRequestSell',
+            )); // Mengirim data kategori ke view
     }
 
     public function create() {
@@ -212,6 +219,7 @@ class ProductController extends Controller
         // $selling = Product::findOrFail($selling->id);
         $product = Product::where('nama_produk', $selling->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
         $product->jumlah_produk -= $selling->quantity;
+        $product->total_sales += $selling->quantity; // Tambahkan penjualan ke total_sales
         // Mengurangi jumlah total produk pada tabel kategori
         $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
         $product->save();
