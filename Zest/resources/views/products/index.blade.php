@@ -50,7 +50,7 @@
                 @endif
             </button>
 
-            <button type="button" class="btn btn-info mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestSellModal">
+            <button type="button" class="btn btn-warning mb-2 position-relative" data-bs-toggle="modal" data-bs-target="#requestSellModal">
                 <i class="fas fa-arrow-circle-down"></i> Request Sell
                 @if ($pendingRequestSell > 0)
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
