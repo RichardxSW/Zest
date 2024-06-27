@@ -25,18 +25,18 @@
 @section('content')
 <div class="container-fluid">
     <!-- Toast Container -->
-<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
-    <!-- Toast -->
-    <div class="toast low-quantity-toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Low Quantity Products Alert</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Some products have low quantity.
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
+        <!-- Toast -->
+        <div class="toast low-quantity-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Low Quantity Products Alert</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Some products have low quantity.
+            </div>
         </div>
     </div>
-</div>
 
     <div class="row mt-4">
         <div class="col-md-3 mb-4">

@@ -10,9 +10,6 @@
 @endpush
 
 @section('content')
-    <!-- <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Add Product</a> -->
-    <!-- <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Add Product</a> -->
-
 <div class="container-fluid mb-5">
     <div class="row mb-2">
         <div class="col">
