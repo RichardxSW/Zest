@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class TotalPurchaseController extends Controller
 {
@@ -220,11 +221,55 @@ class TotalPurchaseController extends Controller
     }
 
     // Display the specified purchase
-    public function show($id) {
-        // Find the purchase by ID
-        $purchase = totalpurchase::find($id);
+    // public function show($id) {
+    //     // Find the purchase by ID
+    //     $purchase = totalpurchase::find($id);
 
-        // Return the show view with the retrieved data
-        return view('totalpurchase.show', compact('purchase'));
+    //     // Return the show view with the retrieved data
+    //     return view('totalpurchase.show', compact('purchase'));
+    // }
+
+    public function dailyPurchases(Request $request)
+    {
+         // Daily Sales
+         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->toDateString());
+         $endDate = $request->input('end_date', Carbon::now()->toDateString());
+         
+         $dailyPurchases = totalPurchase::where('status', 'approved')
+                         ->whereBetween('updated_at', [$startDate, $endDate])
+                         ->get();
+ 
+         $totalDailyPurchases = $dailyPurchases->groupBy('product_name')->map(function ($row) {
+             return $row->sum('quantity');
+         });
+
+         $totalDailyPurchasesPerCategory = $dailyPurchases->groupBy('category')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        return view('totalpurchase.dailyPurchases', compact('dailyPurchases', 'startDate', 'endDate', 'totalDailyPurchases', 'totalDailyPurchasesPerCategory'));
+    }
+
+    public function monthlyPurchases(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+
+        $startDate = Carbon::create($year, $month)->startOfMonth();
+        $endDate = Carbon::create($year, $month)->endOfMonth();
+        
+        $monthlyPurchases = totalPurchase::where('status', 'approved')
+                        ->whereBetween('updated_at', [$startDate, $endDate])
+                        ->get();
+
+        $totalMonthlyPurchases = $monthlyPurchases->groupBy('product_name')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        $totalMonthlyPurchasesPerCategory = $monthlyPurchases->groupBy('category')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        return view('totalpurchase.monthlyPurchases', compact('monthlyPurchases', 'month', 'year', 'totalMonthlyPurchases', 'totalMonthlyPurchasesPerCategory'));
     }
 }

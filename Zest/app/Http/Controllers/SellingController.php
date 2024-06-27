@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\SellingExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SellingController extends Controller
 {
@@ -18,7 +19,13 @@ class SellingController extends Controller
         $products = Product::all();
         $categories = Category::all();
         $customers = Customer::all();
-        return view('sellings.index', compact('sellings', 'products', 'categories', 'customers'));
+
+        return view('sellings.index', compact(
+            'sellings', 
+            'products', 
+            'categories', 
+            'customers',
+        ));
     }
 
     public function create() {
@@ -139,8 +146,53 @@ class SellingController extends Controller
         return $pdf->download('invoice.pdf');
     }
 
-    public function show($id) {
-        $selling = Selling::find($id);
-        return view('sellings.show', compact('selling'));
+    // public function show($id) {
+    //     $selling = Selling::find($id);
+    //     return view('sellings.show', compact('selling'));
+    // }
+
+    public function dailySales(Request $request)
+    {
+         // Daily Sales
+         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->toDateString());
+         $endDate = $request->input('end_date', Carbon::now()->toDateString());
+         
+         $dailySales = Selling::where('status', 'approved')
+                         ->whereBetween('updated_at', [$startDate, $endDate])
+                         ->get();
+ 
+        // Total Sales per Product sorted by quantity descending
+        $totalDailySales = $dailySales->groupBy('product_name')->map(function ($rows) {
+            return $rows->sum('quantity');
+        });
+
+         $totalDailySalesPerCategory = $dailySales->groupBy('category_name')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        return view('sellings.dailySales', compact('dailySales', 'startDate', 'endDate', 'totalDailySales', 'totalDailySalesPerCategory'));
+    }
+
+    public function monthlySales(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+
+        $startDate = Carbon::create($year, $month)->startOfMonth();
+        $endDate = Carbon::create($year, $month)->endOfMonth();
+        
+        $monthlySales = Selling::where('status', 'approved')
+                        ->whereBetween('updated_at', [$startDate, $endDate])
+                        ->get();
+
+        $totalMonthlySales = $monthlySales->groupBy('product_name')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        $totalMonthlySalesPerCategory = $monthlySales->groupBy('category_name')->map(function ($row) {
+            return $row->sum('quantity');
+        });
+
+        return view('sellings.monthlySales', compact('monthlySales', 'month', 'year', 'totalMonthlySales', 'totalMonthlySalesPerCategory'));
     }
 }
