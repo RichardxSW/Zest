@@ -1,0 +1,73 @@
+.dt-length .dt-input {
+    margin-right: 10px !important;
+}
+
+.equal-width-btn {
+    width: 80px; /* Adjust this value as needed */
+}
+
+table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
+    text-align: left;
+}
+
+#sellTable th:nth-child(1),
+#sellTable td:nth-child(1) {
+    width: 4%;
+}
+
+#sellTable th:nth-child(2),
+#sellTable td:nth-child(2),
+#sellTable th:nth-child(3),
+#sellTable td:nth-child(3),
+#sellTable th:nth-child(4),
+#sellTable td:nth-child(4),
+#sellTable th:nth-child(6),
+#sellTable td:nth-child(6) {
+    width: 14%;
+}
+
+#sellTable th:nth-child(5),
+#sellTable td:nth-child(5){
+    width: 8%;
+}
+
+#sellTable th:nth-child(7),
+#sellTable td:nth-child(7) {
+    width: 10%;
+}
+
+#sellTable th:nth-child(8),
+#sellTable td:nth-child(8) {
+    width: 16%;
+}
+
+#invTable th:nth-child(1),
+#invTable td:nth-child(1) {
+    width: 4%;
+}
+
+#invTable th:nth-child(2),
+#invTable td:nth-child(2),
+#invTable th:nth-child(3),
+#invTable td:nth-child(3),
+#invTable th:nth-child(4),
+#invTable td:nth-child(4),
+#invTable th:nth-child(6),
+#invTable td:nth-child(6) {
+    width: 14%;
+}
+
+#invTable th:nth-child(5),
+#invTable td:nth-child(5){
+    width: 8%;
+}
+
+#invTable th:nth-child(7),
+#invTable td:nth-child(7) {
+    width: 10%;
+}
+
+#invTable th:nth-child(8),
+#invTable td:nth-child(8) {
+    width: 16%;
+}
