@@ -13,7 +13,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('supplier.store') }}" method="POST">
+                <form id="addSupplierForm" action="{{ route('supplier.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Name</label>
@@ -39,3 +39,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form element for add customer
+        const addSupplierForm = document.getElementById('addSupplierForm');
+        const addSupplierModalElement = document.getElementById('addSupplierModal');
+        
+        // Clear form on modal close
+        addCustomerModalElement.addEventListener('hidden.bs.modal', function () {
+            addSupplierForm.reset();
+        });
+    });
+</script>

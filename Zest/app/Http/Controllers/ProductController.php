@@ -32,20 +32,17 @@ class ProductController extends Controller
             'selling', 
             'purchase', 
             'pendingRequestPurchase', 
-            'pendingRequestSell',
+            'pendingRequestSell'
             )); // Mengirim data kategori ke view
     }
 
     public function create() {
-        $categories = Category::all(); // Mengambil semua kategori
+        $categories = Category::with('products')->get(); 
         return view('products.create', compact('categories'));
     }
 
     public function store(Request $request) {
         
-        // dd = die and dump 
-        // dd($request->all());
-
         $request->validate([
             'nama_produk' => 'required',
             'harga_produk' => 'required',
@@ -55,7 +52,7 @@ class ProductController extends Controller
 
         // Menyimpan data produk ke database
         $product = new Product;
-        $product->nama_produk = $request->nama_produk;
+        $product->nama_produk = ucwords(strtolower($request->input('nama_produk')));
         $product->harga_produk = $request->harga_produk;
         $product->jumlah_produk = $request->jumlah_produk;
         $product->kategori_produk = $request->kategori_produk;
@@ -81,26 +78,27 @@ class ProductController extends Controller
             'jumlah_produk' => 'numeric',
             'kategori_produk' => 'required',
         ]);
-
+    
+        $product = Product::findOrFail($id);
+        $oldCategory = $product->kategori_produk;
+    
         $update = [
-            'nama_produk' => $request->nama_produk,
+            'nama_produk' => ucwords(strtolower($request->input('nama_produk'))),
             'harga_produk' => $request->harga_produk,
             'jumlah_produk' => $request->jumlah_produk,
             'kategori_produk' => $request->kategori_produk,
         ];
-
-        $product = Product::find($id);
-        $oldCategory = $product->kategori_produk;
-
-        $product->update($request->all());
+    
+        $product->update($update);
         $this->updateCategoryCount($oldCategory);
         $this->updateCategoryCount($request->kategori_produk);
         $this->updateTotalProductCount($oldCategory);
         $this->updateTotalProductCount($request->kategori_produk);
-
+    
         return redirect()->route('products.index')
-        ->with('success', 'Product updated successfully');
-    }
+            ->with('success', 'Product updated successfully');
+    }    
+
     public function delete($id) {
         $product = Product::find($id);
         $category = $product->kategori_produk;

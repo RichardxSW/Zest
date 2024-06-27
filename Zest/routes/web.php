@@ -53,7 +53,6 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::get('/requestSell', [ProductController::class, 'requestSell'])->name('products.requestSell');
         Route::post('/approveSell/{id}', [ProductController::class, 'approveSell'])->name('products.approveSell');
         Route::post('/products/declineSell/{id}', [ProductController::class, 'declineSell'])->name('products.declineSell');
-        Route::get('/{id}', [ProductController::class, 'show'])->name('products.show');
     });
 });
 
