@@ -41,6 +41,15 @@
                 <i class="fas fa-file-excel"></i> Export Excel
             </button>
         </div>
+        <div class="col-auto">
+            <a href="{{ route('sellings.dailySales') }}" class="btn btn-info mb-2 position-relative">
+                Daily Sales
+            </a>
+
+            <a href="{{ route('sellings.monthlySales') }}" class="btn btn-warning mb-2 position-relative">
+                Monthly Sales
+            </a>
+        </div>
     </div>
     <div class="box-body">
         <table id="sellTable" class="table table-bordered table-striped">
