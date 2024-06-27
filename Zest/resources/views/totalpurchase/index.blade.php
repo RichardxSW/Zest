@@ -104,7 +104,7 @@
     <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Category</th> <!-- Tambahkan ini -->
+            <th scope="col">Category</th>
             <th scope="col">Product Name</th>
             <th scope="col">Supplier Name</th>
             <th scope="col">Quantity</th>
@@ -117,13 +117,12 @@
     @foreach ($purchase as $pur)
         <tr>
             <td>{{ $pur->id }}</td>
-            <td>{{ $pur->category }}</td> <!-- Tambahkan ini -->
+            <td>{{ $pur->category }}</td>
             <td>{{ $pur->product_name }}</td>
             <td>{{ $pur->supplier_name }}</td>
             <td>{{ $pur->quantity }}</td>
             <td>{{ $pur->in_date }}</td>
             <td>
-                <!-- {{ $pur->status === 'approved' ? 'Approved' : 'Pending' }} -->
                 @if($pur->status === 'approved')
                     <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
                 @elseif ($pur->status === 'pending')

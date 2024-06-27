@@ -16,12 +16,10 @@ class TotalPurchaseController extends Controller
 {
     // Display a listing of all purchases
     public function index(){
-        // Get all purchases, suppliers, and products
+        // Retrieve all products, categories, suppliers, and purchases
         $products = Product::all();
         $categories = Category::all();
         $supplier = Supplier::all();
-
-        // Order purchases by creation date in ascending order
         $purchase = totalPurchase::orderBy('created_at', 'asc')->get();
 
         // Return the index view with the retrieved data
@@ -31,7 +29,7 @@ class TotalPurchaseController extends Controller
     // Show the form for creating a new purchase
     public function create()
     {
-        // Get all suppliers and products
+        // Retrieve all products, categories, and suppliers
         $products = Product::all();
         $categories = Category::all();
         $suppliers = Supplier::all();
@@ -101,7 +99,7 @@ class TotalPurchaseController extends Controller
         // Find the purchase by ID
         $purchase = totalpurchase::find($id);
 
-        // Get all suppliers and products
+        // Retrieve all products, categories, and suppliers
         $products = Product::all();
         $categories = Category::all();
         $suppliers = Supplier::all();
@@ -139,6 +137,7 @@ class TotalPurchaseController extends Controller
                 $oldSupplier->save();
             }
             
+            // Update purchase details
             $purchase->product_name = ucwords(strtolower($request->input('product_name')));
             $purchase->category = ucwords(strtolower($request->input('category')));
             $purchase->supplier_name = ucwords(strtolower($request->input('supplier_name')));
@@ -200,7 +199,6 @@ class TotalPurchaseController extends Controller
     }
 
     // Export a single purchase invoice to a PDF file
-    // Update exportReceipt function in TotalPurchaseController
     public function exportReceipt($id)
     {
         try {
