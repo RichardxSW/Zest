@@ -26,7 +26,7 @@
                                 @if ($pur->status == 'pending')
                                     <tr>
                                     <td>{{ $pur->id }}</td>
-                                        <td>{{ $pur->category }}</td> <!-- Tambahkan ini -->
+                                        <td>{{ $pur->category }}</td> 
                                         <td>{{ $pur->product_name }}</td>
                                         <td>{{ $pur->supplier_name }}</td>
                                         <td>{{ $pur->quantity }}</td>

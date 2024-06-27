@@ -7,6 +7,9 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
+    table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
+        text-align: left;
+    }
 </style>
 @endpush
 

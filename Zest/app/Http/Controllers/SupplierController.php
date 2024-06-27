@@ -39,9 +39,24 @@ class SupplierController extends Controller
             "contact" => "required",
         ]);
 
+        // Check for duplicate supplier
+        $duplicateSupplier = Supplier::where('name', $request->input('name'))
+            ->where('address', $request->input('address'))
+            ->where('email', $request->input('email'))
+            ->where('contact', $request->input('contact'))
+            ->first();
+
+        if ($duplicateSupplier) {
+            return redirect()->route('supplier.index')->withErrors(['duplicate' => 'Same supplier already exists.']);
+        }
+
         try {
-            // Create a new supplier with the request data
-            Supplier::create($request->all());
+            $supplier = new Supplier();
+            $supplier->name = ucwords(strtolower($request->input('name')));
+            $supplier->address = ucwords(strtolower($request->input('address')));
+            $supplier->email = strtolower($request->input('email'));
+            $supplier->contact = $request->input('contact');
+            $supplier->save();
 
             // Redirect to the index route with a success message
             return redirect()->route('supplier.index')->with('success', 'Supplier added successfully.');
@@ -75,9 +90,24 @@ class SupplierController extends Controller
             "contact" => "required",
         ]);
 
+        // Check for duplicate supplier
+        $duplicateSupplier = Supplier::where('name', $request->input('name'))
+            ->where('address', $request->input('address'))
+            ->where('email', $request->input('email'))
+            ->where('contact', $request->input('contact'))
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($duplicateSupplier) {
+            return redirect()->route('supplier.index')->withErrors(['duplicate' => 'Same supplier already exists.']);   
+        }
+
         try {
-            // Update the supplier with the request data
-            $supplier->update($request->all());
+            $supplier->name = ucwords(strtolower($request->input('name')));
+            $supplier->address = ucwords(strtolower($request->input('address')));
+            $supplier->email = strtolower($request->input('email'));
+            $supplier->contact = $request->input('contact');
+            $supplier->save();
 
             // Redirect to the index route with a success message
             return redirect()->route('supplier.index')->with('success', 'Supplier updated successfully.');

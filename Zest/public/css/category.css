@@ -1,0 +1,30 @@
+.dt-length .dt-input {
+    margin-right: 10px !important;
+}
+
+.equal-width-btn {
+    width: 80px; /* Adjust this value as needed */
+}
+
+table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
+    text-align: left;
+}
+
+#categoryTable th:nth-child(1),
+#categoryTable td:nth-child(1) {
+    width: 1%;
+}
+
+#categoryTable th:nth-child(2),
+#categoryTable td:nth-child(2),
+#categoryTable th:nth-child(3),
+#categoryTable td:nth-child(3),
+#categoryTable th:nth-child(4),
+#categoryTable td:nth-child(4) {
+    width: 17%;
+}
+
+#categoryTable th:nth-child(5),
+#categoryTable td:nth-child(5){
+    width: 15%;
+}

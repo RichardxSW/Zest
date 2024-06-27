@@ -6,27 +6,30 @@
     .dt-length .dt-input {
         margin-right: 10px !important;
     }
+    table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
+        text-align: left;
+    }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-2">
-            <div class="col">
-                <h3>List of Products</h3>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+        <div class="col">
+            <h3>List of Products</h3>
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-            </div>
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
         </div>
+    </div>
 
     <div class="row mb-2 justify-content-between">
         <div class="col-auto">
@@ -61,44 +64,41 @@
                 @endif
             </button>
         </div>
-  </div>
+    </div>
 
-<div class="box-body">
-    <table id="productTable" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-        <th scope="col">No</th>
-        <th scope="col">Product Name</th>
-        <th scope="col">Price</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Category</th>
-        <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach ($product as $pro)
+    <div class="box-body">
+        <table id="productTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                <th scope="col">No</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price (IDR)</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Category</th>
+                <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($product as $pro)
                     <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $pro-> nama_produk }}</td>
-                    <td>{{ $pro-> harga_produk }} </td>
-                    <td>{{ $pro-> jumlah_produk }} </td>
-                    <td>{{ $pro-> kategori_produk }} </td>
-                    <td>
-                        <!-- <a href="#" class="btn btn-warning">Edit</a> -->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal{{ $pro->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-
-                        <!-- <a href="#" class="btn btn-danger">Delete</a> -->
-                        <form action="{{ route('products.delete', $pro->id) }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Delete</button>
-                        </form>
-                    </td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $pro-> nama_produk }}</td>
+                        <td>{{ $pro-> harga_produk }} </td>
+                        <td>{{ $pro-> jumlah_produk }} </td>
+                        <td>{{ $pro-> kategori_produk }} </td>
+                        <td>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal{{ $pro->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                            <form action="{{ route('products.delete', $pro->id) }}" method="POST" class="d-inline">
+                                @method('delete')
+                                @csrf
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Delete</button>
+                            </form>
+                        </td>
                     </tr>
-                    @endforeach
-    </tbody>
-    </table>
-</div>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="container-fluid mt-5" id="importProductContainer">
@@ -137,7 +137,14 @@
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#productTable').DataTable();
+        $('#productTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5]
+                }, 
+            ]
+        });
     });
 </script>
 <script>
@@ -145,50 +152,4 @@
         $('.alert').fadeOut('slow');
     }, 5000);
 </script>
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.table tbody tr');
-        const sortButton = document.getElementById('sortName');
-        let sortOrder = 'asc';
-
-        searchInput.addEventListener('input', function () {
-            const searchText = searchInput.value.toLowerCase();
-            tableRows.forEach(row => {
-                const productCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const priceCell = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const quantityCell = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                const categoryCell = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-                if (
-                    productCell.includes(searchText) ||
-                    priceCell.includes(searchText) ||
-                    quantityCell.includes(searchText) ||
-                    categoryCell.includes(searchText)
-                ) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-
-        sortButton.addEventListener('click', function () {
-            const rowsArray = Array.from(tableRows);
-            rowsArray.sort((a, b) => {
-                const nameA = a.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const nameB = b.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                if (nameA < nameB) {
-                    return sortOrder === 'asc' ? -1 : 1;
-                }
-                if (nameA > nameB) {
-                    return sortOrder === 'asc' ? 1 : -1;
-                }
-                return 0;
-            });
-            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            rowsArray.forEach(row => document.querySelector('.table tbody').appendChild(row));
-        });
-    }); -->
-</script>
-
 @endsection

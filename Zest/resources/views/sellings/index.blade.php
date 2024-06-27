@@ -3,14 +3,6 @@
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <link href="{{ asset('/css/selling.css') }}" rel="stylesheet">
-<style>
-   .paginate_button.active > .page-link {
-        background-color: red !important;
-        border-color: red;
-        color: white;
-    }
-
-</style>
 @endpush
 
 @section('content')
