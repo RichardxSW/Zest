@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Price</label>
-                        <input type="text" class="form-control" name="harga_produk" id="edit_harga_produk{{ $pro->id }}" value="{{ number_format($pro->harga_produk, 0, ',', '.') }}">
+                        <input type="text" class="form-control" name="harga_produk" id="edit_harga_produk{{ $pro->id }}" value="{{$pro->harga_produk}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
