@@ -10,7 +10,7 @@ class ProductImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        return new Customer([
+        return new Product([
             'id' => $row['id'],
             'nama_produk' => $row['nama_produk'],
             'harga_produk' => $row['harga_produk'],
