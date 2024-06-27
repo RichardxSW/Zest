@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Customer;
+use App\Models\Selling;
+use App\Models\TotalPurchase;
 
 class AuthController extends Controller
 {
@@ -28,31 +30,40 @@ class AuthController extends Controller
      */
     public function index()
     {   
+        $selling = Selling::where('status', 'approved')
+                  ->orderBy('created_at', 'asc')
+                  ->take(5)
+                  ->get();
         
         $users = User::orderBy('created_at', 'asc')->get(); 
         $userCount = $users->count();
-        // $userCount = DB::table('users')->count();
         $categoryCount = Category::count();
         $productCount = Product::count();
         $supplierCount = Supplier::count();
         $customerCount = Customer::count();
-        // $purchaseCount = Purchase::count();
-        // $outgoingCount = OutgoingProduct::count();
+        $purchaseCount = totalPurchase::where('status', 'approved')->count();
+        $saleCount = Selling::where('status', 'approved')->count();
 
+        $highestTotalSale = Product::orderBy('total_sales', 'desc')->take(5)->get();
         $recentlyAddedProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
         $lowQuantityProducts = Product::where('jumlah_produk', '<', 15)->get();
+        $latestSale = Selling::where('status', 'approved')
+                            ->orderBy('created_at', 'desc')->take(5)->get();
 
         return view('homepage', compact(
+            'selling',
             'users',
             'userCount',  
             'categoryCount', 
             'productCount', 
             'supplierCount', 
             'customerCount', 
-            // 'purchaseCount', 
-            // 'outgoingCount',
+            'purchaseCount', 
+            'saleCount',
             'recentlyAddedProducts',
             'lowQuantityProducts',
+            'highestTotalSale',
+            'latestSale'
         ));
     }
 }
