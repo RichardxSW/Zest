@@ -38,11 +38,20 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
-                        <input type="text" class="form-control" name="supplier_name">
+                        <div class="input-group">
+                            <select class="form-control" id="supplier_name_select" name="supplier_name_select">
+                                <option value="">Select Supplier</option>
+                                @foreach($supplier as $sup)
+                                    <option value="{{ $sup->name }}">{{ $sup->name }}</option>
+                                @endforeach
+                            </select>
+                            <input type="text" class="form-control d-none" id="supplier_name_input" name="supplier_name_input" placeholder="Enter new supplier name">
+                            <button type="button" id="toggleSupplierInput" class="btn btn-secondary ms-2 small-button">New Supplier</button>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="text" class="form-control" name="quantity" required min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="text" class="form-control" name="quantity" id="quantity" required min="1" oninput="handleQuantityInput(this)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">In Date</label>
@@ -63,6 +72,9 @@
         const productSelect = document.getElementById('product_name');
         const allOptions = Array.from(productSelect.querySelectorAll('option'));
         const form = document.getElementById('addPurchaseForm');
+        const toggleSupplierButton = document.getElementById('toggleSupplierInput');
+        const supplierSelect = document.getElementById('supplier_name_select');
+        const supplierInput = document.getElementById('supplier_name_input');
 
         // Disable product dropdown initially
         productSelect.disabled = true;
@@ -85,6 +97,15 @@
             productSelect.disabled = selectedCategory === '' ? true : false;
         });
 
+        toggleSupplierButton.addEventListener('click', function() {
+            const isSelectVisible = !supplierSelect.classList.contains('d-none');
+            supplierSelect.classList.toggle('d-none', isSelectVisible);
+            supplierInput.classList.toggle('d-none', !isSelectVisible);
+            toggleSupplierButton.textContent = isSelectVisible ? 'Cancel' : 'New Supplier';
+            toggleSupplierButton.classList.toggle('btn-danger', isSelectVisible);
+            toggleSupplierButton.classList.toggle('btn-secondary', !isSelectVisible);
+        });
+
         // Clear form on modal close
         $('#addPurchaseModal').on('hidden.bs.modal', function () {
             form.reset();
@@ -92,4 +113,14 @@
             productSelect.innerHTML = '<option value="">Select Product</option>';
         });
     });
+
+    function handleQuantityInput(input) {
+        if (input.value === '0') {
+            input.value = '1';
+        } else if (input.value === '') {
+            input.value = '';
+        } else if (input.value < 1) {
+            input.value = '1';
+        }
+    }
 </script>

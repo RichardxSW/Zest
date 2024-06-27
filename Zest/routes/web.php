@@ -82,7 +82,7 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
         Route::delete('/delete/{id}', [TotalPurchaseController::class, 'delete'])->name('totalpurchase.delete');
         Route::get('/exportPdf', [TotalPurchaseController::class, 'exportPdf'])->name('totalpurchase.exportPdf');
         Route::get('/exportXls', [TotalPurchaseController::class, 'exportXls'])->name('totalpurchase.exportXls');
-        Route::get('/exportInv/{id}', [TotalPurchaseController::class, 'exportInv'])->name('totalpurchase.exportInv');
+        Route::get('/exportReceipt/{id}', [TotalPurchaseController::class, 'exportReceipt'])->name('totalpurchase.exportReceipt');
         Route::get('show/{id}', [TotalPurchaseController::class, 'show'])->name('totalpurchase.show');
     });
 });

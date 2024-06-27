@@ -104,7 +104,7 @@
     <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Category</th> <!-- Tambahkan ini -->
+            <th scope="col">Category</th>
             <th scope="col">Product Name</th>
             <th scope="col">Supplier Name</th>
             <th scope="col">Quantity</th>
@@ -117,13 +117,12 @@
     @foreach ($purchase as $pur)
         <tr>
             <td>{{ $pur->id }}</td>
-            <td>{{ $pur->category }}</td> <!-- Tambahkan ini -->
+            <td>{{ $pur->category }}</td>
             <td>{{ $pur->product_name }}</td>
             <td>{{ $pur->supplier_name }}</td>
             <td>{{ $pur->quantity }}</td>
             <td>{{ $pur->in_date }}</td>
             <td>
-                <!-- {{ $pur->status === 'approved' ? 'Approved' : 'Pending' }} -->
                 @if($pur->status === 'approved')
                     <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
                 @elseif ($pur->status === 'pending')
@@ -133,16 +132,14 @@
                 @endif  
             </td>
             <td>
-            @if ($pur->status === 'approved')
-                <button type="button" class="btn btn-warning" disabled><i class="fas fa-pencil-alt"></i> Edit</button>
-            @else
+            @if ($pur->status !== 'approved')
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-            @endif
                 <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
                     @method('delete')
                     @csrf
                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
                 </form>
+            @endif
             </td>
         </tr>
     @endforeach
@@ -155,7 +152,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col">
-            <h3>Export invoice</h3>
+            <h3>Export Receipt</h3>
         </div>
     </div>
     <div class="box-body">
@@ -184,7 +181,7 @@
                     <td>{{ $pur->in_date }}</td>
                     <td>{{ $pur->status === 'approved' ? 'Approved' : 'Pending' }}</td>
                     <td>
-                        <a href="{{ route('totalpurchase.exportInv', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
+                        <a href="{{ route('totalpurchase.exportReceipt', $pur->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Receipt</a>
                     </td>
                 </tr>
                 @endif

@@ -40,15 +40,20 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Supplier Name</label>
-                        <input type="text" class="form-control" name="supplier_name" value="{{ $pur->supplier_name }}">
+                        <select class="form-control" name="supplier_name" id="supplier_name_edit_{{ $pur->id }}" required>
+                            <option value="">Select Supplier</option>
+                            @foreach($supplier as $sup)
+                                <option value="{{ $sup->name }}" {{ $pur->supplier_name == $sup->name ? 'selected' : '' }}>{{ $sup->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="text" class="form-control" name="quantity" value="{{ $pur->quantity }}" min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="text" class="form-control" name="quantity" value="{{ $pur->quantity }}" required min="1" oninput="handleQuantityInput(this)">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">In Date</label>
-                        <input type="date" class="form-control" name="in_date" value="{{ $pur->in_date }}">
+                        <input type="date" class="form-control" name="in_date" value="{{ $pur->in_date }}" required readonly>
                     </div>
 
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -70,7 +75,7 @@
             const originalData = {
                 category: categorySelectEdit.value,
                 product: productSelectEdit.value,
-                suuplierName: document.querySelector('#editForm{{ $pur->id }} input[name="supplier_name"]').value,
+                supplierName: document.querySelector('#supplier_name_edit_{{ $pur->id }}').value,
                 quantity: document.querySelector('#editForm{{ $pur->id }} input[name="quantity"]').value,
                 date: document.querySelector('#editForm{{ $pur->id }} input[name="in_date"]').value
             };
@@ -104,7 +109,7 @@
             const modalElement = document.getElementById('editPurchaseModal{{ $pur->id }}');
             modalElement.addEventListener('hidden.bs.modal', function() {
                 categorySelectEdit.value = originalData.category;
-                document.querySelector('#editForm{{ $pur->id }} input[name="supplier_name"]').value = originalData.supplierName;
+                document.querySelector('#supplier_name_edit_{{ $pur->id }}').value = originalData.supplierName;
                 document.querySelector('#editForm{{ $pur->id }} input[name="quantity"]').value = originalData.quantity;
                 document.querySelector('#editForm{{ $pur->id }} input[name="in_date"]').value = originalData.date;
                 populateEditProductOptions();
@@ -113,4 +118,14 @@
         })();
         @endforeach
     });
+
+    function handleQuantityInput(input) {
+        if (input.value === '0') {
+            input.value = '1';
+        } else if (input.value === '') {
+            input.value = '';
+        } else if (input.value < 1) {
+            input.value = '1';
+        }
+    }
 </script>

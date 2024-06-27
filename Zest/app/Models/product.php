@@ -14,6 +14,7 @@ class product extends Model
         'harga_produk',
         'jumlah_produk',
         'kategori_produk',
+        'total_sales'
     ];
 
     public function category()

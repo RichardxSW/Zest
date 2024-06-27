@@ -13,7 +13,7 @@
                     <div>
                         <h5 class="card-title">{{ $userCount }}</h5>
                         <p class="card-text">System Users</p>
-                        <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('users.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <i class="fas fa-users fa-4x" style="opacity: 0.35;"></i>
                 </div>
@@ -25,7 +25,7 @@
                     <div>
                         <h5 class="card-title">{{ $categoryCount }}</h5>
                         <p class="card-text">Category</p>
-                        <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('categories.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <i class="fas fa-tags fa-4x" style="opacity: 0.35;"></i>
                 </div>
@@ -37,7 +37,7 @@
                     <div>
                         <h5 class="card-title">{{ $productCount }}</h5>
                         <p class="card-text">Product</p>
-                        <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('products.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <i class="fas fa-boxes fa-4x" style="opacity: 0.35;"></i>
                 </div>
@@ -49,7 +49,7 @@
                     <div>
                         <h5 class="card-title">{{ $customerCount }}</h5>
                         <p class="card-text">Customer</p>
-                        <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('customers.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <i class="fas fa-user fa-4x" style="opacity: 0.35;"></i>
                 </div>
@@ -73,7 +73,7 @@
             <div class="card bg-primary text-white">
                 <div class="card-body d-flex justify-content-between align-items-center position-relative">
                     <div>
-                        <h5 class="card-title">3</h5>
+                        <h5 class="card-title">{{ $purchaseCount }}</h5>
                         <p class="card-text">Total Purchase</p>
                         <a href="{{ route('totalpurchase.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -85,9 +85,9 @@
             <div class="card bg-primary text-white">
                 <div class="card-body d-flex justify-content-between align-items-center position-relative">
                     <div>
-                        <h5 class="card-title">2</h5>
-                        <p class="card-text">Total Outgoing</p>
-                        <a href="#" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <h5 class="card-title">{{ $saleCount }}</h5>
+                        <p class="card-text">Total Sale</p>
+                        <a href="{{ route('sellings.index') }}" class="text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <i class="fas fa-shipping-fast fa-4x" style="opacity: 0.35;"></i>
                 </div>
@@ -96,9 +96,31 @@
     </div>              
 
     <div class="row mt-4">
-        <div class="card">
-            <div class="card-body">
-                <canvas id="highestSellingProductsChart"></canvas>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Highest Selling Products
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Total Sold</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($highestTotalSale as $pro)
+                                <tr>
+                                    <td>{{ $pro->nama_produk }}</td>
+                                    <td>{{ $pro->total_sales }}</td>
+                                    <td>{{ $pro->jumlah_produk }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -110,7 +132,7 @@
                     Low Quantity Products
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -142,22 +164,22 @@
                     Latest Sales
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Product Name</th>
                                 <th>Date</th>
-                                <th>Total Sale</th>
+                                <th>Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
-                     
+                            @foreach($latestSale as $sell)
                                 <tr>
-                                    <td> product_name </td>
-                                    <td> date </td>
-                                    <td> total_sale </td>
+                                    <td>{{ $sell->product_name }}</td>
+                                    <td>{{ $sell->date }}</td>
+                                    <td>{{ $sell->quantity }}</td>
                                 </tr>
-                   
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -171,13 +193,14 @@
                     Recently Added Products
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Product Name</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Category</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -187,6 +210,7 @@
                                     <td>{{ $product->harga_produk }}</td>
                                     <td>{{ $product->jumlah_produk }}</td>
                                     <td>{{ $product->kategori_produk }}</td>
+                                    <td>{{ $product->created_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
