@@ -132,13 +132,21 @@
                 @endif  
             </td>
             <td>
-            @if ($pur->status !== 'approved')
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}"><i class="fas fa-pencil-alt"></i> Edit</button>
-                <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
-                    @method('delete')
-                    @csrf
-                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-                </form>
+            @if ($pur->status == 'approved' || $pur->status === 'declined')
+                No Action
+            @else
+                <div class="d-flex justify-content-between align-items-center"></div>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}">
+                        <i class="fas fa-pencil-alt"></i> Edit
+                    </button>
+                    <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
             @endif
             </td>
         </tr>
