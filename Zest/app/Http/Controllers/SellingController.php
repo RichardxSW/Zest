@@ -142,7 +142,10 @@ class SellingController extends Controller
     public function exportInv($id)
     {
         $selling = Selling::findOrFail($id);
-        $pdf = Pdf::loadView('sellings.exportInv', compact('selling'));
+
+        $product = Product::where('nama_produk', $selling->product_name)->first();
+
+        $pdf = Pdf::loadView('sellings.exportInv', compact('selling', 'product'));
         return $pdf->download('invoice.pdf');
     }
 
