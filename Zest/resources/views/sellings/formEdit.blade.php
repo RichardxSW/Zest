@@ -24,7 +24,7 @@
                         <select class="form-control" name="product_name" id="product_name_edit_{{ $sell->id }}" required>
                             <option value="">Select Product</option>
                             @foreach($products as $product)
-                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}" {{ $sell->product_name == $product->nama_produk ? 'selected' : '' }}>{{ $product->nama_produk }}</option>
+                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}" data-stock="{{ $product->jumlah_produk }}" {{ $sell->product_name == $product->nama_produk ? 'selected' : '' }}>{{ $product->nama_produk }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -39,13 +39,14 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" value="{{ $sell->quantity }}" min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="number" class="form-control" name="quantity" id="quantity_edit_{{ $sell->id }}" min="1" oninput="validateEditQuantity({{ $sell->id }})" value="{{ $sell->quantity }}">
+                        <div id="quantity-error-edit-{{ $sell->id }}" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" value="{{ $sell->date }}">
+                        <input type="date" class="form-control" name="date" value="{{ $sell->date }}" readonly>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">Submit</button>
+                    <button type="submit" id="submitBtnEdit{{ $sell->id }}" class="btn btn-success mt-3">Submit</button>
                     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
                 </form>
             </div>
@@ -60,12 +61,15 @@
         (function() {
             const categorySelectEdit = document.getElementById('category_name_edit_{{ $sell->id }}');
             const productSelectEdit = document.getElementById('product_name_edit_{{ $sell->id }}');
+            const quantityInputEdit = document.getElementById('quantity_edit_{{ $sell->id }}');
+            const quantityErrorEdit = document.getElementById('quantity-error-edit-{{ $sell->id }}');
+            const submitBtnEdit = document.getElementById('submitBtnEdit{{ $sell->id }}');
             const allOptionsEdit = Array.from(document.querySelectorAll('#product_name_edit_{{ $sell->id }} option'));
             const originalData = {
                 category: categorySelectEdit.value,
                 product: productSelectEdit.value,
                 customerName: document.querySelector('#customer_name_edit_{{ $sell->id }}').value,
-                quantity: document.querySelector('#editForm{{ $sell->id }} input[name="quantity"]').value,
+                quantity: quantityInputEdit.value,
                 date: document.querySelector('#editForm{{ $sell->id }} input[name="date"]').value
             };
 
@@ -87,6 +91,22 @@
                 }
             }
 
+            function validateEditQuantity(sellId) {
+                const selectedProduct = productSelectEdit.options[productSelectEdit.selectedIndex];
+                const maxQuantity = parseInt(selectedProduct.getAttribute('data-stock'));
+                const enteredQuantity = parseInt(quantityInputEdit.value);
+
+                if (enteredQuantity > maxQuantity) {
+                    quantityErrorEdit.textContent = 'Quantity exceeds available stock.';
+                    quantityInputEdit.classList.add('is-invalid');
+                    submitBtnEdit.disabled = true;
+                } else {
+                    quantityErrorEdit.textContent = '';
+                    quantityInputEdit.classList.remove('is-invalid');
+                    submitBtnEdit.disabled = false;
+                }
+            }
+
             populateEditProductOptions();
 
             categorySelectEdit.addEventListener('change', function() {
@@ -94,15 +114,25 @@
                 populateEditProductOptions();
             });
 
+            productSelectEdit.addEventListener('change', function() {
+                validateEditQuantity({{ $sell->id }});
+            });
+            quantityInputEdit.addEventListener('input', function() {
+                validateEditQuantity({{ $sell->id }});
+            });
+
             // Reset form data when modal is closed
             const modalElement = document.getElementById('editSellingModal{{ $sell->id }}');
             modalElement.addEventListener('hidden.bs.modal', function() {
                 categorySelectEdit.value = originalData.category;
                 document.querySelector('#customer_name_edit_{{ $sell->id }}').value = originalData.customerName;
-                document.querySelector('#editForm{{ $sell->id }} input[name="quantity"]').value = originalData.quantity;
+                quantityInputEdit.value = originalData.quantity;
                 document.querySelector('#editForm{{ $sell->id }} input[name="date"]').value = originalData.date;
                 populateEditProductOptions();
                 productSelectEdit.value = originalData.product;
+                quantityErrorEdit.textContent = '';
+                quantityInputEdit.classList.remove('is-invalid');
+                submitBtnEdit.disabled = false;
             });
         })();
         @endforeach

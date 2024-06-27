@@ -23,7 +23,7 @@
                         <select class="form-control" name="product_name" id="product_name" required disabled>
                             <option value="">Select Product</option>
                             @foreach($products as $product)
-                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}">{{ $product->nama_produk }}</option>
+                                <option value="{{ $product->nama_produk }}" data-category="{{ $product->kategori_produk }}" data-stock="{{ $product->jumlah_produk }}">{{ $product->nama_produk }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -42,13 +42,14 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" required min="1" oninput="this.value = Math.abs(this.value)">
+                        <input type="number" class="form-control" name="quantity" id="quantity" required min="1" oninput="validateQuantity()" value="1">
+                        <div id="quantity-error" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" id="date" required>
+                        <input type="date" class="form-control" name="date" id="date" required readonly>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">Submit</button>
+                    <button type="submit" id="submitBtn" class="btn btn-success mt-3">Submit</button>
                     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
                 </form>
             </div>
@@ -66,6 +67,9 @@
         const customerSelect = document.getElementById('customer_name_select');
         const customerInput = document.getElementById('customer_name_input');
         const dateInput = document.getElementById('date');
+        const quantityInput = document.getElementById('quantity');
+        const quantityError = document.getElementById('quantity-error');
+        const submitBtn = document.getElementById('submitBtn');
 
         // Set date input to today's date
         const today = new Date().toISOString().split('T')[0];
@@ -92,6 +96,9 @@
             productSelect.disabled = selectedCategory === '' ? true : false;
         });
 
+        productSelect.addEventListener('change', validateQuantity);
+        quantityInput.addEventListener('input', validateQuantity);
+
         // Toggle between select and input for customer name
         toggleCustomerButton.addEventListener('click', function() {
             const isSelectVisible = !customerSelect.classList.contains('d-none');
@@ -101,6 +108,23 @@
             toggleCustomerButton.classList.toggle('btn-danger', isSelectVisible);
             toggleCustomerButton.classList.toggle('btn-secondary', !isSelectVisible);
         });
+
+        // Validate Quantity Function
+        function validateQuantity() {
+            const selectedProduct = productSelect.options[productSelect.selectedIndex];
+            const maxQuantity = parseInt(selectedProduct.getAttribute('data-stock'));
+            const enteredQuantity = parseInt(quantityInput.value);
+
+            if (enteredQuantity > maxQuantity) {
+                quantityError.textContent = 'Quantity exceeds available stock.';
+                quantityInput.classList.add('is-invalid');
+                submitBtn.disabled = true;
+            } else {
+                quantityError.textContent = '';
+                quantityInput.classList.remove('is-invalid');
+                submitBtn.disabled = false;
+            }
+        }
 
         // Clear form on modal close
         $('#addSellingModal').on('hidden.bs.modal', function () {
@@ -115,6 +139,19 @@
             
             // Reset date input to today's date
             dateInput.value = today;
+
+            // Reset quantity validation and submit button status
+            quantityError.textContent = '';
+            quantityInput.classList.remove('is-invalid');
+            submitBtn.disabled = false;
+        });
+
+        // Trigger validation on form submit
+        form.addEventListener('submit', function(event) {
+            validateQuantity();
+            if (submitBtn.disabled) {
+                event.preventDefault();
+            }
         });
     });
 </script>
@@ -126,5 +163,9 @@
 
     .input-group .small-button {
         width: 120px;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
     }
 </style>

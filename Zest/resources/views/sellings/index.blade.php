@@ -2,80 +2,14 @@
 
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/selling.css') }}" rel="stylesheet">
 <style>
-    .dt-length .dt-input {
-        margin-right: 10px !important;
+   .paginate_button.active > .page-link {
+        background-color: red !important;
+        border-color: red;
+        color: white;
     }
 
-    .equal-width-btn {
-        width: 80px; /* Adjust this value as needed */
-    }
-
-    table.dataTable th.dt-type-numeric,table.dataTable th.dt-type-date,table.dataTable td.dt-type-numeric,table.dataTable td.dt-type-date {
-        text-align: left;
-    }
-
-    #sellTable th:nth-child(1),
-    #sellTable td:nth-child(1) {
-        width: 4%;
-    }
-
-    #sellTable th:nth-child(2),
-    #sellTable td:nth-child(2),
-    #sellTable th:nth-child(3),
-    #sellTable td:nth-child(3),
-    #sellTable th:nth-child(4),
-    #sellTable td:nth-child(4),
-    #sellTable th:nth-child(6),
-    #sellTable td:nth-child(6) {
-        width: 14%;
-    }
-
-    #sellTable th:nth-child(5),
-    #sellTable td:nth-child(5){
-        width: 8%;
-    }
-
-    #sellTable th:nth-child(7),
-    #sellTable td:nth-child(7) {
-        width: 10%;
-    }
-
-    #sellTable th:nth-child(8),
-    #sellTable td:nth-child(8) {
-        width: 16%;
-    }
-
-    #invTable th:nth-child(1),
-    #invTable td:nth-child(1) {
-        width: 4%;
-    }
-
-    #invTable th:nth-child(2),
-    #invTable td:nth-child(2),
-    #invTable th:nth-child(3),
-    #invTable td:nth-child(3),
-    #invTable th:nth-child(4),
-    #invTable td:nth-child(4),
-    #invTable th:nth-child(6),
-    #invTable td:nth-child(6) {
-        width: 14%;
-    }
-
-    #invTable th:nth-child(5),
-    #invTable td:nth-child(5){
-        width: 8%;
-    }
-
-    #invTable th:nth-child(7),
-    #invTable td:nth-child(7) {
-        width: 10%;
-    }
-
-    #invTable th:nth-child(8),
-    #invTable td:nth-child(8) {
-        width: 16%;
-    }
 </style>
 @endpush
 
@@ -133,11 +67,11 @@
                     <td>{{ $selling->date }}</td>
                     <td>
                         @if($selling->status === 'approved')
-                            <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
+                            <span class="badge rounded-pill bg-success" style="width: 80px";>Approved</span>
                         @elseif ($selling->status === 'pending')
-                            <span class="badge rounded-pill bg-warning text-dark" style="width: 80px"; >Pending</span>
-                        @else ($selling->status === 'declined')
-                            <span class="badge rounded-pill bg-danger text-dark" style="width: 80px";>Declined</span>
+                            <span class="badge rounded-pill bg-warning" style="width: 80px"; >Pending</span>
+                        @else
+                            <span class="badge rounded-pill bg-danger" style="width: 80px";>Declined</span>
                         @endif
                     </td>
                     <td>
@@ -196,7 +130,7 @@
                             <td>{{ $selling->quantity }}</td>
                             <td>{{ $selling->date }}</td>
                             <td>
-                                <span class="badge rounded-pill bg-success text-dark" style="width: 80px";>Approved</span>
+                                <span class="badge rounded-pill bg-success" style="width: 80px";>Approved</span>
                             </td>    
                             <td>
                                 <a href="{{ route('sellings.exportInv', $selling->id) }}" class="btn btn-success"><i class="fas fa-file-pdf"></i> Export Invoice</a>
