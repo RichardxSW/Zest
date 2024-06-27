@@ -104,7 +104,7 @@
             </a>
 
             <a href="{{ route('totalpurchase.monthlyPurchases') }}" class="btn btn-warning mb-2 position-relative">
-                Monthly Sales
+                Monthly Purchases
             </a>
         </div>
     </div>
