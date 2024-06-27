@@ -17,6 +17,7 @@
     <link href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" rel="stylesheet">
 
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     @stack('styles')
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
