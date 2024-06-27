@@ -27,8 +27,11 @@
             color: #333;
             margin-bottom: 20px;
         }
-        .invoice-box .date {
+        .invoice-box .date, .invoice-box .purchase-id {
             text-align: right;
+            margin-bottom: 5px;
+        }
+        .invoice-box .purchase-id {
             margin-bottom: 20px;
         }
         .invoice-box table {
@@ -79,12 +82,10 @@
             background: #f1f1f1;
         }
         .manager-info {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: right;
             font-style: italic;
-            position: absolute;
-            bottom: 20px;
-            right: 30px;
+            position: relative;
         }
         .date-column {
             white-space: nowrap; /* Prevents text wrapping */
@@ -98,6 +99,9 @@
         </div>
         <div class="date">
             Date: {{ \Carbon\Carbon::now()->toFormattedDateString() }}
+        </div>
+        <div class="purchase-id">
+            Purchase No: {{ $purchase->id }}
         </div>
         <table cellpadding="0" cellspacing="0">
             <tr class="heading">
