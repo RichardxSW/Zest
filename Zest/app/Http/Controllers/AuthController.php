@@ -36,26 +36,18 @@ class AuthController extends Controller
         $purchaseCount = totalPurchase::where('status', 'approved')->count();
         $saleCount = Selling::where('status', 'approved')->count();
 
-        $highestTotalSale = Product::orderBy('total_sales', 'desc')->take(5)->get();
         $recentlyAddedProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
         $lowQuantityProducts = Product::where('jumlah_produk', '<', 15)->get();
 
-        // Get sales data for the current month and order by total_quantity
+        // Get sales data for the current month and order by total_sales
         $currentMonth = Carbon::now()->month;
-        $selling = Selling::whereMonth('created_at', $currentMonth)
-                ->where('status', 'approved') 
-                ->selectRaw('product_name, SUM(quantity) as total_quantity')
-                ->groupBy('product_name')
-                ->orderBy('total_quantity', 'desc')
-                ->take(5)
-                ->get();
+        $highestTotalSale = Product::orderBy('total_sales', 'desc')->take(5)->get();
 
-        $productNames = $selling->pluck('product_name');
-        $productSales = $selling->pluck('total_quantity');
+        // Retrieve products and their names and sales
+        $productNames = $highestTotalSale->pluck('nama_produk');
+        $productSales = $highestTotalSale->pluck('total_sales');
 
         // Logging the data for debugging purposes
-        Log::info('Product Names:', $productNames->toArray());
-        Log::info('Product Sales:', $productSales->toArray());
         $latestSale = Selling::where('status', 'approved')
                             ->orderBy('created_at', 'desc')->take(5)->get();
 
@@ -72,9 +64,9 @@ class AuthController extends Controller
             'recentlyAddedProducts',
             'lowQuantityProducts',
             'productNames',
-            'productSales'
+            'productSales',
             'highestTotalSale',
-            'latestSale'
+            'latestSale',
         ));
     }
 }

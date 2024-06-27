@@ -126,6 +126,14 @@
     </div>
 
     <div class="row mt-4">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="highestSellingProductsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
