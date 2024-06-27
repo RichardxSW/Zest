@@ -11,13 +11,21 @@ class UserController extends Controller
 {
     public function index()
     {   
-        $users = User::orderBy('created_at', 'asc')->get(); 
-        return view('users.index', compact('users'));
+        try {
+            $users = User::orderBy('created_at', 'asc')->get(); 
+            return view('users.index', compact('users'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Error fetching users');
+        }
     }
 
     public function create()
     {
-        return view('users.create');
+        try {
+            return view('users.create');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Error displaying create user form');
+        }
     }
 
     public function store(Request $request)
@@ -35,24 +43,36 @@ class UserController extends Controller
                              ->withInput();
         }
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-        ]);
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+            ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+            return redirect()->route('users.index')->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error creating user');
+        }
     }
 
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        try {
+            return view('users.show', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Error displaying user');
+        }
     }
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        try {
+            return view('users.edit', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Error displaying edit user form');
+        }
     }
 
     public function update(Request $request, User $user)
@@ -60,7 +80,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            // 'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|string',
         ]);
 
@@ -70,21 +89,30 @@ class UserController extends Controller
                              ->withInput();
         }
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            // 'password' => $request->password ? Hash::make($request->password) : $user->password,
-            'role' => $request->role,
-        ]);
+        try {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => $request->role,
+            ]);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+            return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error updating user');
+        }
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
-        $user->delete();
-        return redirect()->route('users.index')
-        ->with('success', 'User deleted successfully');
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return redirect()->route('users.index')->with('error', 'User not found.');
+            }
+            $user->delete();
+            return redirect()->route('users.index')->with('success', 'User deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Error deleting user');
+        }
     }
 }
