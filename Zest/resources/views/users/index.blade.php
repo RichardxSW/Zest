@@ -87,5 +87,10 @@
         });
     });
 </script>
+<script>
+    setTimeout(function(){
+        $('.alert').fadeOut('slow');
+    }, 5000);
+</script>
 
 @endsection
