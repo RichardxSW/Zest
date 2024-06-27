@@ -41,7 +41,10 @@ class AuthController extends Controller
 
         // Get sales data for the current month and order by total_sales
         $currentMonth = Carbon::now()->month;
-        $highestTotalSale = Product::orderBy('total_sales', 'desc')->take(5)->get();
+        $highestTotalSale = Product::where('total_sales', '>', 0)
+                                ->orderBy('total_sales', 'desc')
+                                ->take(5)
+                                ->get();
 
         // Retrieve products and their names and sales
         $productNames = $highestTotalSale->pluck('nama_produk');
@@ -50,6 +53,8 @@ class AuthController extends Controller
         // Logging the data for debugging purposes
         $latestSale = Selling::where('status', 'approved')
                             ->orderBy('created_at', 'desc')->take(5)->get();
+
+        $lowQuantityExists = Product::where('jumlah_produk', '<=', 50)->exists();
 
         return view('homepage', compact(
             'selling',
@@ -67,6 +72,7 @@ class AuthController extends Controller
             'productSales',
             'highestTotalSale',
             'latestSale',
+            'lowQuantityExists'
         ));
     }
 }

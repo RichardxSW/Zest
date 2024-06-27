@@ -2,10 +2,42 @@
 
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+<style>
+    .toast {
+    background-color: #dc3545; /* Warna latar belakang merah */
+    color: white; 
+}
+
+.toast .toast-header {
+    background-color: #c82333; /* Warna header toast */
+    color:white;
+}
+
+.toast .toast-body {
+    background-color: #dc3545;
+   /* Warna teks dalam badan toast */
+   color:white;
+}
+
+</style>
 @endpush
 
 @section('content')
 <div class="container-fluid">
+    <!-- Toast Container -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
+    <!-- Toast -->
+    <div class="toast low-quantity-toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Low Quantity Products Alert</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Some products have low quantity.
+        </div>
+    </div>
+</div>
+
     <div class="row mt-4">
         <div class="col-md-3 mb-4">
             <div class="card bg-info text-white">
@@ -99,7 +131,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Highest Selling Products
+                    <h3>Highest Selling Products</h3>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -112,11 +144,13 @@
                         </thead>
                         <tbody>
                             @foreach($highestTotalSale as $pro)
+                                @if ($pro->total_sales > 0)
                                 <tr>
                                     <td>{{ $pro->nama_produk }}</td>
                                     <td>{{ $pro->total_sales }}</td>
                                     <td>{{ $pro->jumlah_produk }}</td>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -137,7 +171,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Low Quantity Products
+                    <h3>Low Quantity Products</h3>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -169,7 +203,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Latest Sales
+                    <h3>Latest Sales</h3>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -198,7 +232,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Recently Added Products
+                    <h3>Recently Added Products</h3>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -228,9 +262,10 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    
     const canvas = document.getElementById('highestSellingProductsChart');
     canvas.width = 400;
     canvas.height = 400; 
@@ -275,6 +310,15 @@
             }
         }
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if there are any low quantity products and show the toast if so
+        @if ($lowQuantityExists)
+            const toast = new bootstrap.Toast(document.querySelector('.low-quantity-toast'));
+            toast.show();
+        @endif
+    });
 </script>
+
 
 @endsection
