@@ -113,7 +113,14 @@
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#supTable').DataTable();
+        $('#supTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,5]
+                }, 
+            ]
+        });
     });
 </script>
 <script>
