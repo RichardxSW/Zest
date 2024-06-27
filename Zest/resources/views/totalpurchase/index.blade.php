@@ -2,72 +2,7 @@
 
 @push('styles')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-<style>
-    .dt-length .dt-input {
-        margin-right: 10px !important;
-    }
-    /* Styling untuk purTable */
-    #purTable th,
-    #purTable td {
-        padding: 8px;
-        text-align: left;
-    }
-    #purTable th:nth-child(1),
-    #purTable td:nth-child(1) {
-        width: 5%;
-    }
-    #purTable th:nth-child(2),
-    #purTable td:nth-child(2),
-    #purTable th:nth-child(3),
-    #purTable td:nth-child(3),
-    #purTable th:nth-child(4),
-    #purTable td:nth-child(4) {
-        width: 15%;
-    }
-    #purTable th:nth-child(5),
-    #purTable td:nth-child(5),
-    #purTable th:nth-child(6),
-    #purTable td:nth-child(6),
-    #purTable th:nth-child(7),
-    #purTable td:nth-child(7) {
-        width: 10%;
-    }
-    #purTable th:nth-child(8),
-    #purTable td:nth-child(8) {
-        width: 18%;
-    }
-
-    /* Styling untuk invTable */
-    #invTable th,
-    #invTable td {
-        padding: 8px; 
-        text-align: left; 
-    }
-    #invTable th:nth-child(1),
-    #invTable td:nth-child(1) {
-        width: 5%;
-    }
-    #invTable th:nth-child(2),
-    #invTable td:nth-child(2),
-    #invTable th:nth-child(3),
-    #invTable td:nth-child(3),
-    #invTable th:nth-child(4),
-    #invTable td:nth-child(4) {
-        width: 15%;
-    }
-    #invTable th:nth-child(5),
-    #invTable td:nth-child(5),
-    #invTable th:nth-child(6),
-    #invTable td:nth-child(6),
-    #invTable th:nth-child(7),
-    #invTable td:nth-child(7) {
-        width: 10%;
-    }
-    #invTable th:nth-child(8),
-    #invTable td:nth-child(8) {
-        width: 15%;
-    }
-</style>
+<link href="{{ asset('/css/purchase.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -110,59 +45,58 @@
     </div>
     <div class="box-body">
     <table id="purTable" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Category</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Supplier Name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach ($purchase as $pur)
-        <tr>
-            <td>{{ $pur->id }}</td>
-            <td>{{ $pur->category }}</td>
-            <td>{{ $pur->product_name }}</td>
-            <td>{{ $pur->supplier_name }}</td>
-            <td>{{ $pur->quantity }}</td>
-            <td>{{ $pur->in_date }}</td>
-            <td>
-                @if($pur->status === 'approved')
-                    <span class="badge rounded-pill bg-success" style="width: 80px";>Approved</span>
-                @elseif ($pur->status === 'pending')
-                    <span class="badge rounded-pill bg-warning" style="width: 80px"; >Pending</span>
-                @else ($pur->status === 'declined')
-                    <span class="badge rounded-pill bg-danger" style="width: 80px";>Declined</span>
-                @endif  
-            </td>
-            <td>
-            @if ($pur->status == 'approved' || $pur->status === 'declined')
-                No Action
-            @else
-                <div class="d-flex justify-content-between align-items-center"></div>
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}">
-                        <i class="fas fa-pencil-alt"></i> Edit
-                    </button>
-                    <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
-                        @method('delete')
-                        @csrf
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Delete
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Category</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Supplier Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach ($purchase as $pur)
+            <tr>
+                <td>{{ $pur->id }}</td>
+                <td>{{ $pur->category }}</td>
+                <td>{{ $pur->product_name }}</td>
+                <td>{{ $pur->supplier_name }}</td>
+                <td>{{ $pur->quantity }}</td>
+                <td>{{ $pur->in_date }}</td>
+                <td>
+                    @if($pur->status === 'approved')
+                        <span class="badge rounded-pill bg-success" style="width: 80px";>Approved</span>
+                    @elseif ($pur->status === 'pending')
+                        <span class="badge rounded-pill bg-warning" style="width: 80px"; >Pending</span>
+                    @else 
+                        <span class="badge rounded-pill bg-danger" style="width: 80px";>Declined</span>
+                    @endif  
+                </td>
+                <td>
+                @if ($pur->status == 'approved' || $pur->status === 'declined')
+                    No Action
+                @else
+                    <div class="d-flex justify-content-between align-items-center"></div>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPurchaseModal{{ $pur->id }}">
+                            <i class="fas fa-pencil-alt"></i> Edit
                         </button>
-                    </form>
-                </div>
-            @endif
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
-
+                        <form action="{{ route('totalpurchase.delete', $pur->id) }}" method="POST" class="d-inline">
+                            @method('delete')
+                            @csrf
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                @endif
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
     </div>
 </div>
 
@@ -220,8 +154,22 @@
 <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#purTable').DataTable();
-        $('#invTable').DataTable();
+        $('#purTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,7]
+                }, 
+            ]
+        });
+        $('#invTable').DataTable({
+            "columnDefs": [
+                { 
+                    "searchable": false,
+                    "targets": [0,7]
+                }, 
+            ]
+        });
     });
 </script>
 <script>

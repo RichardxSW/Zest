@@ -1,0 +1,64 @@
+.dt-length .dt-input {
+    margin-right: 10px !important;
+}
+/* Styling untuk purTable */
+#purTable th,
+#purTable td {
+    padding: 8px;
+    text-align: left;
+}
+#purTable th:nth-child(1),
+#purTable td:nth-child(1) {
+    width: 5%;
+}
+#purTable th:nth-child(2),
+#purTable td:nth-child(2),
+#purTable th:nth-child(3),
+#purTable td:nth-child(3),
+#purTable th:nth-child(4),
+#purTable td:nth-child(4) {
+    width: 15%;
+}
+#purTable th:nth-child(5),
+#purTable td:nth-child(5),
+#purTable th:nth-child(6),
+#purTable td:nth-child(6),
+#purTable th:nth-child(7),
+#purTable td:nth-child(7) {
+    width: 10%;
+}
+#purTable th:nth-child(8),
+#purTable td:nth-child(8) {
+    width: 18%;
+}
+
+/* Styling untuk invTable */
+#invTable th,
+#invTable td {
+    padding: 8px; 
+    text-align: left; 
+}
+#invTable th:nth-child(1),
+#invTable td:nth-child(1) {
+    width: 5%;
+}
+#invTable th:nth-child(2),
+#invTable td:nth-child(2),
+#invTable th:nth-child(3),
+#invTable td:nth-child(3),
+#invTable th:nth-child(4),
+#invTable td:nth-child(4) {
+    width: 15%;
+}
+#invTable th:nth-child(5),
+#invTable td:nth-child(5),
+#invTable th:nth-child(6),
+#invTable td:nth-child(6),
+#invTable th:nth-child(7),
+#invTable td:nth-child(7) {
+    width: 10%;
+}
+#invTable th:nth-child(8),
+#invTable td:nth-child(8) {
+    width: 15%;
+}
