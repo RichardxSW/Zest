@@ -56,31 +56,38 @@ composer install
 
 ### 3. Atur file .env
 - Perbarui konfigurasi database dan password pgadmin di file .env
+- 
+### 4. Import Database Backup
+```bash
+psql -U username -d Zest -f path/to/backup.sql
+```
 
-### 4. Migrasi Database
+### 5. Migrasi Database
 ```bash
 php artisan migrate
 ```
 
-### 5. Seed Database
+### 6. Seed Database
 ```bash
 php artisan db:seed
 ```
 
-### 6. Compile Asset
+### 7. Compile Asset
 ```bash
 npm install
 ```
 
-### 7. Jalankan server pengembangan
+### 8. Jalankan server pengembangan
 ```bash
+cd Zest
 npm run dev
 ```
 **buka terminal baru**
 ```bash
+cd Zest
 php artisan serve
 ```
 
-### 8. Akses Website
+### 9. Akses Website
 - Buka browser web Anda dan akses http://127.0.0.1:8000 untuk mulai menggunakan Zest.
 
