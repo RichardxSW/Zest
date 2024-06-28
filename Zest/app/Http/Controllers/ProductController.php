@@ -16,14 +16,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
-    //
+    // Function to display the products list
     public function index() {
         $selling = Selling::all();
         $customer = Customer::all();
         $purchase = totalPurchase::all();
         $product = Product::orderBy('created_at', 'asc')->get(); 
-        $category = Category::all(); // Mengambil semua kategori
-        // Hitung jumlah request purchase yang pending
+        $category = Category::all(); 
         $pendingRequestPurchase = totalPurchase::where('status', 'pending')->count();
         $pendingRequestSell = Selling::where('status', 'pending')->count();
         return view('products.index', compact(
@@ -33,14 +32,16 @@ class ProductController extends Controller
             'purchase', 
             'pendingRequestPurchase', 
             'pendingRequestSell'
-            )); // Mengirim data kategori ke view
+            ));
     }
 
+    // Function to display the add product form
     public function create() {
         $categories = Category::with('products')->get(); 
         return view('products.create', compact('categories'));
     }
 
+    // Function to store the product data
     public function store(Request $request) {
         
         $request->validate([
@@ -65,11 +66,13 @@ class ProductController extends Controller
             ->with('success', 'Product added successfully');
     }
 
+    // Function to display the edit product form
     public function edit($id) {
         $pro = Product::find($id);
         return view('products.edit', compact('product'));
     }
 
+    // Function to update the product data
     public function update($id, Request $request) {
 
         $request->validate([
@@ -99,6 +102,7 @@ class ProductController extends Controller
             ->with('success', 'Product updated successfully');
     }    
 
+    // Function to delete the product data
     public function delete($id) {
         $product = Product::find($id);
         $category = $product->kategori_produk;
@@ -110,23 +114,7 @@ class ProductController extends Controller
             ->with('success', 'Product deleted successfully');
     }
 
-    public function search(Request $request)
-    {
-        $category = Category::all();
-
-        $query = $request->input('query');
-
-        $product = Product::query()
-            ->where('nama_produk', 'ILIKE', '%' . $query . '%')
-            ->orWhere('harga_produk', 'ILIKE', '%' . $query . '%')
-            ->orWhere('jumlah_produk', 'ILIKE', '%' . $query . '%')
-            ->orWhere('kategori_produk', 'ILIKE', '%' . $query . '%')
-            ->orderBy('created_at', 'asc') 
-            ->get();
-
-        return view("products.index", compact("product", "category"));
-    }
-
+    // Function to update the category count
     private function updateCategoryCount($categoryName) {
         $category = Category::where('kategori', $categoryName)->first();
         if ($category) {
@@ -135,6 +123,7 @@ class ProductController extends Controller
         }
     }
 
+    // Function to update the total product count
     private function updateTotalProductCount($categoryName) {
         $category = Category::where('kategori', $categoryName)->first();
         if ($category) {
@@ -144,6 +133,7 @@ class ProductController extends Controller
         }
     }
 
+    // Function to export the product data to PDF
     public function exportPdf() {
         try {
             $product = Product::all();
@@ -154,6 +144,7 @@ class ProductController extends Controller
         }
     }
 
+    // Function to export the product data to Excel
     public function exportXls()
     {
         try {
@@ -163,6 +154,7 @@ class ProductController extends Controller
         }
     }
 
+    // Function to import the product data from Excel
     public function import(Request $request)
     {
         $request->validate([
@@ -178,17 +170,20 @@ class ProductController extends Controller
         }
     }
 
+    // Function to display the request purchase form
     public function requestPurchase() {
         $purchase = totalPurchase::all();
         return view('products.requestPurchase', compact('purchase'));
     }
     
+    // Function to display the request sell form
     public function requestSell() {
         // $selling = Selling::where('status', 'pending')->get();
         $selling = Selling::all();
         return view('products.requestSell', compact('selling'));
     }
 
+    // Function to store the purchase data
     private function reduceCategoryProductCount($categoryName, $quantity)
         {
             $category = Category::where('kategori', $categoryName)->first();
@@ -198,6 +193,7 @@ class ProductController extends Controller
             }
         }
 
+    // Function to store the purchase data
     private function increaseCategoryProductCount($categoryName, $quantity)
         {
             $category = Category::where('kategori', $categoryName)->first();
@@ -207,18 +203,16 @@ class ProductController extends Controller
             }
         }
 
+    // Function to store the purchase data
     public function approveSell(Request $request, $id)
     {
         $selling = Selling::findOrFail($id);
         $selling->status = 'approved';
         $selling->save();
 
-        // Tambahkan logika untuk menambah jumlah produk
-        // $selling = Product::findOrFail($selling->id);
-        $product = Product::where('nama_produk', $selling->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product = Product::where('nama_produk', $selling->product_name)->firstOrFail();
         $product->jumlah_produk -= $selling->quantity;
-        $product->total_sales += $selling->quantity; // Tambahkan penjualan ke total_sales
-        // Mengurangi jumlah total produk pada tabel kategori
+        $product->total_sales += $selling->quantity;
         $this->reduceCategoryProductCount($product->kategori_produk, $selling->quantity);
         $product->save();
 
@@ -233,22 +227,22 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Sale approved and product quantity updated.');
     }
 
+    // Function to store the purchase data
     public function approvePurchase(Request $request, $id)
     {
         $purchase = totalPurchase::findOrFail($id);
         $purchase->status = 'approved';
         $purchase->save();
 
-        // Tambahkan logika untuk menambah jumlah produk
-        $product = Product::where('nama_produk', $purchase->product_name)->firstOrFail(); // Mendapatkan produk berdasarkan nama produk dari penjualan
+        $product = Product::where('nama_produk', $purchase->product_name)->firstOrFail();
         $product->jumlah_produk += $purchase->quantity;
-        // Mengurangi jumlah total produk pada tabel kategori
         $this->increaseCategoryProductCount($product->kategori_produk, $purchase->quantity);
         $product->save();
 
         return redirect()->route('products.index')->with('success', 'Purchase approved and product quantity updated.');
     }
 
+    // Function to decline the sell request
     public function declineSell(Request $request, $id)
     {
         $selling = Selling::findOrFail($id);
@@ -258,6 +252,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Sell Request declined successfully.');
     }
 
+    // Function to decline the purchase request
     public function declinePurchase(Request $request, $id)
     {
         $purchase = totalPurchase::findOrFail($id);

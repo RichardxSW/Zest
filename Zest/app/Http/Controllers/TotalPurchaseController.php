@@ -220,15 +220,7 @@ class TotalPurchaseController extends Controller
         }
     }
 
-    // Display the specified purchase
-    // public function show($id) {
-    //     // Find the purchase by ID
-    //     $purchase = totalpurchase::find($id);
-
-    //     // Return the show view with the retrieved data
-    //     return view('totalpurchase.show', compact('purchase'));
-    // }
-
+    // Display the daily purchases
     public function dailyPurchases(Request $request)
     {
          // Daily Sales
@@ -250,6 +242,7 @@ class TotalPurchaseController extends Controller
         return view('totalpurchase.dailyPurchases', compact('dailyPurchases', 'startDate', 'endDate', 'totalDailyPurchases', 'totalDailyPurchasesPerCategory'));
     }
 
+    // Display the monthly purchases
     public function monthlyPurchases(Request $request)
     {
         $month = $request->input('month', Carbon::now()->month);

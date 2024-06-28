@@ -33,7 +33,6 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/delete/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
-        Route::get('/search', [CategoryController::class, 'search'])->name('categories.search');
     });
 
     Route::prefix('product')->group(function () {
@@ -46,18 +45,15 @@ Route::middleware(['role:Stock_Manager'])->group(function () {
         Route::get('/exportPdf', [ProductController::class, 'exportPdf'])->name('products.exportPdf');
         Route::get('/exportXls', [ProductController::class, 'exportXls'])->name('products.exportXls');
         Route::post('/importXls', [ProductController::class, 'import'])->name('products.import');
-        Route::get('/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/requestPurchase', [ProductController::class, 'requestPurchase'])->name('products.requestPurchase');
         Route::post('/approvePurchase/{id}', [ProductController::class, 'approvePurchase'])->name('products.approvePurchase');
         Route::post('/declinePurchase/{id}', [ProductController::class, 'declinePurchase'])->name('products.declinePurchase');
         Route::get('/requestSell', [ProductController::class, 'requestSell'])->name('products.requestSell');
         Route::post('/approveSell/{id}', [ProductController::class, 'approveSell'])->name('products.approveSell');
         Route::post('/declineSell/{id}', [ProductController::class, 'declineSell'])->name('products.declineSell');
-        Route::get('/{id}', [ProductController::class, 'show'])->name('products.show');
     });
 });
 
-// Supplier routes for Purchasing Staff
 // Supplier routes for Purchasing Staff
 Route::middleware(['role:Purchasing_Staff'])->group(function () {
     Route::prefix('supplier')->group(function () {
@@ -83,13 +79,11 @@ Route::middleware(['role:Purchasing_Staff'])->group(function () {
         Route::get('/exportPdf', [TotalPurchaseController::class, 'exportPdf'])->name('totalpurchase.exportPdf');
         Route::get('/exportXls', [TotalPurchaseController::class, 'exportXls'])->name('totalpurchase.exportXls');
         Route::get('/exportReceipt/{id}', [TotalPurchaseController::class, 'exportReceipt'])->name('totalpurchase.exportReceipt');
-        // Route::get('show/{id}', [TotalPurchaseController::class, 'show'])->name('totalpurchase.show');
         Route::get('/dailyPurchases', [TotalPurchaseController::class, 'dailyPurchases'])->name('totalpurchase.dailyPurchases');
         Route::get('/monthlyPurchases', [TotalPurchaseController::class, 'monthlyPurchases'])->name('totalpurchase.monthlyPurchases');
     });
 });
 
-// Assuming you have CustomerController and SellingController
 // Customer routes for Marketing Staff
 Route::middleware(['role:Marketing_Staff'])->group(function () {
     Route::prefix('customer')->group(function () {
@@ -115,7 +109,6 @@ Route::middleware(['role:Marketing_Staff'])->group(function () {
         Route::get('/exportXls', [SellingController::class, 'exportXls'])->name('sellings.exportXls');
         Route::get('/exportInv/{id}', [SellingController::class, 'exportInv'])->name('sellings.exportInv');
         Route::post('/importXls', [SellingController::class, 'import'])->name('sellings.import');
-        // Route::get('/{id}', [SellingController::class, 'show'])->name('sellings.show');
         Route::get('/dailySales', [SellingController::class, 'dailySales'])->name('sellings.dailySales');
         Route::get('/monthlySales', [SellingController::class, 'monthlySales'])->name('sellings.monthlySales');
     });
@@ -128,7 +121,6 @@ Route::prefix('users')->group( function () {
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/update/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
-    Route::get('/search', [UserController::class, 'search'])->name('users.search');
 });
 
 // User management routes

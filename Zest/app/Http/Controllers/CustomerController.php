@@ -13,17 +13,20 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
+    // Function to display the customers list
     public function index()
     {
         $customers = Customer::all();
         return view('customers.index', compact('customers'));
     }
 
+    // Function to display the add customer form
     public function create()
     {
         return view('customers.create');
     }
 
+    // Function to store the customer data
     public function store(Request $request)
     {
         $request->validate([
@@ -59,12 +62,14 @@ class CustomerController extends Controller
         }
     }
 
+    // Function to display the edit customer form
     public function edit($id)
     {
         $customer = Customer::find($id);
         return view('customers.edit', compact('customer'));
     }
 
+    // Function to update the customer data
     public function update(Request $request, $id)
     {
         $customer = Customer::find($id);
@@ -101,6 +106,7 @@ class CustomerController extends Controller
         }
     }
 
+    // Function to delete the customer data
     public function delete($id)
     {
         try {
@@ -112,6 +118,7 @@ class CustomerController extends Controller
         }
     }
 
+    // Function to export the customer data to PDF
     public function exportPdf()
     {
         try {
@@ -123,6 +130,7 @@ class CustomerController extends Controller
         }
     }
 
+    // Function to export the customer data to Excel
     public function exportXls()
     {
         try {
@@ -132,6 +140,7 @@ class CustomerController extends Controller
         }
     }
 
+    // Function to import the customer data from Excel
     public function import(Request $request)
     {
         $request->validate([

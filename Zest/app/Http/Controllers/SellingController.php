@@ -14,6 +14,7 @@ use Carbon\Carbon;
 
 class SellingController extends Controller
 {
+    // Function to display the sellings list
     public function index() {
         $sellings = Selling::all();
         $products = Product::all();
@@ -28,6 +29,7 @@ class SellingController extends Controller
         ));
     }
 
+    // Function to display the add selling form
     public function create() {
         $categories = Category::all();
         $products = Product::all();
@@ -35,6 +37,7 @@ class SellingController extends Controller
         return view('sellings.create', compact('categories', 'products','customers'));
     }
 
+    // Function to store the selling data
     public function store(Request $request)
     {
         $request->validate([
@@ -70,6 +73,7 @@ class SellingController extends Controller
         }
     }
 
+    // Function to display the edit selling form
     public function edit($id) {
         $selling = Selling::find($id);
         $categories = Category::all();
@@ -78,6 +82,7 @@ class SellingController extends Controller
         return view('sellings.edit', compact('selling', 'customers', 'categories', 'products'));
     }
 
+    // Function to update the selling data
     public function update(Request $request, $id)
     {
         $selling = Selling::find($id);
@@ -98,11 +103,10 @@ class SellingController extends Controller
             // Update the selling record
             $selling->product_name = ucwords(strtolower($request->input('product_name')));
             $selling->category_name = ucwords(strtolower($request->input('category_name')));
-            // Optionally, you can skip updating customer_name here to maintain the existing customer association
             $selling->customer_name = ucwords(strtolower($request->input('customer_name')));
             $selling->quantity = $request->input('quantity');
             $selling->date = $request->input('date');
-            $selling->status = $selling->status; // Ensure status remains unchanged
+            $selling->status = $selling->status; 
             $selling->save();
 
             return redirect()->route('sellings.index')->with('success', 'Selling updated successfully.');
@@ -111,6 +115,7 @@ class SellingController extends Controller
         }
     }
 
+    // Function to delete the selling data
     public function delete($id) {
         try {
             $selling = Selling::find($id);
@@ -121,6 +126,7 @@ class SellingController extends Controller
         }
     }
 
+    // Function to export the selling data to PDF
     public function exportPdf() {
         try {
             $sellings = Selling::all();
@@ -131,6 +137,7 @@ class SellingController extends Controller
         }
     }
 
+    // Function to export the selling data to Excel
     public function exportXls() {
         try {
             return Excel::download(new SellingExport, 'sellings.xlsx');
@@ -139,6 +146,7 @@ class SellingController extends Controller
         }
     }
 
+    // Function to export invoice
     public function exportInv($id)
     {
         $selling = Selling::findOrFail($id);
@@ -149,11 +157,7 @@ class SellingController extends Controller
         return $pdf->download('invoice.pdf');
     }
 
-    // public function show($id) {
-    //     $selling = Selling::find($id);
-    //     return view('sellings.show', compact('selling'));
-    // }
-
+    // Function to make daily sales
     public function dailySales(Request $request)
     {
          // Daily Sales
@@ -176,6 +180,7 @@ class SellingController extends Controller
         return view('sellings.dailySales', compact('dailySales', 'startDate', 'endDate', 'totalDailySales', 'totalDailySalesPerCategory'));
     }
 
+    // Function to make monthly sales
     public function monthlySales(Request $request)
     {
         $month = $request->input('month', Carbon::now()->month);

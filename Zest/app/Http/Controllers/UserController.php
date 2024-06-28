@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    // Function to display the users list
     public function index()
     {   
         try {
@@ -19,6 +20,7 @@ class UserController extends Controller
         }
     }
 
+    // Function to display the add user form
     public function create()
     {
         try {
@@ -28,6 +30,7 @@ class UserController extends Controller
         }
     }
 
+    // Function to store the user data
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -57,15 +60,7 @@ class UserController extends Controller
         }
     }
 
-    public function show(User $user)
-    {
-        try {
-            return view('users.show', compact('user'));
-        } catch (\Exception $e) {
-            return redirect()->route('users.index')->with('error', 'Error displaying user');
-        }
-    }
-
+    // Function to display the edit user form
     public function edit(User $user)
     {
         try {
@@ -75,6 +70,7 @@ class UserController extends Controller
         }
     }
 
+    // Function to update the user data
     public function update(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
@@ -102,6 +98,7 @@ class UserController extends Controller
         }
     }
 
+    // Function to delete the user data
     public function delete($id)
     {
         try {

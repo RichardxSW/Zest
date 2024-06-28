@@ -19,7 +19,8 @@ class AuthController extends Controller
     {
         $this->middleware('auth');
     }
-
+    
+    // Function to display the homepage
     public function index()
     {   
         $selling = Selling::where('status', 'approved')
