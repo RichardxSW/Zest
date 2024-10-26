@@ -1,4 +1,4 @@
-# Zest - Website Inventaris Toko Buah
+# Zest - Website Inventaris Distributor Buah
 
 Kelompok 5-TI-A
 - Tanjaya Jason Winata (535220041)
